@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -19,9 +22,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
+        'role',
         'password',
-    ];
+    ];  
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,8 +45,16 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'role' => UserRole::class,
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relasi ke Disposition karena User dapat memiliki banyak Disposition
+     */
+    public function dispositions(): HasMany
+    {
+        return $this->hasMany(Disposition::class);
     }
 }
