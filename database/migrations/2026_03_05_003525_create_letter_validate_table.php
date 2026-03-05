@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('letter_validate', function (Blueprint $table) {
             $table->id();
+            
+            $table->foreignId('letter_id')->constrained('letters')->cascadeOnDelete();
+
             $table->boolean('acc_katu')->default(false);
             $table->boolean('acc_waka')->default(false);
             $table->text('note_katu')->nullable();

@@ -13,6 +13,7 @@ class LetterValidate extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'letter_id',
         'acc_katu',
         'acc_waka',
         'note_katu',
