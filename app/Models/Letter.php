@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Letter extends Model
 {
@@ -64,6 +65,14 @@ class Letter extends Model
     public function classification(): BelongsTo
     {
         return $this->belongsTo(Classification::class);
+    }
+
+    /**
+     * Relasi ke Letter Validate karena Letter memiliki satu LetterValidate
+     */
+    public function letterValidate(): HasOne
+    {
+        return $this->hasOne(LetterValidate::class);
     }
 
 
