@@ -34,6 +34,9 @@ return new class extends Migration
                     ->nullable(false);
             $table->enum('status', array_column(LetterStatus::cases(), 'value'))// status dari surat
                     ->default(LetterStatus::DRAFT);
+            $table->foreignId('validate_id')
+                    ->constrained('letter_validate')
+                    ->cascadeOnDelete();
 
             $table->timestamps();                                               // created_at dan updated_at
 
