@@ -2,8 +2,13 @@
 
 namespace App\Services;
 
+use App\Enums\LetterStatus;
+use App\Enums\LetterType;
 use App\Enums\UserRole;
+use App\Models\Letter;
 use Exception;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 class LetterService
 {
@@ -11,14 +16,9 @@ class LetterService
      * Logika untuk Registrasi Surat Masuk (Incoming)
      * Langsung masuk ke antrean 'RECEIVED' untuk Kepsek.
      */
-    public function registerIncomingLetter(array $data, $file = null): Letter
+    public function registerIncomingLetter(array $data): Letter
     {
-        return DB::transaction(function () use ($data, $file) {
-            // Handle upload file jika ada
-            if ($file) {
-                $data['file_path'] = $file->store('letters/incoming');
-            }
-
+        return DB::transaction(function () use ($data) {
             // Set status default untuk antrean surat masuk
             $data['type'] = LetterType::INCOMING;
             $data['status'] = LetterStatus::RECEIVED;
@@ -107,5 +107,26 @@ class LetterService
         }
 
         $letter->save();
+    }
+
+
+    /**
+     * logika setelah pemanggilan fungsi pembuatan Letter.
+     * Menyimpan file surat utama.
+     */
+    public function uploadFile(Letter $letter, UploadedFile $file): bool
+    {
+        // Hapus file lama jika ada
+        if ($letter->file_path && Storage::disk('public')->exists($letter->file_path)) {
+            Storage::disk('public')->delete($letter->file_path);
+        }
+
+        // Struktur: letters/{id}/dokumen_utama.pdf
+        $path = "letters/{$letter->id}";
+        $fileName = $letter->id . "_" . time() . "." . $file->getClientOriginalExtension();
+
+        $finalPath = $file->storeAs($path, $fileName, 'public');
+
+        return $letter->update(['file_path' => $finalPath]);
     }
 }
