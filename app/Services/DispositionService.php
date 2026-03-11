@@ -41,13 +41,38 @@ class DispositionService
     }
 
     /**
-     * Memperbarui status disposisi (misal: diselesaikan oleh Waka/Penerima).
+     * Memperbarui status disposisi dan cek apakah surat bisa diarsip.
      */
     public function updateDispositionStatus(Disposition $disposition, DispositionStatus $status): bool
     {
-        return $disposition->update([
-            'status' => $status
-        ]);
+        return DB::transaction(function () use ($disposition, $status) {
+            // 1. Update status disposisi yang sedang dikerjakan
+            $updated = $disposition->update(['status' => $status]);
+
+            // 2. Jika status diubah jadi COMPLETED, cek kawan-kawannya (disposisi lain di surat yang sama)
+            if ($status === DispositionStatus::COMPLETED) {
+                $this->checkAndArchiveLetter($disposition->letter);
+            }
+
+            return $updated;
+        });
+    }
+
+    /**
+     * Cek apakah seluruh disposisi sudah selesai.
+     * Jika ya, pindahkan status surat ke COMPLETED (Arsip).
+     */
+    private function checkAndArchiveLetter(Letter $letter): void
+    {
+        // Cek apakah masih ada disposisi yang BELUM completed
+        $hasPendingDispositions = $letter->dispositions()
+            ->where('status', '!=', DispositionStatus::COMPLETED)
+            ->exists();
+
+        // Jika tidak ada lagi yang pending/processing, maka arsipkan
+        if (!$hasPendingDispositions) {
+            $letter->update(['status' => LetterStatus::COMPLETED]);
+        }
     }
 
     /**
