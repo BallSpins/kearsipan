@@ -17,9 +17,7 @@ class LetterRequest extends Model
     protected $fillable = [
         'subject',
         'description',
-        'status',
         'file_path',
-        'note_tu',
         'letter_id',
     ];  
 
@@ -40,7 +38,7 @@ class LetterRequest extends Model
     protected function casts(): array
     {
         return [
-            'status' => LetterRequestStatus::class,
+            //
         ];
     }
 
@@ -53,10 +51,26 @@ class LetterRequest extends Model
     }
 
     /**
-     * Relasi ke Letter karena membutuhkan LetterValidate untuk memvalidasi dari katu dan waka
+     * Relasi ke Letter karena membutuhkan referensi letter
      */
     public function letter(): BelongsTo
     {
         return $this->belongsTo(Letter::class);
+    }
+
+    /**
+     * Helper untuk cek apakah sudah jadi surat resmi
+     */
+    public function isApproved(): bool
+    {
+        return !is_null($this->letter_id);
+    }
+
+    /**
+     * Scope untuk filter request yang belum disentuh TU
+     */
+    public function scopePending(Builder $query): void
+    {
+        $query->whereNull('letter_id');
     }
 }

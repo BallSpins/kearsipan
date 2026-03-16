@@ -37,7 +37,8 @@ class LetterValidate extends Model
     protected function casts(): array
     {
         return [
-            //
+            'acc_katu' => 'boolean',
+            'acc_waka' => 'boolean',
         ];
     }
 

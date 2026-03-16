@@ -20,6 +20,7 @@ class Letter extends Model
     protected $fillable = [
         'full_number',
         'type',
+        'status',
         'classification_code',
         'file_number',
         'address',
@@ -64,7 +65,7 @@ class Letter extends Model
      */
     public function classification(): BelongsTo
     {
-        return $this->belongsTo(Classification::class);
+        return $this->belongsTo(Classification::class, 'classification_code', 'code');
     }
 
     /**
@@ -73,6 +74,20 @@ class Letter extends Model
     public function letterValidate(): HasOne
     {
         return $this->hasOne(LetterValidate::class);
+    }
+
+    /**
+     * Relasi ke LetterRequest karena Letter memiliki satu LetterRequest
+     */
+    public function letterRequest(): HasOne
+    {
+        return $this->hasOne(LetterRequest::class);
+    }
+
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class);
     }
 
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\LetterRequestStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,11 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('subject');
             $table->text('description');
-            $table->enum('status', array_column(LetterRequestStatus::cases(), 'value'))
-                    ->default(LetterRequestStatus::PENDING);
             $table->text('file_path')
                     ->nullable(false);
-            $table->text('note_tu')->nullable(); // Alasan jika ditolak
             $table->foreignId('letter_id')->nullable()->constrained(); // Terisi jika sudah jadi surat resmi
             $table->timestamps();
         });

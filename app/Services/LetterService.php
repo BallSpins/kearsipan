@@ -9,6 +9,7 @@ use App\Models\Letter;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LetterService
 {
@@ -106,6 +107,7 @@ class LetterService
             if ($role === UserRole::WAKA) $letter->letterValidate->note_waka = $note;
         }
 
+        $letter->letterValidate->save();
         $letter->save();
     }
 
