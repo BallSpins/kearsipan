@@ -124,6 +124,15 @@ class Letter extends Model
     // --- SCOPES UNTUK SURAT MASUK (INCOMING) ---
 
     /**
+     * Antrean draf surat masuk (untuk fitur autosave/registrasi belum selesai).
+     */
+    public function scopeIncomingDrafts(Builder $query): void
+    {
+        $query->where('type', LetterType::INCOMING)
+              ->where('status', LetterStatus::DRAFT);
+    }
+
+    /**
      * Antrean surat masuk yang baru diterima dan menunggu disposisi Kepsek.
      */
     public function scopeIncomingNew(Builder $query): void
@@ -131,6 +140,7 @@ class Letter extends Model
         $query->where('type', LetterType::INCOMING)
                 ->where('status', LetterStatus::RECEIVED);
     }
+
 
     /**
      * Antrean surat masuk yang sudah selesai diproses/arsip.

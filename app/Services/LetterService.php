@@ -50,6 +50,10 @@ class LetterService
             throw new Exception("Hanya surat berstatus Draf yang bisa diajukan validasi.");
         }
 
+        if (!$letter->file_path) {
+            throw new \Exception("File surat resmi belum diunggah!");
+        }
+
         return $letter->update([
             'status' => LetterStatus::REVIEWING
         ]);
