@@ -14,6 +14,7 @@ class LetterValidate extends Model
      */
     protected $fillable = [
         'letter_id',
+        'waka_id',
         'acc_katu',
         'acc_waka',
         'note_katu',
@@ -48,5 +49,13 @@ class LetterValidate extends Model
     public function letter(): BelongsTo
     {
         return $this->belongsTo(Letter::class);
+    }
+
+    /**
+     * Relasi ke User untuk referensi ke waka terkait
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'waka_id');
     }
 }

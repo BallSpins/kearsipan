@@ -15,11 +15,16 @@ class LetterRequestService
     {
         $this->letterService = $letterService;
     }
+    
     /**
      * Logika untuk mmebuat request oleh waka kepada tu
      */
     public function createRequest(array $data): LetterRequest
     {
+        $waka_id = auth()->user()->id;
+
+        $data['waka_id'] = $waka_id;
+
         return LetterRequest::create($data);
     }
 

@@ -106,10 +106,17 @@ class Letter extends Model
     /**
      * Antrean yang sedang menunggu validasi Ka TU / Waka.
      */
-    public function scopeWaitingValidation(Builder $query): void
+    public function scopeWaitingValidation(Builder $query, ?int $wakaId = null): void
     {
         $query->where('type', LetterType::OUTGOING)
                 ->where('status', LetterStatus::REVIEWING);
+
+        // Jika ada ID Waka (berarti yang login adalah Waka)
+        if ($wakaId) {
+            $query->whereHas('letterValidate', function ($q) use ($wakaId) {
+                $q->where('waka_id', $wakaId);
+            });
+        }
     }
 
     /**

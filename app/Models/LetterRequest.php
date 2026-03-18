@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\LetterRequestStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +19,7 @@ class LetterRequest extends Model
         'description',
         'file_path',
         'letter_id',
+        'waka_id',
     ];  
 
     /**
@@ -56,6 +57,14 @@ class LetterRequest extends Model
     public function letter(): BelongsTo
     {
         return $this->belongsTo(Letter::class);
+    }
+
+    /**
+     * Relasi ke User untuk referensi ke waka terkait
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'waka_id');
     }
 
     /**

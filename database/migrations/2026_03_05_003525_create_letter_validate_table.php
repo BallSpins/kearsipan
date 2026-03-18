@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('letter_validate', function (Blueprint $table) {
+        Schema::create('letter_validates', function (Blueprint $table) {
             $table->id();
             
             $table->foreignId('letter_id')->constrained('letters')->cascadeOnDelete();
+            $table->foreignId('waka_id')->nullable()->constrained('users')->nullOnDelete();
 
             $table->boolean('acc_katu')->default(false);
             $table->boolean('acc_waka')->default(false);
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('letter_validate');
+        Schema::dropIfExists('letter_validates');
     }
 };

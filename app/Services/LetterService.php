@@ -41,6 +41,18 @@ class LetterService
     }
 
     /**
+     * Logika untuk memperbarui surat draft
+     */
+    public function updateDraftLetter(Letter $letter, array $data): Letter
+    {
+        if ($letter->status != LetterStatus::DRAFT) {
+            throw new Exception("Hanya surat berstatus Draf yang bisa diperbarui");
+        }
+
+        return $letter->update($data);
+    }
+
+    /**
      * Logika untuk Menggerakkan Antrean (Move Queue)
      * Contoh: Dari Draf ke Reviewing (Validasi Waka)
      */
@@ -51,12 +63,25 @@ class LetterService
         }
 
         if (!$letter->file_path) {
-            throw new \Exception("File surat resmi belum diunggah!");
+            throw new Exception("File surat resmi belum diunggah!");
         }
 
-        return $letter->update([
-            'status' => LetterStatus::REVIEWING
-        ]);
+        return DB::transaction(function () use ($letter) {
+            $letter->letterValidate()->updateOrCreate(
+                ['letter_id' => $letter->id],
+                [
+                    'waka_id'   => $letter->letterRequest->waka_id,
+                    'acc_katu'  => false,
+                    'acc_waka'  => false,
+                    'note_katu' => null,
+                    'note_waka' => null,
+                ],
+            );
+
+            return $letter->update([
+                'status' => LetterStatus::REVIEWING
+            ]);
+        });
     }
 
     /**
@@ -75,16 +100,17 @@ class LetterService
     public function processReview(Letter $letter, string $action, ?string $note = null): void
     {
         $role = auth()->user()->role; // 'katu' atau 'waka'
+        $validate = $letter->letterValidate;
 
         if ($action === 'approve') {
             if ($role === UserRole::KEPALA_TU) {
-                $letter->letterValidate->acc_katu = true;
-                $letter->letterValidate->note_katu = null;
+                $validate->acc_katu = true;
+                $validate->note_katu = null;
                 // $letter->acc_katu = true;
                 // $letter->note_katu = null; // hapus note lama kalau sudah di acc
             } elseif ($role === UserRole::WAKA) {
-                $letter->letterValidate->acc_waka = true;
-                $letter->letterValidate->note_waka = null;
+                $validate->acc_waka = true;
+                $validate->note_waka = null;
                 // $letter->acc_waka = true;
                 // $letter->note_waka = null;
             }
@@ -94,25 +120,27 @@ class LetterService
             //     $letter->status = LetterStatus::VALIDATED;
             // }
             
-            if ($letter->letterValidate->acc_katu && $letter->letterValidate->acc_waka) {
+            if ($validate->acc_katu && $validate->acc_waka) {
                 $letter->status = LetterStatus::VALIDATED;
             }
         } 
         else {
             // jika salah satu REJECT: Balik ke DRAFT & reset centang
             $letter->status = LetterStatus::DRAFT;
-            $letter->letterValidate->acc_katu = false;
-            $letter->letterValidate->acc_waka = false;
+            $validate->acc_katu = false;
+            $validate->acc_waka = false;
             // $letter->acc_katu = false;
             // $letter->acc_waka = false;
 
             // simpan note ke kolom yang sesuai role-nya
-            if ($role === UserRole::KEPALA_TU) $letter->letterValidate->note_katu = $note;
-            if ($role === UserRole::WAKA) $letter->letterValidate->note_waka = $note;
+            if ($role === UserRole::KEPALA_TU) $validate->note_katu = $note;
+            if ($role === UserRole::WAKA) $validate->note_waka = $note;
         }
 
-        $letter->letterValidate->save();
-        $letter->save();
+        DB::transaction(function () use ($letter, $validate) {
+            $validate->save();
+            $letter->save();
+        });
     }
 
 

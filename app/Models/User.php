@@ -57,4 +57,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Disposition::class);
     }
+
+    /**
+     * Relasi ke LetterRequest karena User dapat membuat request
+     * Request surat yang ditujukan ke Waka ini
+     */
+    public function assignedRequests(): HasMany
+    {
+        return $this->hasMany(LetterRequest::class, 'waka_id');
+    }
+
+    /**
+     * Relasi ke LetterValidate karena User dapat memiliki banyak validasi surat
+     * Surat yang harus divalidasi oleh Waka ini
+     */
+    public function pendingValidations(): HasMany
+    {
+        return $this->hasMany(LetterValidate::class, 'waka_id');
+    }
 }
