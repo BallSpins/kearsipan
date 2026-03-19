@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LetterRequest;
 use App\Services\LetterRequestAttachmentService;
 use App\Services\LetterRequestService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class LetterRequestController extends Controller
 {
@@ -19,6 +21,69 @@ class LetterRequestController extends Controller
         $this->requestService = $requestService;
         $this->attachmentService = $attachmentService;
     }
+
+    // Start View function
+
+    /**
+     * List permintaan waka beserta statusnya (Oleh Waka)
+     */
+    public function indexWakaRequestView(): View
+    {
+        $requests = LetterRequest::byWaka(auth()->id())
+                    ->with(['letter'])
+                    ->latest()
+                    ->paginate(10);
+        
+        return view('', compact('requests'));
+    }
+
+    /**
+     * List permintaan waka beserta statusnya (Oleh TU)
+     */
+    public function indexTURequestView(): View
+    {
+        $requests = LetterRequest::with(['letter'])
+                    ->latest()
+                    ->paginate(10);
+        
+        return view('', compact('requests'));
+    }
+
+    /**
+     * Tampilan pembuatan permintaan (oleh waka)
+     */
+    public function createRequestView(): View
+    {
+        return view('');
+    }
+
+    /**
+     * Tampilan detail dari permintaan waka. (oleh Waka)
+     * Dapat menampilkan status surat
+     */
+    public function detailWakaRequestView(LetterRequest $request): View
+    {
+        if ($request->waka_id != auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke permintaan ini.');
+        }
+
+        $request->load(['letter.classification', 'attachments']);
+
+        return view('', compact('request'));
+    }
+
+    /**
+     * Tampilan detail dari permintaan waka. (oleh TU)
+     * Dapat menampilkan status surat
+     */
+    public function detailTURequestView(LetterRequest $request): View
+    {
+        $request->load(['letter.classification', 'attachments']);
+
+        return view('', compact('request'));
+    }
+
+    // End View function
 
     /**
      * Waka membuat permohonan surat baru

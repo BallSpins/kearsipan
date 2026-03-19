@@ -82,4 +82,12 @@ class LetterRequest extends Model
     {
         $query->whereNull('letter_id');
     }
+
+    /**
+     * Scope untuk memfilter permintaan surat milik Waka tertentu.
+     */
+    public function scopeByWaka(Builder $query, int $wakaId): void
+    {
+        $query->where('waka_id', $wakaId);
+    }
 }

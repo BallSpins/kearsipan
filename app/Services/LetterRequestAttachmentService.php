@@ -49,4 +49,18 @@ class LetterRequestAttachmentService
 
         return $attachment;
     }
+
+    /**
+     * Menghapus data lampiran dan file fisiknya
+     */
+    public function deleteAttachment(LetterRequestAttachment $attachment): bool
+    {
+        // 1. Hapus file fisik
+        if (Storage::disk('public')->exists($attachment->file_path)) {
+            Storage::disk('public')->delete($attachment->file_path);
+        }
+
+        // 2. Hapus record database
+        return $attachment->delete();
+    }
 }
