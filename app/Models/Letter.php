@@ -85,6 +85,9 @@ class Letter extends Model
     }
 
 
+    /**
+     * Relasi ke Attachment karena Letter dapat memiliki banyak lampiran
+     */
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
@@ -146,6 +149,18 @@ class Letter extends Model
     {
         $query->where('type', LetterType::INCOMING)
                 ->where('status', LetterStatus::RECEIVED);
+    }
+
+    /**
+     * Scope untuk memfilter surat yang didisposisikan ke user (Waka) tertentu.
+     */
+    public function scopeAssignedDisposition(Builder $query, int $userId): void
+    {
+        $query->where('type', LetterType::INCOMING)
+            ->where('status', LetterStatus::DISPATCHED)
+            ->whereHas('dispositions', function ($q) use ($userId) {
+                $q->where('receiver_id', $userId);
+            });
     }
 
 

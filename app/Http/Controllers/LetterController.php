@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\LetterStatus;
 use App\Enums\LetterType;
+use App\Enums\UserRole;
 use App\Models\Letter;
 use App\Services\AttachmentService;
+use App\Services\ClassificationService;
 use App\Services\DispositionService;
 use App\Services\LetterService;
 use Illuminate\Http\RedirectResponse;
@@ -16,15 +19,18 @@ class LetterController extends Controller
     protected $letterService;
     protected $attachmentService;
     protected $dispositionService;
+    protected $classificationService;
     
     public function __construct(
         LetterService $letterService,
         AttachmentService $attachmentService,
-        DispositionService $dispositionService
+        DispositionService $dispositionService,
+        ClassificationService $classificationService
     ) {
         $this->letterService = $letterService;
         $this->attachmentService = $attachmentService;
         $this->dispositionService = $dispositionService;
+        $this->classificationService = $classificationService;
     }
 
     // Start View function
@@ -32,9 +38,9 @@ class LetterController extends Controller
     // Start View Surat Masuk
 
     /**
-     * Antrean surat masuk untuk TU (Registrasi)
+     * Antrean surat masuk untuk TU (Registrasi) (oleh TU dan KATU)
      */
-    public function indexIncoming(): View
+    public function indexIncomingView(): View
     {
         $letters = Letter::incomingDrafts()
                     ->with(['classification'])
@@ -45,9 +51,9 @@ class LetterController extends Controller
     }
 
     /**
-     * List surat masuk yang baru diterima oleh kepsek
+     * List surat masuk yang baru diterima oleh kepsek (oleh kepsek)
      */
-    public function indexIncomingNew(): View
+    public function indexIncomingNewView(): View
     {
         $letters = Letter::incomingNew()
                     ->with(['classification'])
@@ -57,26 +63,117 @@ class LetterController extends Controller
         return view('', compact('letters'));
     }
 
-    // End View Surat Masuk
-
-    // Start View Surat Keluar
-
-    public function indexOutgoing(): View
+    /**
+     * List surat masuk yang di disposisikan kepada waka (oleh Waka)
+     */
+    public function indexWakaDispositionView(): View
     {
-        $letter = Letter::outgoingDrafts()
-                    ->with(['classification'])
-                    -latest()
+        $letters = Letter::assignedDisposition(auth()->id())
+                    ->with(['classification', 'dispositions'])
+                    ->latest()
                     ->paginate(10);
 
         return view('', compact('letters'));
     }
 
     /**
-     * Antrean surat masuk untuk Waka dan Ka TU
+     * Tampilan create surat masuk baru (oleh TU)
      */
-    public function indexReview(): View
+    public function createDraftView(): View
     {
-        $letters = Letter::waitingValidation()
+        $classifications = $this->classificationService->getClassifications();
+
+        return view('', compact('classifications'));
+    }
+
+    /**
+     * Tampilan edit surat draft masuk (oleh TU)
+     */
+    public function editIncomingDraftView(Letter $letter): View
+    {
+        $letter->load(['attachments', 'classification']);
+
+        $classifications = $this->classificationService->getClassifications();
+
+        return view('', compact('letter', 'classifications'));
+    }
+
+    /**
+     * Tampilan detail untuk kepsek melihat surat yang akan di disposisikan (oleh kepsek)
+     */
+    public function detailIncomingNewView(Letter $letter): View
+    {
+        if ($letter->type != LetterType::INCOMING && $letter->status != LetterStatus::RECEIVED) {
+            abort(403, 'Halaman ini hanya untuk surat yang akan di-review oleh KEPSEK.');
+        }
+
+        $letter->load(['attachments', 'classification']);
+
+        return view('', compact('letter'));
+    }
+
+    /**
+     * Tampilan detail untuk waka melihat surat yang di disposisikan dari kepsek (oleh waka)
+     */
+    public function detailDispositionView(Letter $letter): View
+    {
+        $check = Letter::assignedDisposition(auth()->id())
+                ->where('id', $letter->id)
+                ->exists();
+
+        if (!$check) {
+            abort(403, 'Anda tidak memiliki akses ke disposisi surat ini.');
+        }
+
+        $letter->load(['attachments', 'classification', 'dispositions' => function($query) {
+            $query->where('receiver_id', auth()->id());
+        }]);
+
+        return view('', compact('letter'));
+    }
+
+    /**
+     * Tampilan detail untuk kepsek memonitoring surat yang sedang di disposisikan kepada waka (oleh kepsek)
+     */
+    public function monitorDispositionView(Letter $letter): View
+    {
+        // Hanya surat yang sudah berstatus DISPATCHED yang bisa dipantau
+        if ($letter->status !== LetterStatus::DISPATCHED) {
+            abort(404, 'Surat belum didisposisikan.');
+        }
+
+        $letter->load(['attachments', 'classification', 'dispositions.receiver']);
+
+        return view('', compact('letter'));
+    }
+
+    // End View Surat Masuk
+
+    // Start View Surat Keluar
+
+    /**
+     * List draft surat keluar (permintaan dari waka) (oleh TU dan Ka TU)
+     */
+    public function indexOutgoingView(): View
+    {
+        $letters = Letter::outgoingDrafts()
+                    ->with(['classification'])
+                    ->latest()
+                    ->paginate(10);
+
+        return view('', compact('letters'));
+    }
+
+    /**
+     * Antrean review surat keluar untuk Waka dan Ka TU (oleh waka dan Ka TU)
+     */
+    public function indexReviewView(): View
+    {
+        $user = auth()->user();
+
+        $wakaId = ($user->role === UserRole::WAKA) ? $user->id : null;
+
+        $letters = Letter::waitingValidation($wakaId)
                     ->with(['letterValidate', 'classification'])
                     ->latest()
                     ->paginate(10);
@@ -84,14 +181,37 @@ class LetterController extends Controller
         return view('', compact('letters'));
     }
     
-    public function indexReadyToSign(): View
+    /**
+     * List surat keluar yang akan di ttd kepsek (oleh kepsek)
+     */
+    public function indexReadyToSignView(): View
     {
         $letters = Letter::readyToSign()
                     ->with('classification')
                     ->latest()
-                    ->ppaginate(10);
+                    ->paginate(10);
         
         return view('', compact('letters'));
+    }
+
+    /**
+     * Tampilan untuk waka dan Ka TU me-review surat (oleh waka dan Ka TU)
+     */
+    public function reviewLetterView(Letter $letter): View
+    {
+        $letter->load(['attachments', 'classification', 'letterValidate']);
+
+        return view('', compact('letter'));
+    }
+
+    /**
+     * tampilan untuk ttd kepsek (oleh kepsek)
+     */
+    public function signLetterView(Letter $letter): View
+    {
+        $letter->load(['attachments', 'classification']);
+
+        return view('', compact('letter'));
     }
 
     // End View Surat Keluar
@@ -99,7 +219,7 @@ class LetterController extends Controller
     /**
      * Tampilan detail untuk surat (DRAFT) (Oleh TU)
      */
-    public function letterDraftDetail(Letter $letter): View
+    public function letterDraftDetailView(Letter $letter): View
     {
         if ($letter->status !== LetterStatus::DRAFT) {
             abort(403, 'Halaman ini hanya untuk surat berstatus draf.');
@@ -121,7 +241,7 @@ class LetterController extends Controller
     /**
      * List surat yang sudah selesai (arsip)
      */
-    public function indexArchived(): View
+    public function indexArchivedView(): View
     {
         $letters = Letter::archived()
                     ->latest()
@@ -187,7 +307,7 @@ class LetterController extends Controller
     /**
      * Finalisasi Status Surat Menjadi Reviewing (Oleh TU)
      */
-    public function finalizeLetter(Request $_, Letter $letter): RedirectResponse
+    public function finalizeToReviewing(Request $_, Letter $letter): RedirectResponse
     {
         $this->letterService->submitForValidation($letter);
 
@@ -212,12 +332,44 @@ class LetterController extends Controller
     /**
      * Membuat Disposisi (Oleh Kepsek)
      */
-    public function createDisposition(Request $request, Letter $letter)
+    public function createDisposition(Request $request, Letter $letter): RedirectResponse
     {
-        $disposition = $this->dispositionService->createDisposition($letter, $request->all());
+        $this->dispositionService->createDisposition($letter, $request->all());
 
         return redirect()
                 ->route('')
                 ->with('success', 'Surat di disposisikan ke yang bersangkutan.');
+    }
+
+    /**
+     * Update file yang telah di ttd (oleh Kepsek)
+     */
+    public function uploadSignedLetter(Request $request, Letter $letter): RedirectResponse
+    {
+        // 1. Validasi: Pastikan surat memang sudah di-acc semua pihak
+        if ($letter->status !== LetterStatus::VALIDATED) {
+            throw new Exception("Surat belum divalidasi lengkap, tidak bisa upload TTD.");
+        }
+
+        // 2. Upload file PDF Final (versi TTD)
+        if ($request->hasFile('signed_file')) {
+            $this->letterService->uploadFile($letter, $request->file('signed_file'));
+        }
+
+        return redirect()
+                ->route('')
+                ->with('success', 'Surat final berhasil diunggah.');
+    }
+
+    /**
+     * Finalisasi surat menjadi COMPLETED
+     */
+    public function finalizeToCompleted(Letter $letter): RedirectResponse
+    {
+        $this->letterService->markAsCompleted($letter);
+
+        return redirect()
+                ->route('')
+                ->with('success', 'Surat final berhasil diarsipkan.');
     }
 }
