@@ -321,6 +321,13 @@ class LetterController extends Controller
      */
     public function review(Request $request, Letter $letter): RedirectResponse
     {
+        $user = auth()->user();
+
+        // Jika Waka, pastikan dia adalah Waka yang ditunjuk di LetterValidate
+        if ($user->role === UserRole::WAKA && $letter->letterValidate->waka_id !== $user->id) {
+            abort(403, 'Anda bukan reviewer yang ditunjuk untuk surat ini.');
+        }
+
         // $request->action bisa berisi 'approve' atau 'reject'
         $this->letterService->processReview($letter, $request->action, $request->note);
 

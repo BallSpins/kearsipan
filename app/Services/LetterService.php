@@ -150,17 +150,21 @@ class LetterService
      */
     public function uploadFile(Letter $letter, UploadedFile $file): bool
     {
-        // Hapus file lama jika ada
-        if ($letter->file_path && Storage::disk('public')->exists($letter->file_path)) {
-            Storage::disk('public')->delete($letter->file_path);
-        }
-
-        // Struktur: letters/{id}/dokumen_utama.pdf
-        $path = "letters/{$letter->id}";
-        $fileName = $letter->id . "_" . time() . "." . $file->getClientOriginalExtension();
-
-        $finalPath = $file->storeAs($path, $fileName, 'public');
-
-        return $letter->update(['file_path' => $finalPath]);
+        return DB::transaction(function () use ($letter, $file) {
+            $oldPath = $letter->file_path;
+            
+            // Struktur: letters/{id}/dokumen_utama.pdf
+            $path = "letters/{$letter->id}";
+            $fileName = $letter->id . "_" . time() . "." . $file->getClientOriginalExtension();
+            
+            $finalPath = $file->storeAs($path, $fileName, 'public');
+            
+            $updated = $letter->update(['file_path' => $finalPath]);
+            
+            // Hapus file lama jika ada
+            if ($updated && $oldPath && Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+        });
     }
 }

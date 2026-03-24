@@ -6,6 +6,7 @@ use App\Models\Attachment;
 use App\Models\Letter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AttachmentService
@@ -41,23 +42,26 @@ class AttachmentService
      */
     public function updateAttachment(Attachment $attachment, UploadedFile $newFile): Attachment
     {
-        // 1. Hapus file lama dari storage
-        if (Storage::disk('public')->exists($attachment->file_path)) {
-            Storage::disk('public')->delete($attachment->file_path);
-        }
+        return DB::transaction(function () use ($attachment, $newFile) {
+            $oldPath = $attachment->file_path;
+    
+            // Simpan file baru di folder yang sama (letters/{letter_id}/attachments)
+            $path = "letters/{$attachment->letter_id}/attachments";
+            $finalPath = $newFile->store($path, 'public');
+    
+            // Update metadata di database
+            $updated = $attachment->update([
+                'file_path' => $finalPath,
+                'file_name' => $newFile->getClientOriginalName(),
+                'file_type' => $newFile->getClientMimeType(),
+            ]);
 
-        // 2. Simpan file baru di folder yang sama (letters/{letter_id}/attachments)
-        $path = "letters/{$attachment->letter_id}/attachments";
-        $finalPath = $newFile->store($path, 'public');
-
-        // 3. Update metadata di database
-        $attachment->update([
-            'file_path' => $finalPath,
-            'file_name' => $newFile->getClientOriginalName(),
-            'file_type' => $newFile->getClientMimeType(),
-        ]);
-
-        return $attachment;
+            if ($updated && $oldPath && Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+    
+            return $attachment;
+        });
     }
 
     /**

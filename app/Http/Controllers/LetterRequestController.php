@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\LetterRequest;
 use App\Services\LetterRequestAttachmentService;
 use App\Services\LetterRequestService;
@@ -109,6 +110,45 @@ class LetterRequestController extends Controller
         return redirect()
                 ->route('')
                 ->with('success', 'Request terkirim.');
+    }
+
+    public function update(Request $request, LetterRequest $letterRequest): RedirectResponse
+    {
+        // Proteksi kepemilikan
+        if ($letterRequest->waka_id != auth()->id()) {
+            abort(403);
+        }
+
+        // Hanya bisa diedit jika belum diproses TU (status Pending)
+        if ($letterRequest->isApproved()) {
+            return redirect()
+                    ->back()
+                    ->with('error', 'Request yang sudah disetujui tidak bisa diubah.');
+        }
+
+        $this->requestService->updateRequest($letterRequest, $request->all());
+        return redirect()
+                ->back()
+                ->with('success', 'Permintaan diperbarui.');
+    }
+
+    public function destroy(LetterRequest $letterRequest): RedirectResponse
+    {
+        $user = auth()->user();
+        $isOwner = $letterRequest->waka_id == $user->id;
+        $isStaffTU = in_array($user->role, [UserRole::TU, UserRole::KEPALA_TU]);
+
+        // Logika: Hanya pemilik atau TU yang bisa hapus
+        if (!$isOwner && !$isStaffTU) {
+            abort(403, "Halaman ini hanya dapat diakses oleh pemilik prmintaan atau TU dan Kepala TU.");
+        }
+
+        // Pastikan file lampiran di storage juga ikut terhapus via Service
+        $this->requestService->deleteRequest($letterRequest);
+        
+        return redirect()
+                ->route('')
+                ->with('success', 'Permintaan berhasil dihapus.');
     }
 
     /**

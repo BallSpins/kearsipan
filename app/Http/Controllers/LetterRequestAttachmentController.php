@@ -16,6 +16,16 @@ class LetterRequestAttachmentController extends Controller
     }
 
     /**
+     * Memperbarui lampiran spesifik (1)
+     */
+    public function updateSpecificAttachment(Request $request, Attachment $attachment)
+    {
+        if ($request->hasFile('file')) {
+            $this->attachmentService->updateAttachment($attachment, $request->file('file'));
+        }
+    }
+
+    /**
      * Menghapus lampiran spesifik (1) pada permintaan
      */
     public function deleteSpecificAttachment(Request $_, Attachment $attachment)
