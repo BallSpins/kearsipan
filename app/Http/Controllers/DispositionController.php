@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\DispositionStatus;
 use App\Models\Disposition;
 use App\Services\DispositionService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class DispositionController extends Controller
             
             return redirect()->back()
                 ->with('success', 'Disposisi berhasil dikirimkan.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', $e->getMessage());
         }

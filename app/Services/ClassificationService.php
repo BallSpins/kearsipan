@@ -10,6 +10,11 @@ class ClassificationService
 {
     protected $cacheKey = 'all_classifications';
 
+    public function getPaginatedClassifications($perPage = 10)
+    {
+        return Classification::paginate($perPage);
+    }
+
     public function getClassifications(): Collection
     {
         $classifications = Cache::rememberForever($this->cacheKey, function () {
@@ -28,9 +33,8 @@ class ClassificationService
         return $classification;
     }
 
-    public function updateClassification(int $id, array $data): Classification
+    public function updateClassification(Classification $classification, array $data): Classification
     {
-        $classification = Classification::findOrFail($id);
         $classification->update($data);
         
         $this->refreshCache();
@@ -38,9 +42,8 @@ class ClassificationService
         return $classification;
     }
 
-    public function deleteClassification(int $id): bool
+    public function deleteClassification(Classification $classification): bool
     {
-        $classification = Classification::findOrFail($id);
         $deleted = $classification->delete();
         
         if ($deleted) {
