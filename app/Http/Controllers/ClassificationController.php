@@ -23,14 +23,14 @@ class ClassificationController extends Controller
     /**
      * Tampilan list dari seluruh klasifikasi
      */
-    public function indexClassifications(): View
+    public function indexClassificationsView(): View
     {
         $classifications = $this->classificationService->getPaginatedClassifications();
 
         return view('', compact('classifications'));
     }
 
-    public function createClassification(): View
+    public function createClassificationView(): View
     {
         return view('');
     }
@@ -38,7 +38,7 @@ class ClassificationController extends Controller
     /**
      * Tampilan edit klasifikasi
      */
-    public function editClassification(Classification $classification): View
+    public function editClassificationView(Classification $classification): View
     {
         return view('', compact('classification'));
     }
@@ -79,6 +79,9 @@ class ClassificationController extends Controller
         }
     }
 
+    /**
+     * Logika untuk menghapus klasifikasi
+     */
     public function deleteClassification(Classification $classification): RedirectResponse
     {
         try {
