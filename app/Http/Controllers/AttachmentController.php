@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attachment;
 use App\Models\Letter;
 use App\Services\AttachmentService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AttachmentController extends Controller
@@ -20,17 +21,19 @@ class AttachmentController extends Controller
     /**
      * Memperbarui lampiran spesifik (1)
      */
-    public function updateSpecificAttachment(Request $request, Attachment $attachment)
+    public function updateSpecificAttachment(Request $request, Attachment $attachment): RedirectResponse
     {
-        if ($request->hasFile('file')) {
-            $this->attachmentService->updateAttachment($attachment, $request->file('file'));
-        }
+        $this->attachmentService->updateAttachment($attachment, $request->file('file'));
+
+        return redirect()
+                ->back()
+                ->with('success', 'Lampiran berhasil diperbarui');
     }
 
     /**
      * Menghapus lampiran spesifik (1) pada surat
      */
-    public function deleteSpecificAttachment(Request $_, Attachment $attachment)
+    public function deleteSpecificAttachment(Request $_, Attachment $attachment): RedirectResponse
     {
         $this->attachmentService->deleteAttachment($attachment);
 
@@ -42,7 +45,7 @@ class AttachmentController extends Controller
     /**
      * Menghapus semua lampiran milik surat
      */
-    public function deleteAllAttachment(Request $_, Letter $letter)
+    public function deleteAllAttachment(Request $_, Letter $letter): RedirectResponse
     {
         foreach($letter->attachments as $attachment) {
             $this->attachmentService->deleteAttachment($attachment);

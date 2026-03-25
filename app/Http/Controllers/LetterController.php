@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\LetterStatus;
 use App\Enums\LetterType;
 use App\Enums\UserRole;
+use App\Http\Requests\Letter\ReviewLetterRequest;
+use App\Http\Requests\Letter\StoreDispositionRequest;
+use App\Http\Requests\Letter\StoreIncomingRequest;
+use App\Http\Requests\Letter\UpdateSignedLetterRequest;
 use App\Models\Letter;
 use App\Services\AttachmentService;
 use App\Services\ClassificationService;
@@ -255,10 +259,12 @@ class LetterController extends Controller
     /**
      * Registrasi Surat Masuk (Oleh TU)
      */
-    public function storeIncoming(Request $request): RedirectResponse
+    public function storeIncoming(StoreIncomingRequest $request): RedirectResponse
     {
+        $data = $request->safe()->except(['file', 'attachments']);
+
         // 1. Simpan data surat (tipe & status otomatis di service)
-        $letter = $this->letterService->registerIncomingLetter($request->all());
+        $letter = $this->letterService->registerIncomingLetter($data);
 
         // 2. Upload file utama jika ada
         if ($request->hasFile('file')) {
@@ -319,7 +325,7 @@ class LetterController extends Controller
     /**
      * Proses Validasi/Review (Oleh Ka TU dan Waka)
      */
-    public function review(Request $request, Letter $letter): RedirectResponse
+    public function review(ReviewLetterRequest $request, Letter $letter): RedirectResponse
     {
         $user = auth()->user();
 
@@ -337,21 +343,9 @@ class LetterController extends Controller
     }
 
     /**
-     * Membuat Disposisi (Oleh Kepsek)
-     */
-    public function createDisposition(Request $request, Letter $letter): RedirectResponse
-    {
-        $this->dispositionService->createDisposition($letter, $request->all());
-
-        return redirect()
-                ->route('')
-                ->with('success', 'Surat di disposisikan ke yang bersangkutan.');
-    }
-
-    /**
      * Update file yang telah di ttd (oleh Kepsek)
      */
-    public function uploadSignedLetter(Request $request, Letter $letter): RedirectResponse
+    public function uploadSignedLetter(UpdateSignedLetterRequest $request, Letter $letter): RedirectResponse
     {
         // 1. Validasi: Pastikan surat memang sudah di-acc semua pihak
         if ($letter->status !== LetterStatus::VALIDATED) {

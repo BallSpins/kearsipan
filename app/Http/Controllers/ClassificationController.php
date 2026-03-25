@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClassificationRequest;
 use App\Models\Classification;
 use App\Services\ClassificationService;
 use Exception;
@@ -32,7 +33,9 @@ class ClassificationController extends Controller
 
     public function createClassificationView(): View
     {
-        return view('');
+        $classifications = $this->classificationService->getClassifications();
+
+        return view('', compact('classifications'));
     }
 
     /**
@@ -40,7 +43,9 @@ class ClassificationController extends Controller
      */
     public function editClassificationView(Classification $classification): View
     {
-        return view('', compact('classification'));
+        $classifications = $this->classificationService->getClassifications();
+
+        return view('', compact('classification', 'classifications'));
     }
 
     // End View function
@@ -48,10 +53,12 @@ class ClassificationController extends Controller
     /**
      * Logika untuk menyimpan klasifikasi baru
      */
-    public function storeClassification(Request $request): RedirectResponse
+    public function storeClassification(ClassificationRequest $request): RedirectResponse
     {
         try {
-            $this->classificationService->createClassification($request->all());
+            $data = $request->validated();
+
+            $this->classificationService->createClassification($data);
 
             return redirect()
                     ->route('')
@@ -65,10 +72,12 @@ class ClassificationController extends Controller
     /**
      * Logika untuk memperbarui klasifikasi
      */
-    public function updateClassification(Request $request, Classification $classification): RedirectResponse
+    public function updateClassification(ClassificationRequest $request, Classification $classification): RedirectResponse
     {
         try {
-            $this->classificationService->updateClassification($classification, $request->all());
+            $data = $request->validated();
+
+            $this->classificationService->updateClassification($classification, $data);
 
             return redirect()
                     ->route('')

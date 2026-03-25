@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Http\Requests\LetterRequest\StoreOutgoingRequest;
+use App\Http\Requests\LetterRequest\UpdateRequest;
+use App\Http\Requests\LetterRequest\UpdateRequestFile;
 use App\Models\LetterRequest;
 use App\Services\LetterRequestAttachmentService;
 use App\Services\LetterRequestService;
@@ -89,10 +92,12 @@ class LetterRequestController extends Controller
     /**
      * Waka membuat permohonan surat baru
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreOutgoingRequest $request): RedirectResponse
     {
+        $data = $request->safe()->only(['subject', 'description']);
+
         // 1. Buat data request
-        $letterRequest = $this->requestService->createRequest($request->only(['subject', 'description']));
+        $letterRequest = $this->requestService->createRequest($data);
 
         // 2. Upload draf kasar jika ada
         if ($request->hasFile('draft_file')) {
@@ -112,7 +117,10 @@ class LetterRequestController extends Controller
                 ->with('success', 'Request terkirim.');
     }
 
-    public function update(Request $request, LetterRequest $letterRequest): RedirectResponse
+    /**
+     * Memperbarui permintaan surat (Oleh Waka)
+     */
+    public function update(UpdateRequest $request, LetterRequest $letterRequest): RedirectResponse
     {
         // Proteksi kepemilikan
         if ($letterRequest->waka_id != auth()->id()) {
@@ -126,12 +134,28 @@ class LetterRequestController extends Controller
                     ->with('error', 'Request yang sudah disetujui tidak bisa diubah.');
         }
 
-        $this->requestService->updateRequest($letterRequest, $request->all());
+        $data = $request->validated();
+
+        $this->requestService->updateRequest($letterRequest, $data);
         return redirect()
                 ->back()
                 ->with('success', 'Permintaan diperbarui.');
     }
 
+    /**
+     * Memperbarui file pada permintaan surat (Oleh Waka)
+     */
+    public function updateFile(UpdateRequestFile $request, LetterRequest $letterRequest): RedirectResponse
+    {
+        $this->requestService->uploadFile($letterRequest, $request->file('file'));
+        return redirect()
+                ->back()
+                ->with('success', 'Permintaan diperbarui.');
+    }
+
+    /**
+     * Menghapus permintaan surat (Oleh Waka)
+     */
     public function destroy(LetterRequest $letterRequest): RedirectResponse
     {
         $user = auth()->user();

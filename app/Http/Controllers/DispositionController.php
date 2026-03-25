@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DispositionStatus;
+use App\Http\Requests\Letter\StoreDispositionRequest;
 use App\Models\Disposition;
 use App\Services\DispositionService;
 use Exception;
@@ -21,10 +22,10 @@ class DispositionController extends Controller
     /**
      * Menyimpan disposisi baru (Oleh Kepsek)
      */
-    public function store(Request $request, Letter $letter): RedirectResponse
+    public function store(StoreDispositionRequest $request, Letter $letter): RedirectResponse
     {
         try {
-            $this->dispositionService->createDisposition($letter, $request->all());
+            $this->dispositionService->createDisposition($letter, $request->validated());
             
             return redirect()->back()
                 ->with('success', 'Disposisi berhasil dikirimkan.');

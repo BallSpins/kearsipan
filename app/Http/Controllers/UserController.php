@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,9 +22,11 @@ class UserController extends Controller
         return view('');
     }
 
-    public function authenticate(Request $request): RedirectResponse
+    public function authenticate(AuthRequest $request): RedirectResponse
     {
-        if (auth()->attempt($request->all(), $request->remember)) {
+        $credentials = $request->validated();
+
+        if (auth()->attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
             return redirect()->intended('dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
@@ -85,10 +89,13 @@ class UserController extends Controller
     /**
      * Logika untuk menyimpan user baru
      */
-    public function storeUser(Request $request): RedirectResponse
+    public function storeUser(UserRequest $request): RedirectResponse
     {
         try {
-            User::create($request->all());
+            $data = $request->validate();
+            $data['password'] = bcrypt($data['password']);
+
+            User::create($data);
 
             return redirect()
                     ->route('')
@@ -102,10 +109,18 @@ class UserController extends Controller
     /**
      * Logika untuk memperbarui user
      */
-    public function updateUser(Request $request, User $user): RedirectResponse
+    public function updateUser(UserRequest $request, User $user): RedirectResponse
     {
         try {
-            $user->update($request->all());
+            $data = $request->validated();
+
+            if (empty($data['password'])) {
+                unset($data['password']);
+            } else {
+                $data['password'] = bcrypt($data['password']);
+            }
+
+            $user->update($data);
 
             return redirect()
                     ->route('')

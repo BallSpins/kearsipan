@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\LetterRequestStatus;
 use App\Models\Letter;
 use App\Models\LetterRequest;
 use Illuminate\Http\UploadedFile;
