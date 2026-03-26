@@ -7,7 +7,6 @@ use App\Models\Classification;
 use App\Services\ClassificationService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ClassificationController extends Controller

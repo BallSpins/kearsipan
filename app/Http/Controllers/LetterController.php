@@ -6,7 +6,6 @@ use App\Enums\LetterStatus;
 use App\Enums\LetterType;
 use App\Enums\UserRole;
 use App\Http\Requests\Letter\ReviewLetterRequest;
-use App\Http\Requests\Letter\StoreDispositionRequest;
 use App\Http\Requests\Letter\StoreIncomingRequest;
 use App\Http\Requests\Letter\UpdateSignedLetterRequest;
 use App\Models\Letter;
@@ -243,7 +242,7 @@ class LetterController extends Controller
     }
 
     /**
-     * List surat yang sudah selesai (arsip)
+     * List surat yang sudah selesai (arsip oleh TU)
      */
     public function indexArchivedView(): View
     {

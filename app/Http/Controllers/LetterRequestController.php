@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
+use App\Http\Requests\LetterRequest\ApproveLetterRequest;
 use App\Http\Requests\LetterRequest\StoreOutgoingRequest;
 use App\Http\Requests\LetterRequest\UpdateRequest;
 use App\Http\Requests\LetterRequest\UpdateRequestFile;
@@ -10,7 +11,6 @@ use App\Models\LetterRequest;
 use App\Services\LetterRequestAttachmentService;
 use App\Services\LetterRequestService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LetterRequestController extends Controller
@@ -154,7 +154,7 @@ class LetterRequestController extends Controller
     }
 
     /**
-     * Menghapus permintaan surat (Oleh Waka)
+     * Menghapus permintaan surat (Oleh Waka, TU, KATU)
      */
     public function destroy(LetterRequest $letterRequest): RedirectResponse
     {
@@ -178,10 +178,12 @@ class LetterRequestController extends Controller
     /**
      * TU menyetujui request dan menjadikannya surat keluar resmi
      */
-    public function approve(Request $request, LetterRequest $letterRequest): RedirectResponse
+    public function approve(ApproveLetterRequest $request, LetterRequest $letterRequest): RedirectResponse
     {
         // $request berisi data resmi: nomor surat, klasifikasi, dsb.
-        $this->requestService->createLetter($letterRequest, $request->all());
+        $data = $request->validated();
+
+        $this->requestService->createLetter($letterRequest, $data);
 
         return redirect()
                 ->route('')

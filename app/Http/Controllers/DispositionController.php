@@ -8,7 +8,6 @@ use App\Models\Disposition;
 use App\Services\DispositionService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class DispositionController extends Controller
 {

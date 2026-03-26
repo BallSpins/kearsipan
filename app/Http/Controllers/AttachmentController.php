@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateAttachmentRequest;
 use App\Models\Attachment;
 use App\Models\Letter;
 use App\Services\AttachmentService;
@@ -21,7 +22,7 @@ class AttachmentController extends Controller
     /**
      * Memperbarui lampiran spesifik (1)
      */
-    public function updateSpecificAttachment(Request $request, Attachment $attachment): RedirectResponse
+    public function updateSpecificAttachment(UpdateAttachmentRequest $request, Attachment $attachment): RedirectResponse
     {
         $this->attachmentService->updateAttachment($attachment, $request->file('file'));
 

@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function loginView(): View
     {
-        return view('');
+        return view('auth.login');
     }
 
     public function authenticate(AuthRequest $request): RedirectResponse
