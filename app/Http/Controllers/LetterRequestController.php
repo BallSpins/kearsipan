@@ -12,6 +12,7 @@ use App\Services\LetterRequestAttachmentService;
 use App\Services\LetterRequestService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LetterRequestController extends Controller
 {
@@ -173,6 +174,18 @@ class LetterRequestController extends Controller
         return redirect()
                 ->route('')
                 ->with('success', 'Permintaan berhasil dihapus.');
+    }
+
+    public function downloadOutgoing(LetterRequest $letter): BinaryFileResponse
+    {
+        $path = storage_path('app/public/' . $letter->file_path);
+
+        if (!file_exists($path)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()
+                ->download($path, $letter->file_name);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateAttachmentRequest;
 use App\Services\LetterRequestAttachmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LetterRequestAttachmentController extends Controller
 {
@@ -15,6 +16,18 @@ class LetterRequestAttachmentController extends Controller
         LetterRequestAttachmentService $attachmentService,
     ) {
         $this->attachmentService = $attachmentService;
+    }
+
+    public function downloadAttachment(LetterRequestAttachmentService $attachment): BinaryFileResponse
+    {
+        $path = storage_path('app/public/' . $attachment->file_path);
+
+        if (!file_exists($path)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()
+                ->download($path, $attachment->file_name);
     }
 
     /**

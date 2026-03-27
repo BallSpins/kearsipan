@@ -16,6 +16,7 @@ use App\Services\LetterService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class LetterController extends Controller
 {
@@ -307,6 +308,18 @@ class LetterController extends Controller
         return redirect()
                 ->route('', $letter->id)
                 ->with('success', 'Surat masuk berhasil diperbarui.');
+    }
+
+    public function downloadIncoming(Letter $letter): BinaryFileResponse
+    {
+        $path = storage_path('app/public/' . $letter->file_path);
+
+        if (!file_exists($path)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()
+                ->download($path, $letter->file_name);
     }
 
     /**
