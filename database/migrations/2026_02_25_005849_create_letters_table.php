@@ -26,7 +26,7 @@ return new class extends Migration
                     ->nullable(false);                                          // alamat tujuan / alamat pengirim
             $table->text('subject')
                     ->nullable(false);                                          // perihal
-            $table->string('referrence_number', 50)
+            $table->string('reference_number', 50)
                     ->nullable(false);                                          // no petunjuk
             $table->integer('tracking_number')
                     ->nullable(false);                                          // pengganti no pakket / no urut

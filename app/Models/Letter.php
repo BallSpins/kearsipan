@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Letter extends Model
 {
@@ -19,6 +20,7 @@ class Letter extends Model
     protected $fillable = [
         'full_number',
         'type',
+        'status',
         'classification_code',
         'file_number',
         'address',
@@ -63,7 +65,32 @@ class Letter extends Model
      */
     public function classification(): BelongsTo
     {
-        return $this->belongsTo(Classification::class);
+        return $this->belongsTo(Classification::class, 'classification_code', 'code');
+    }
+
+    /**
+     * Relasi ke Letter Validate karena Letter memiliki satu LetterValidate
+     */
+    public function letterValidate(): HasOne
+    {
+        return $this->hasOne(LetterValidate::class);
+    }
+
+    /**
+     * Relasi ke LetterRequest karena Letter memiliki satu LetterRequest
+     */
+    public function letterRequest(): HasOne
+    {
+        return $this->hasOne(LetterRequest::class);
+    }
+
+
+    /**
+     * Relasi ke Attachment karena Letter dapat memiliki banyak lampiran
+     */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class);
     }
 
 
@@ -82,10 +109,17 @@ class Letter extends Model
     /**
      * Antrean yang sedang menunggu validasi Ka TU / Waka.
      */
-    public function scopeWaitingValidation(Builder $query): void
+    public function scopeWaitingValidation(Builder $query, ?int $wakaId = null): void
     {
         $query->where('type', LetterType::OUTGOING)
                 ->where('status', LetterStatus::REVIEWING);
+
+        // Jika ada ID Waka (berarti yang login adalah Waka)
+        if ($wakaId) {
+            $query->whereHas('letterValidate', function ($q) use ($wakaId) {
+                $q->where('waka_id', $wakaId);
+            });
+        }
     }
 
     /**
@@ -100,6 +134,15 @@ class Letter extends Model
     // --- SCOPES UNTUK SURAT MASUK (INCOMING) ---
 
     /**
+     * Antrean draf surat masuk (untuk fitur autosave/registrasi belum selesai).
+     */
+    public function scopeIncomingDrafts(Builder $query): void
+    {
+        $query->where('type', LetterType::INCOMING)
+              ->where('status', LetterStatus::DRAFT);
+    }
+
+    /**
      * Antrean surat masuk yang baru diterima dan menunggu disposisi Kepsek.
      */
     public function scopeIncomingNew(Builder $query): void
@@ -107,6 +150,19 @@ class Letter extends Model
         $query->where('type', LetterType::INCOMING)
                 ->where('status', LetterStatus::RECEIVED);
     }
+
+    /**
+     * Scope untuk memfilter surat yang didisposisikan ke user (Waka) tertentu.
+     */
+    public function scopeAssignedDisposition(Builder $query, int $userId): void
+    {
+        $query->where('type', LetterType::INCOMING)
+            ->where('status', LetterStatus::DISPATCHED)
+            ->whereHas('dispositions', function ($q) use ($userId) {
+                $q->where('receiver_id', $userId);
+            });
+    }
+
 
     /**
      * Antrean surat masuk yang sudah selesai diproses/arsip.
