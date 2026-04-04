@@ -19,6 +19,8 @@ class Letter extends Model
      */
     protected $fillable = [
         'full_number',
+        'sequence_number',
+        'yeaar',
         'type',
         'status',
         'classification_code',

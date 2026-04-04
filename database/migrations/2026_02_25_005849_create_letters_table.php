@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('letters', function (Blueprint $table) {
             $table->id();
             $table->text('full_number');                                        // id full dari surat termasuk class_code, tanggal dll
+            $table->integer('sequence_number')->nullable();   
+            $table->year('year')->index();                                     
             $table->enum('type', array_column(LetterType::cases(), 'value'))
                     ->default(LetterType::OUTGOING);                            // tipe surat (keluar/masuk)
             $table->string('classification_code', 25)
