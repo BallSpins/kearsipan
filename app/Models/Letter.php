@@ -20,7 +20,7 @@ class Letter extends Model
     protected $fillable = [
         'full_number',
         'sequence_number',
-        'yeaar',
+        'year',
         'type',
         'status',
         'classification_code',

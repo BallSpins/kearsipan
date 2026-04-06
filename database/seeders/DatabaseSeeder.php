@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ClassificationSeeder::class,
             LetterSeeder::class,
+            LetterTemplateSeeder::class,
         ]);
     }
 }

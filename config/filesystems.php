@@ -47,6 +47,13 @@ return [
             'report' => false,
         ],
 
+        'letter_templates' => [
+            'driver' => 'local',
+            'root' => storage_path('app/letter_templates'),
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
