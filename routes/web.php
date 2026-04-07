@@ -17,7 +17,6 @@ Route::get('/login', [UserController::class, 'loginView'])
     ->name('login.view');
 Route::post('/login', [UserController::class, 'authenticate'])
     ->name('login');
-    
 // End Auth
     
 Route::middleware([
@@ -61,6 +60,7 @@ Route::middleware([
         ->middleware([
             'role:' . UserRole::only(UserRole::ADMIN),
         ])->group(function () {
+
             Route::get('/', [UserController::class, 'indexUserView'])
                 ->name('index');
             Route::get('/create', [UserController::class, 'createUserView'])
@@ -77,11 +77,15 @@ Route::middleware([
         });
 
     // Group Classification
-    Route::prefix('classifications')
+    Route::prefix('classifications') 
         ->name('classifications.')
         ->middleware([
             'role:' . UserRole::only(UserRole::KEPALA_TU),
         ])->group(function () {
+            Route::get('/dashboard', function () {
+                return view('dashboardTu');
+            })->name('dashboard');
+
             Route::get('/', [ClassificationController::class, 'indexClassificationsView'])
                 ->name('index');
             Route::get('/create', [ClassificationController::class, 'createClassificationView'])
@@ -103,6 +107,10 @@ Route::middleware([
         ->middleware([
             'role:' . UserRole::only(UserRole::KEPALA_SEKOLAH),
         ])->group(function () {
+            Route::get('/dashboard', function () {
+                return view('dashboardTu');
+            })->name('dashboard');
+
             Route::get('/incoming', [LetterController::class, 'indexIncomingNewView'])
                 ->name('incoming.view');
     
@@ -140,10 +148,13 @@ Route::middleware([
         
     // Group TU
     Route::prefix('tu')
-        ->name('tu.')
+        ->name('tu.') 
         ->middleware([
             'role:' . UserRole::only(UserRole::KEPALA_TU, UserRole::TU),
         ])->group(function () {
+            Route::get('/dashboard', function () {
+                return view('tu.dashboard');
+            })->name('dashboard');
             // LetterRequest (Permintaan Surat)
             Route::get('/request', [LetterRequestController::class, 'indexTURequestView'])
                 ->name('request.list.view');
