@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Storage;
 
 class LetterService
 {
+    protected $numberService;
+
+    public function __construct(LetterNumberService $numberService)
+    {
+        $this->numberService = $numberService;
+    }
+
     /**
      * Logika untuk Registrasi Surat Masuk (Incoming)
      * Langsung masuk ke antrean 'RECEIVED' untuk Kepsek.
@@ -20,11 +27,21 @@ class LetterService
     public function registerIncomingLetter(array $data): Letter
     {
         return DB::transaction(function () use ($data) {
-            // Set status default untuk antrean surat masuk
-            $data['type'] = LetterType::INCOMING;
-            $data['status'] = LetterStatus::RECEIVED;
+            $generated = $this->numberService->generateNumber(
+                LetterType::INCOMING, 
+                $data['classification_code']
+            );
 
-            return Letter::create($data);
+            // Set status default untuk antrean surat masuk
+            $finalData = array_merge($data, [
+                'type'            => LetterType::INCOMING,
+                'status'          => LetterStatus::RECEIVED,
+                'sequence_number' => $generated['sequence_number'],
+                'year'            => $generated['year'],
+                'origin_number' => $data['origin_number'],
+            ]);
+
+            return Letter::create($finalData);
         });
     }
 
@@ -34,10 +51,26 @@ class LetterService
      */
     public function createOutgoingDraft(array $data): Letter
     {
-        $data['type'] = LetterType::OUTGOING;
-        $data['status'] = LetterStatus::DRAFT;
+        return DB::transaction(function () use ($data) {
+            $generated = $this->numberService->generateNumber(
+                LetterType::OUTGOING, 
+                $data['classification_code']
+            );
 
-        return Letter::create($data);
+            // pakai jika nomor surat baru muncul jika setelah di acc kepsek
+            // $data['full_number'] = "TEMP-" . time() . "-DRAFT"; 
+            // $data['sequence_number'] = 0; // Tanda belum punya urutan resmi
+
+            $finalData = array_merge($data, [
+                'type'            => LetterType::OUTGOING,
+                'status'          => LetterStatus::DRAFT,
+                'full_number'     => $generated['full_number'],
+                'sequence_number' => $generated['sequence_number'],
+                'year'            => $generated['year'],
+            ]);
+    
+            return Letter::create($finalData);
+        });
     }
 
     /**

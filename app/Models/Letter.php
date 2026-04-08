@@ -19,14 +19,14 @@ class Letter extends Model
      */
     protected $fillable = [
         'full_number',
+        'origin_number',
+        'sequence_number',
+        'year',
         'type',
         'status',
         'classification_code',
-        'file_number',
         'address',
         'subject',
-        'reference_number',
-        'tracking_number',
         'file_path',
     ];  
 

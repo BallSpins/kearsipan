@@ -7,6 +7,7 @@ use App\Http\Controllers\DispositionController;
 use App\Http\Controllers\LetterController;
 use App\Http\Controllers\LetterRequestAttachmentController;
 use App\Http\Controllers\LetterRequestController;
+use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
@@ -35,6 +36,13 @@ Route::middleware([
     Route::prefix('download')
         ->name('download.')
         ->group(function () {
+            Route::prefix('template')
+                ->name('template')
+                ->group(function () {
+                    Route::get('/{template:slug}', [TemplateController::class, 'download'])
+                        ->name('.download');
+                });
+                
             Route::prefix('incoming')
                 ->name('incoming')
                 ->group(function () {
