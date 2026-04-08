@@ -26,12 +26,26 @@ class UserController extends Controller
     public function authenticate(AuthRequest $request): RedirectResponse
     {
         $credentials = $request->validated();
-
+        
         if (auth()->attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
-                             ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
+            if (auth()->user()->role === UserRole::TU) {
+                return redirect()->route('tu.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                                 ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
+            } else if (auth()->user()->role === UserRole::KEPALA_TU) {
+                return redirect()->route('katu.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                                 ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
+            } else if (auth()->user()->role === UserRole::WAKA) {
+                return redirect()->route('waka.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                                 ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
+            } else if (auth()->user()->role === UserRole::KEPALA_SEKOLAH) {
+                return redirect()->route('kepsek.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                                 ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
+            } else if (auth()->user()->role === UserRole::ADMIN) {
+                return redirect()->route('users.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                                 ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
+            }
         }
 
         return back()->withErrors([
