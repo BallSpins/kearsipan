@@ -26,6 +26,16 @@ class StoreIncomingRequest extends FormRequest
                 'required',
                 'exists:classifications,code',
             ],
+            'origin_number' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'tracking_number' => [
+                'required',
+                'string',
+                'max:50',
+            ],
             'address' => [
                 'required',
                 'string',

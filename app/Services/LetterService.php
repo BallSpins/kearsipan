@@ -36,11 +36,9 @@ class LetterService
             $finalData = array_merge($data, [
                 'type'            => LetterType::INCOMING,
                 'status'          => LetterStatus::RECEIVED,
-                'full_number'     => $generated['full_number'],
-                'reference_number' => $data['classification_code'],
                 'sequence_number' => $generated['sequence_number'],
                 'year'            => $generated['year'],
-                'tracking_number' => $generated['tracking_number'],
+                'origin_number' => $data['origin_number'],
             ]);
 
             return Letter::create($finalData);
@@ -67,10 +65,8 @@ class LetterService
                 'type'            => LetterType::OUTGOING,
                 'status'          => LetterStatus::DRAFT,
                 'full_number'     => $generated['full_number'],
-                'reference_number' => $data['classification_code'],
                 'sequence_number' => $generated['sequence_number'],
                 'year'            => $generated['year'],
-                'tracking_number' => $generated['tracking_number'],
             ]);
     
             return Letter::create($finalData);

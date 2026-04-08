@@ -15,23 +15,18 @@ return new class extends Migration
     {
         Schema::create('letters', function (Blueprint $table) {
             $table->id();
-            $table->text('full_number');                                        // id full dari surat termasuk class_code, tanggal dll
+            $table->text('full_number')->nullable();  
+            $table->string('origin_number')->nullable();                                      // id full dari surat termasuk class_code, tanggal dll
             $table->integer('sequence_number')->nullable();   
             $table->year('year')->index();                                     
             $table->enum('type', array_column(LetterType::cases(), 'value'))
                     ->default(LetterType::OUTGOING);                            // tipe surat (keluar/masuk)
             $table->string('classification_code', 25)
-                    ->nullable();                                               // kode klasifikasi surat
-            $table->string('file_number', 50)
-                    ->nullable(false);                                          // no berkas
+                    ->nullable();                                      // no berkas
             $table->text('address')
                     ->nullable(false);                                          // alamat tujuan / alamat pengirim
             $table->text('subject')
-                    ->nullable(false);                                          // perihal
-            $table->string('reference_number', 50)
-                    ->nullable(false);                                          // no petunjuk
-            $table->integer('tracking_number')
-                    ->nullable(false);                                          // pengganti no pakket / no urut
+                    ->nullable(false);                                        // pengganti no pakket / no urut
             $table->text('file_path')
                     ->nullable(false);
             $table->enum('status', array_column(LetterStatus::cases(), 'value'))// status dari surat

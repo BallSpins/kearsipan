@@ -29,7 +29,6 @@ class LetterNumberService
                 'sequence_number' => $nextNumber,
                 'year'            => $year,
                 'full_number'     => "{$classificationCode}/{$formatted}/" . self::SCHOOL_CODE . "/{$year}",
-                'tracking_number' => $formatted // Simpan 001, 002 ke tracking_number
             ];
         });
     }
