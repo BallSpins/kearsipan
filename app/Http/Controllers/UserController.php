@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

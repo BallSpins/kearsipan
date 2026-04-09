@@ -26,11 +26,6 @@ class ApproveLetterRequest extends FormRequest
                 'required', 
                 'exists:classifications,code',
             ],
-            'full_number' => [
-                'required', 
-                'string', 
-                'unique:letters,full_number',
-            ],
             'subject' => [
                 'required', 
                 'string', 

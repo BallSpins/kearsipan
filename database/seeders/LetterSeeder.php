@@ -24,6 +24,8 @@ class LetterSeeder extends Seeder
         // --- CONTOH SURAT MASUK (INCOMING) ---
         Letter::create([
             'full_number' => '001/SM/III/2026',
+            'sequence_number' => 1,
+            'year' => 2026,
             'type' => LetterType::INCOMING,
             'classification_code' => $classification->code,
             'file_number' => 'B.001',
@@ -38,6 +40,8 @@ class LetterSeeder extends Seeder
         // --- CONTOH SURAT KELUAR (OUTGOING) - STATUS DRAFT ---
         Letter::create([
             'full_number' => '002/SK/III/2026',
+            'sequence_number' => 2,
+            'year' => 2026,
             'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
             'file_number' => 'B.002',
@@ -52,6 +56,8 @@ class LetterSeeder extends Seeder
         // --- CONTOH SURAT KELUAR (OUTGOING) - SEDANG DIREVIEW ---
         $reviewingLetter = Letter::create([
             'full_number' => '003/SK/III/2026',
+            'sequence_number' => 3,
+            'year' => 2026,
             'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
             'file_number' => 'B.003',
@@ -72,6 +78,8 @@ class LetterSeeder extends Seeder
         // --- CONTOH SURAT KELUAR (OUTGOING) - SUDAH VALIDASI ---
         Letter::create([
             'full_number' => '004/SK/III/2026',
+            'sequence_number' => 4,
+            'year' => 2026,
             'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
             'file_number' => 'B.004',

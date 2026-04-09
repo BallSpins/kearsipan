@@ -26,15 +26,17 @@ class StoreIncomingRequest extends FormRequest
                 'required',
                 'exists:classifications,code',
             ],
-            'full_number' => [
+            'origin_number' => [
                 'required',
                 'string',
+                'max:255',
+            ],
+            'tracking_number' => [
+                'required',
+                'string',
+                'max:50',
             ],
             'address' => [
-                'required',
-                'string',
-            ],
-            'file_number' => [
                 'required',
                 'string',
             ],
@@ -42,14 +44,10 @@ class StoreIncomingRequest extends FormRequest
                 'required',
                 'string',
             ],
-            'reference_number' => [
-                'required',
-                'string',
-            ],
-            'tracking_number' => [
-                'required',
-                'string',
-            ],
+            // 'reference_number' => [
+            //     'required',
+            //     'string',
+            // ],
             'file' => [
                 'required', 
                 'file', 
