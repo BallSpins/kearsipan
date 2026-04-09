@@ -107,7 +107,7 @@ class UserController extends Controller
     public function storeUser(UserRequest $request): RedirectResponse
     {
         try {
-            $data = $request->validate();
+            $data = $request->validated();
             $data['password'] = bcrypt($data['password']);
 
             User::create($data);
