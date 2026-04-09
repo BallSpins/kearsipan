@@ -260,9 +260,7 @@ Route::middleware([
             'role:' . UserRole::only(UserRole::KEPALA_TU, UserRole::TU),
         ])->group(function () {
             // route untuk menampilkan dashboard khusus TU (GET /tu/dashboard)
-            Route::get('/dashboard', function () {
-                return view('tu.dashboard');
-            })->name('dashboard');
+            Route::get('/dashboard', [LetterController::class, 'TUDashboardView'])->name('dashboard');
 
             // ====================================================================
             // LETTER REQUEST (Permintaan Surat dari WAKA) - TU Management

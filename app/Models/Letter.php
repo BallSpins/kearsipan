@@ -106,6 +106,16 @@ class Letter extends Model
                 ->where('status', LetterStatus::DRAFT);
     }
 
+
+    public function scopeRevisions(Builder $query): void
+    {
+        $query->where('status', LetterStatus::DRAFT)
+              ->whereHas('letterValidate', function ($q) {
+                  $q->whereNotNull('note_katu')
+                    ->orWhereNotNull('note_waka');
+              });
+    }
+
     /**
      * Antrean yang sedang menunggu validasi Ka TU / Waka.
      */

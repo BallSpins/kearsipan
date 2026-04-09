@@ -9,6 +9,7 @@ use App\Http\Requests\Letter\ReviewLetterRequest;
 use App\Http\Requests\Letter\StoreIncomingRequest;
 use App\Http\Requests\Letter\UpdateSignedLetterRequest;
 use App\Models\Letter;
+use App\Models\LetterRequest;
 use App\Services\AttachmentService;
 use App\Services\ClassificationService;
 use App\Services\DispositionService;
@@ -219,6 +220,27 @@ class LetterController extends Controller
     }
 
     // End View Surat Keluar
+
+    public function TUDashboardView(): View
+    {
+        $draftLetter = Letter::incomingDrafts()
+                    ->orWhere(function ($q) {
+                        $q->outgoingDrafts();
+                    })
+                    ->limit(5)
+                    ->latest()
+                    ->get();
+
+        $pendingRequestCount = LetterRequest::pending()
+                    ->count();
+
+        $revisionRequestCount = Letter::revisions()
+                    ->count();
+
+        $totalRequestCount = LetterRequest::count();
+
+        return view('tu.dashboard', compact('draftLetter', 'pendingRequestCount', 'revisionRequestCount', 'totalRequestCount'));
+    }
 
     /**
      * Tampilan detail untuk surat (DRAFT) (Oleh TU)

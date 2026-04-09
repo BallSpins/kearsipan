@@ -172,6 +172,11 @@ class LetterService
 
         DB::transaction(function () use ($letter, $validate) {
             $validate->save();
+
+            if ($validate->acc_katu && $validate->acc_waka) {
+                $letter->status = LetterStatus::VALIDATED;
+            }
+            
             $letter->save();
         });
     }

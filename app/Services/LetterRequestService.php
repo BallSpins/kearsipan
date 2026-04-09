@@ -6,6 +6,7 @@ use App\Models\Letter;
 use App\Models\LetterRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LetterRequestService
 {
@@ -47,15 +48,16 @@ class LetterRequestService
      */
     public function deleteRequest(LetterRequest $letterRequest): bool
     {
+        $disk = Storage::disk('public');
         // 1. Hapus file draf utama
-        if ($letterRequest->file_path && Storage::exists($letterRequest->file_path)) {
-            Storage::delete($letterRequest->file_path);
+        if ($letterRequest->file_path && $disk->exists($letterRequest->file_path)) {
+            $disk->delete($letterRequest->file_path);
         }
 
         // 2. Hapus semua file lampiran pendukung (via Relation)
         foreach ($letterRequest->attachments as $attachment) {
-            if (Storage::exists($attachment->file_path)) {
-                Storage::delete($attachment->file_path);
+            if ($disk->exists($attachment->file_path)) {
+                $disk->delete($attachment->file_path);
             }
             // Hapus record database lampiran
             $attachment->delete();
