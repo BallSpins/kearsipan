@@ -2,6 +2,22 @@
     <x-slot:title>
         Halaman Login
     </x-slot:title>
+
+    @if (session()->has('success'))
+        <div class="bg-green-500 text-white p-4 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="bg-red-500 text-white p-4 rounded mb-4">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="min-h-screen flex items-center justify-center bg-[#E6ECFE]">
         <div class="w-full bg-white p-12 max-w-lg rounded-2xl shadow-xl">
             

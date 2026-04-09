@@ -21,18 +21,34 @@ class LetterSeeder extends Seeder
             'name' => 'Tata Usaha'
         ]);
 
+        App\Models\LetterRequest::create([
+            'subject' => 'Permohonan Surat Keterangan Lulus',
+            'description' => 'Saya memohon surat keterangan lulus untuk keperluan pendaftaran perguruan tinggi.',
+            'file_path' => 'letter_requests/permohonan_skl.pdf',
+            'waka_id' => 4,
+        ]);
+
+        App\Models\Letter::create([
+            'full_number' => '002/SK/III/2026',
+            'sequence_number' => 2,
+            'year' => 2026,
+            'type' => App/Enums/LetterType::OUTGOING,
+            'classification_code' => $classification->code,
+            'address' => 'Orang Tua/Wali Murid Kelas XII',
+            'subject' => 'Permohonan Surat Keterangan Lulus',
+            'file_path' => 'letters/seed/surat_keluar_draft.pdf',
+            'status' => LetterStatus::DRAFT,
+        ]);
+
         // --- CONTOH SURAT MASUK (INCOMING) ---
         Letter::create([
-            'full_number' => '001/SM/III/2026',
+            'origin_number' => '001/SM/III/2026',
             'sequence_number' => 1,
             'year' => 2026,
             'type' => LetterType::INCOMING,
             'classification_code' => $classification->code,
-            'file_number' => 'B.001',
             'address' => 'Dinas Pendidikan Provinsi Jawa Timur',
             'subject' => 'Undangan Rapat Koordinasi Kurikulum Merdeka',
-            'reference_number' => 'REF-9921',
-            'tracking_number' => 1,
             'file_path' => 'letters/seed/surat_masuk_1.pdf',
             'status' => LetterStatus::RECEIVED, // Menunggu disposisi Kepsek
         ]);
@@ -44,11 +60,8 @@ class LetterSeeder extends Seeder
             'year' => 2026,
             'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
-            'file_number' => 'B.002',
             'address' => 'Orang Tua/Wali Murid Kelas XII',
             'subject' => 'Pemberitahuan Pelaksanaan Ujian Satuan Pendidikan',
-            'reference_number' => 'REF-9922',
-            'tracking_number' => 2,
             'file_path' => 'letters/seed/surat_keluar_draft.pdf',
             'status' => LetterStatus::DRAFT,
         ]);
@@ -60,11 +73,8 @@ class LetterSeeder extends Seeder
             'year' => 2026,
             'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
-            'file_number' => 'B.003',
             'address' => 'PT. Industri Kreatif Sejahtera',
             'subject' => 'Permohonan Kerjasama Magang (Prakerin)',
-            'reference_number' => 'REF-9923',
-            'tracking_number' => 3,
             'file_path' => 'letters/seed/surat_review.pdf',
             'status' => LetterStatus::REVIEWING,
         ]);
@@ -82,11 +92,8 @@ class LetterSeeder extends Seeder
             'year' => 2026,
             'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
-            'file_number' => 'B.004',
             'address' => 'Kepala Desa Sukomulyo',
             'subject' => 'Izin Kegiatan Bakti Sosial Siswa',
-            'reference_number' => 'REF-9924',
-            'tracking_number' => 4,
             'file_path' => 'letters/seed/surat_siap_ttd.pdf',
             'status' => LetterStatus::VALIDATED,
         ]);

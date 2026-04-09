@@ -51,7 +51,7 @@ class LetterRequestController extends Controller
                     ->latest()
                     ->paginate(10);
         
-        return view('', compact('requests'));
+        return view('tu.requestIndex', compact('requests'));
     }
 
     /**
