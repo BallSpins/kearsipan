@@ -16,13 +16,13 @@
                     <h-1 class="text-xl">Permintaan Surat</h-1>
                 </div>
             </a>
-            <a href="{{ route('tu.dashboard') }}" class="flex px-4 py-2 rounded {{ request()->routeIs('') ? 'bg-[#5F9598] ' : 'hover:bg-[#5F9598]' }}">
+            <a href="{{ route('tu.incoming.view') }}" class="flex px-4 py-2 rounded {{ request()->routeIs('') ? 'bg-[#5F9598] ' : 'hover:bg-[#5F9598]' }}">
                 <div class="justify-center flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"><path fill="#fff" d="M20 2a1 1 0 0 1 1 1v3.757l-8.999 9l-.006 4.238l4.246.006L21 15.242V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm1.778 6.808l1.414 1.414L15.414 18l-1.416-.002l.002-1.412zM12 12H7v2h5zm3-4H7v2h8z"/></svg>
                     <h1 class="text-xl">Draft</h1>
                 </div>
             </a>
-            <a href="{{ route('tu.dashboard') }}" class="flex px-4 py-2rounded {{ request()->routeIs('') ? 'bg-[#5F9598] ' : 'hover:bg-[#5F9598]' }}">
+            <a href="{{ route('tu.archived') }}" class="flex px-4 py-2rounded {{ request()->routeIs('') ? 'bg-[#5F9598] ' : 'hover:bg-[#5F9598]' }}">
                 <div class="justify-center flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"><path fill="currentColor" d="m12 18l4-4l-1.4-1.4l-1.6 1.6V10h-2v4.2l-1.6-1.6L8 14zm-7 3q-.825 0-1.412-.587T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675V19q0 .825-.587 1.413T19 21zm.4-15h13.2l-.85-1H6.25z"/></svg>
                     <h-1 class="text-xl">Arsip</h-1>
@@ -35,7 +35,11 @@
                 </div>
             </a>
         </x-layouts.sidebar>
-        <div class="bg-white"><h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1></div>
+
+        <div class="bg-white">
+            <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
+        </div>
+
         <div class="mt-20 ml-75 flex gap-15">
             <div class="bg-white rounded-xl shadow-xl w-110 h-55">
                 <h1 class="font-semibold text-xl p-2 ml-10">Total Permintaan</h1>
@@ -59,7 +63,9 @@
                 </div>
             </div>
         </div>
+
         <h1 class="text-4xl font-semibold ml-75 mt-10">Draft Surat</h1>
+
         <div class="bg-[#061E29] shadow-lg  w-360 ml-75">
             <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200">
             <table class="w-full text-left">
