@@ -68,7 +68,7 @@
                         <th class="px-6 py-4 font-bold text-white text-lg">No</th>
                         <th class="px-6 py-4 font-bold text-white text-lg">Tanggal Agenda</th>
                         <th class="px-6 py-4 font-bold text-white text-lg">Jenis Surat</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Pengirim</th>
+                        <th class="px-6 py-4 font-bold text-white text-lg">Alamat Tujuan</th>
                         <th class="px-6 py-4 font-bold text-white text-lg text-center">Status</th>
                     </tr>
                 </thead>

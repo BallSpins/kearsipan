@@ -85,7 +85,7 @@ class LetterRequestController extends Controller
     {
         $request->load(['letter.classification', 'attachments']);
 
-        return view('', compact('request'));
+        return view('tu.requestDetail', compact('request'));
     }
 
     // End View function
