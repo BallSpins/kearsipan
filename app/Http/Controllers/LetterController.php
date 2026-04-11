@@ -52,7 +52,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('tu.incomingIndex', compact('letters'));
     }
 
     /**
@@ -88,7 +88,7 @@ class LetterController extends Controller
     {
         $classifications = $this->classificationService->getClassifications();
 
-        return view('', compact('classifications'));
+        return view('tu.createLetter', compact('classifications'));
     }
 
     /**
@@ -273,7 +273,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('tu.letterArchive', compact('letters'));
     }
 
     // End view function
