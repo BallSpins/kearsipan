@@ -132,51 +132,41 @@ class LetterService
      */
     public function processReview(Letter $letter, string $action, ?string $note = null): void
     {
-        $role = auth()->user()->role; // 'katu' atau 'waka'
-        $validate = $letter->letterValidate;
+        DB::transaction(function () use ($letter, $action, $note) {
+            $role = auth()->user()->role; // 'katu' atau 'waka'
 
-        if ($action === 'approve') {
-            if ($role === UserRole::KEPALA_TU) {
-                $validate->acc_katu = true;
-                $validate->note_katu = null;
-                // $letter->acc_katu = true;
-                // $letter->note_katu = null; // hapus note lama kalau sudah di acc
-            } elseif ($role === UserRole::WAKA) {
-                $validate->acc_waka = true;
-                $validate->note_waka = null;
-                // $letter->acc_waka = true;
-                // $letter->note_waka = null;
+            $letter->refresh()->lockForUpdate();
+            $validate = $letter->letterValidate()->lockForUpdate()->first();
+
+            if ($action === 'approve') {
+                if ($role === UserRole::KEPALA_TU) {
+                    $validate->acc_katu = true;
+                    $validate->note_katu = null; // hapus note lama kalau sudah di acc
+                } elseif ($role === UserRole::WAKA) {
+                    $validate->acc_waka = true;
+                    $validate->note_waka = null;
+                }
+            } elseif ($action === 'reject') {
+                // jika salah satu REJECT: Balik ke DRAFT & reset centang
+                $letter->status = LetterStatus::DRAFT;
+
+                $validate->acc_katu = false;
+                $validate->acc_waka = false;
+
+                // simpan note ke kolom yang sesuai role-nya
+                if ($role === UserRole::KEPALA_TU) {
+                    $validate->note_katu = $note;
+                } elseif ($role === UserRole::WAKA) {
+                    $validate->note_waka = $note;
+                }
             }
 
-            // cek apakah keduanya sudah acc
-            // if ($letter->acc_katu && $letter->acc_waka) {
-            //     $letter->status = LetterStatus::VALIDATED;
-            // }
             
             if ($validate->acc_katu && $validate->acc_waka) {
                 $letter->status = LetterStatus::VALIDATED;
             }
-        } 
-        else {
-            // jika salah satu REJECT: Balik ke DRAFT & reset centang
-            $letter->status = LetterStatus::DRAFT;
-            $validate->acc_katu = false;
-            $validate->acc_waka = false;
-            // $letter->acc_katu = false;
-            // $letter->acc_waka = false;
-
-            // simpan note ke kolom yang sesuai role-nya
-            if ($role === UserRole::KEPALA_TU) $validate->note_katu = $note;
-            if ($role === UserRole::WAKA) $validate->note_waka = $note;
-        }
-
-        DB::transaction(function () use ($letter, $validate) {
+                
             $validate->save();
-
-            if ($validate->acc_katu && $validate->acc_waka) {
-                $letter->status = LetterStatus::VALIDATED;
-            }
-            
             $letter->save();
         });
     }
