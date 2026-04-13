@@ -257,11 +257,8 @@ class LetterController extends Controller
             $letter->load('letterRequest');
         }
 
-        $viewPath = ($letter->type === LetterType::INCOMING) 
-                ? 'letters.incoming.draft' 
-                : 'letters.outgoing.draft';
 
-        return view($viewPath, compact('letter'));
+        return view('tu.editDraft', compact('letter'));
     }
 
     /**

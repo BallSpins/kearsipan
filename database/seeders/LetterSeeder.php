@@ -6,6 +6,7 @@ use App\Enums\LetterStatus;
 use App\Enums\LetterType;
 use App\Models\Classification;
 use App\Models\Letter;
+use App\Models\LetterRequest;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,18 +22,18 @@ class LetterSeeder extends Seeder
             'name' => 'Tata Usaha'
         ]);
 
-        App\Models\LetterRequest::create([
+        LetterRequest::create([
             'subject' => 'Permohonan Surat Keterangan Lulus',
             'description' => 'Saya memohon surat keterangan lulus untuk keperluan pendaftaran perguruan tinggi.',
             'file_path' => 'letter_requests/permohonan_skl.pdf',
             'waka_id' => 4,
         ]);
 
-        App\Models\Letter::create([
+        Letter::create([
             'full_number' => '002/SK/III/2026',
             'sequence_number' => 2,
             'year' => 2026,
-            'type' => App/Enums/LetterType::OUTGOING,
+            'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
             'address' => 'Orang Tua/Wali Murid Kelas XII',
             'subject' => 'Permohonan Surat Keterangan Lulus',
@@ -40,11 +41,11 @@ class LetterSeeder extends Seeder
             'status' => LetterStatus::DRAFT,
         ]);
 
-        App\Models\Letter::create([
+        Letter::create([
             'full_number' => '002/SK/III/2026',
             'sequence_number' => 3,
             'year' => 2026,
-            'type' => App\Enums\LetterType::INCOMING,
+            'type' => LetterType::INCOMING,
             'classification_code' => $classification->code,
             'address' => 'Orang Tua/Wali Murid Kelas XII',
             'subject' => 'Permohonan Surat Keterangan Lulus',

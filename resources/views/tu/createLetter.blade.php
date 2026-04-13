@@ -81,8 +81,8 @@
         <form action="">
             <div class="flex flex-row gap-40">
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat Tujuan</label>
-                    <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat</label>
+                    <input type="text" name="address" class="rounded border w-150 h-10 p-2 mb-2">
 
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Lampiran</label>
                     <div
@@ -108,11 +108,11 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat Tujuan</label>
-                    <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Nomor Surat</label>
+                    <input type="text" name="origin_number" class="rounded border w-150 h-10 p-2 mb-2">
 
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
-                    <textarea name="" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none"></textarea>
+                    <textarea name="subject" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none"></textarea>
                     <div class="ml-auto">
                         <button
                             class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Kirim</button>

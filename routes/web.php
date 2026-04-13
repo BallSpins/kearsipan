@@ -308,7 +308,7 @@ Route::middleware([
 
             // route untuk menampilkan form edit draft surat masuk (GET /tu/draft/edit/{letter})
             // Note: Parameter {letter} diisi letter id. Hanya surat dengan status DRAFT yang bisa diedit.
-            Route::get('/draft/edit/{letter}', [LetterController::class, 'editIncomingDraftView'])
+            Route::get('/draft/edit/{letter}', [LetterController::class, 'letterDraftDetailView'])
                 ->name('incoming.draft.edit.view');
 
             // ====================================================================

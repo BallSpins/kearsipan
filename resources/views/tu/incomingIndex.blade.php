@@ -91,10 +91,11 @@
                             <td class="px-6 py-4 text-gray-700">{{ $item->address }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ $item->status }}</td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
-                                <span class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30">Hapus
-                                </span>
-                                <span class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">Update
-                                </span>
+                                <a 
+                                    class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30">Hapus
+                                </a>
+                                <a href="{{ route('tu.incoming.draft.edit.view', $item->id) }}" class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">Update
+                                </a>
                             </td>
                             <td></td>
                         </tr>
