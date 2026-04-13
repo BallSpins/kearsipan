@@ -9,13 +9,13 @@
       <button type="button" 
         @click="$dispatch('open-logout-modal')" 
         class="flex bg-[#FF0000] hover:bg-red-700 transition w-40 h-10 rounded justify-center items-center cursor-pointer">
-    <div class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-            <path fill="white" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"/>
-        </svg>
-        <span class="text-white font-medium">Logout</span>
-    </div>
-</button>
+          <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                  <path fill="white" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"/>
+              </svg>
+              <span class="text-white font-medium">Logout</span>
+          </div>
+      </button>
     </div>
 
     {{-- Alert Sukses --}}
