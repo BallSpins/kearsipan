@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 
 class UserRequest extends FormRequest
@@ -38,7 +39,6 @@ class UserRequest extends FormRequest
             // Logic Conditional untuk Password
             'password' => [
                 $isUpdate ? 'nullable' : 'required', // Jika update boleh null, jika create wajib ada
-                'confirmed',
                 Password::min(8),
             ],
         ];
