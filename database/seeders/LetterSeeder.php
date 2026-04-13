@@ -40,6 +40,18 @@ class LetterSeeder extends Seeder
             'status' => LetterStatus::DRAFT,
         ]);
 
+        App\Models\Letter::create([
+            'full_number' => '002/SK/III/2026',
+            'sequence_number' => 3,
+            'year' => 2026,
+            'type' => App\Enums\LetterType::INCOMING,
+            'classification_code' => $classification->code,
+            'address' => 'Orang Tua/Wali Murid Kelas XII',
+            'subject' => 'Permohonan Surat Keterangan Lulus',
+            'file_path' => 'letters/seed/surat_masuk_draft.pdf',
+            'status' => LetterStatus::DRAFT,
+        ]);
+
         // --- CONTOH SURAT MASUK (INCOMING) ---
         Letter::create([
             'origin_number' => '001/SM/III/2026',

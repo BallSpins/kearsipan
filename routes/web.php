@@ -47,6 +47,10 @@ Route::middleware([
         return view('dashboard');
     });
 
+    // route untuk menampilkan halaman template surat (GET /templates)
+    Route::get('/templates', [TemplateController::class, 'index'])
+        ->name('templates.index');
+
     // ========================================================================
     // FILE DOWNLOAD GROUP
     // ========================================================================
