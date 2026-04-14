@@ -9,6 +9,7 @@ use App\Http\Requests\Letter\ReviewLetterRequest;
 use App\Http\Requests\Letter\StoreIncomingRequest;
 use App\Http\Requests\Letter\UpdateSignedLetterRequest;
 use App\Models\Letter;
+use App\Models\LetterRequest;
 use App\Services\AttachmentService;
 use App\Services\ClassificationService;
 use App\Services\DispositionService;
@@ -51,7 +52,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('tu.incomingIndex', compact('letters'));
     }
 
     /**
@@ -77,7 +78,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('waka.incomingIndex', compact('letters'));
     }
 
     /**
@@ -87,7 +88,7 @@ class LetterController extends Controller
     {
         $classifications = $this->classificationService->getClassifications();
 
-        return view('', compact('classifications'));
+        return view('tu.createLetter', compact('classifications'));
     }
 
     /**
@@ -133,7 +134,7 @@ class LetterController extends Controller
             $query->where('receiver_id', auth()->id());
         }]);
 
-        return view('', compact('letter'));
+        return view('waka.incomingDetail', compact('letter'));
     }
 
     /**
@@ -181,8 +182,12 @@ class LetterController extends Controller
                     ->with(['letterValidate', 'classification'])
                     ->latest()
                     ->paginate(10);
-
-        return view('', compact('letters'));
+        
+        if($user->role === UserRole::KEPALA_TU) {
+            return view('katu.reviewIndex', compact('letters'));
+        } else if ($user->role === UserRole::WAKA) {
+            return view('waka.reviewIndex', compact('letters'));
+        }
     }
     
     /**
@@ -205,7 +210,7 @@ class LetterController extends Controller
     {
         $letter->load(['attachments', 'classification', 'letterValidate']);
 
-        return view('', compact('letter'));
+        return view('waka.reviewDetail', compact('letter'));
     }
 
     /**
@@ -219,6 +224,27 @@ class LetterController extends Controller
     }
 
     // End View Surat Keluar
+
+    public function TUDashboardView(): View
+    {
+        $draftLetter = Letter::incomingDrafts()
+                    ->orWhere(function ($q) {
+                        $q->outgoingDrafts();
+                    })
+                    ->limit(5)
+                    ->latest()
+                    ->get();
+
+        $pendingRequestCount = LetterRequest::pending()
+                    ->count();
+
+        $revisionRequestCount = Letter::revisions()
+                    ->count();
+
+        $totalRequestCount = LetterRequest::count();
+
+        return view('tu.dashboard', compact('draftLetter', 'pendingRequestCount', 'revisionRequestCount', 'totalRequestCount'));
+    }
 
     /**
      * Tampilan detail untuk surat (DRAFT) (Oleh TU)
@@ -235,11 +261,8 @@ class LetterController extends Controller
             $letter->load('letterRequest');
         }
 
-        $viewPath = ($letter->type === LetterType::INCOMING) 
-                ? 'letters.incoming.draft' 
-                : 'letters.outgoing.draft';
 
-        return view($viewPath, compact('letter'));
+        return view('tu.editDraft', compact('letter'));
     }
 
     /**
@@ -251,7 +274,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('tu.letterArchive', compact('letters'));
     }
 
     // End view function

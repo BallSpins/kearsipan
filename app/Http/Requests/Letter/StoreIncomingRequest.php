@@ -31,11 +31,6 @@ class StoreIncomingRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'tracking_number' => [
-                'required',
-                'string',
-                'max:50',
-            ],
             'address' => [
                 'required',
                 'string',
@@ -44,10 +39,6 @@ class StoreIncomingRequest extends FormRequest
                 'required',
                 'string',
             ],
-            // 'reference_number' => [
-            //     'required',
-            //     'string',
-            // ],
             'file' => [
                 'required', 
                 'file', 

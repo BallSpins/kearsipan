@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\DispositionStatus;
 use App\Enums\LetterStatus;
 use App\Enums\LetterType;
 use App\Models\Classification;
 use App\Models\Letter;
+use App\Models\LetterRequest;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,22 +23,34 @@ class LetterSeeder extends Seeder
             'name' => 'Tata Usaha'
         ]);
 
-        App\Models\LetterRequest::create([
+        LetterRequest::create([
             'subject' => 'Permohonan Surat Keterangan Lulus',
             'description' => 'Saya memohon surat keterangan lulus untuk keperluan pendaftaran perguruan tinggi.',
             'file_path' => 'letter_requests/permohonan_skl.pdf',
             'waka_id' => 4,
         ]);
 
-        App\Models\Letter::create([
+        Letter::create([
             'full_number' => '002/SK/III/2026',
             'sequence_number' => 2,
             'year' => 2026,
-            'type' => App/Enums/LetterType::OUTGOING,
+            'type' => LetterType::OUTGOING,
             'classification_code' => $classification->code,
             'address' => 'Orang Tua/Wali Murid Kelas XII',
             'subject' => 'Permohonan Surat Keterangan Lulus',
             'file_path' => 'letters/seed/surat_keluar_draft.pdf',
+            'status' => LetterStatus::DRAFT,
+        ]);
+
+        Letter::create([
+            'full_number' => '002/SK/III/2026',
+            'sequence_number' => 3,
+            'year' => 2026,
+            'type' => LetterType::INCOMING,
+            'classification_code' => $classification->code,
+            'address' => 'Orang Tua/Wali Murid Kelas XII',
+            'subject' => 'Permohonan Surat Keterangan Lulus',
+            'file_path' => 'letters/seed/surat_masuk_draft.pdf',
             'status' => LetterStatus::DRAFT,
         ]);
 
@@ -51,6 +65,18 @@ class LetterSeeder extends Seeder
             'subject' => 'Undangan Rapat Koordinasi Kurikulum Merdeka',
             'file_path' => 'letters/seed/surat_masuk_1.pdf',
             'status' => LetterStatus::RECEIVED, // Menunggu disposisi Kepsek
+        ]);
+
+        $incoming = Letter::create([
+            'origin_number' => '001/SM/III/2026',
+            'sequence_number' => 1,
+            'year' => 2026,
+            'type' => LetterType::INCOMING,
+            'classification_code' => $classification->code,
+            'address' => 'Dinas Pendidikan Provinsi Jawa Timur',
+            'subject' => 'Undangan Rapat Koordinasi Kurikulum Merdeka',
+            'file_path' => 'letters/seed/surat_masuk_1.pdf',
+            'status' => LetterStatus::DISPATCHED, // Menunggu disposisi Kepsek
         ]);
 
         // --- CONTOH SURAT KELUAR (OUTGOING) - STATUS DRAFT ---
@@ -83,6 +109,19 @@ class LetterSeeder extends Seeder
             'waka_id' => 3, 
             'acc_katu' => false,
             'acc_waka' => false,
+        ]);
+
+        $reviewingLetter->letterValidate()->create([
+            'waka_id' => 4, 
+            'acc_katu' => false,
+            'acc_waka' => false,
+        ]);
+
+        $incoming->dispositions()->create([
+            'receiver_id' => 4,
+            'receiver_role' => 'Waka',
+            'instruction' => 'Tolong ditindak lanjuti',
+            'status' => DispositionStatus::PENDING,
         ]);
 
         // --- CONTOH SURAT KELUAR (OUTGOING) - SUDAH VALIDASI ---

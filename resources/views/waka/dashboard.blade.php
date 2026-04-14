@@ -3,10 +3,10 @@
         Dashboard TU
     </x-slot:title>
     <div>
-        <x-sidebar.tu />
+        <x-sidebar.waka />
 
         <div class="bg-white shadow-xl">
-            <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
+            <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
         </div>
 
         <div class="mt-20 ml-75 flex gap-15">
@@ -18,16 +18,9 @@
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-xl w-110 h-55">
-                <h1 class="font-semibold text-xl p-2 ml-10">Menunggu Persetujuan</h1>
-                 <div class="flex gap-40 mt-10">
-                    <p class="font-bold text-7xl p-2 ml-10">{{ $pendingRequestCount }}</p>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 24 24"><path fill="#FF5D00" d="M12 5.511c.561 0 1.119.354 1.544 1.062l5.912 9.854C20.307 17.842 19.65 19 18 19H6c-1.65 0-2.307-1.159-1.456-2.573l5.912-9.854c.425-.708.983-1.062 1.544-1.062m0-2c-1.296 0-2.482.74-3.259 2.031l-5.912 9.856c-.786 1.309-.872 2.705-.235 3.83S4.473 21 6 21h12c1.527 0 2.77-.646 3.406-1.771s.551-2.521-.235-3.83l-5.912-9.854C14.482 4.251 13.296 3.511 12 3.511"/><circle cx="12" cy="16" r="1.3" fill="#FF5D00"/><path fill="#FF5D00" d="M13.5 10c0-.83-.671-1.5-1.5-1.5a1.5 1.5 0 0 0-1.389 2.062C11.165 11.938 12 14 12 14l1.391-3.438c.068-.173.109-.363.109-.562"/></svg>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-xl w-110 h-55">
-                <h1 class="font-semibold text-xl p-2 ml-10">Revisi</h1>
+                <h1 class="font-semibold text-xl p-2 ml-10">Surat Masuk</h1>
                 <div class="flex gap-40 mt-10">
-                    <p class="font-bold text-7xl p-2 ml-10">{{ $revisionRequestCount }}</p>
+                    <p class="font-bold text-7xl p-2 ml-10">{{ $totalDisposedCount }}</p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 24 24"><path fill="#3B82F6" d="M5 21h14c1.1 0 2-.9 2-2v-7h-2v7H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2"/><path fill="#3B82F6" d="M7 13v3c0 .55.45 1 1 1h3c.27 0 .52-.11.71-.29l9-9a.996.996 0 0 0 0-1.41l-3-3a.996.996 0 0 0-1.41 0l-9.01 8.99A1 1 0 0 0 7 13m10-7.59L18.59 7L17.5 8.09L15.91 6.5zm-8 8l5.5-5.5l1.59 1.59l-5.5 5.5H9z"/></svg>
                 </div>
             </div>
@@ -41,14 +34,15 @@
                 <thead class="bg-[#061E29]">
                     <tr>
                         <th class="px-6 py-4 font-bold text-white text-lg">No</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Tanggal Agenda</th>
+                        <th class="px-6 py-4 font-bold text-white text-lg">Nomor Surat</th>
                         <th class="px-6 py-4 font-bold text-white text-lg">Jenis Surat</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Alamat Tujuan</th>
+                        <th class="px-6 py-4 font-bold text-white text-lg">Alamat</th>
                         <th class="px-6 py-4 font-bold text-white text-lg text-center">Status</th>
+                        <th class="px-6 py-4 font-bold text-white text-lg text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-                    @foreach ($draftLetter as $index => $item)
+                    @foreach ($disposedLetter as $index => $item)
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-6 py-4 text-gray-700">{{ $index + 1 }}</td>
                             {{-- Gunakan created_at karena di tabel letters gak ada kolom 'tanggal' --}}

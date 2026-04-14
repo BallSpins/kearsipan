@@ -7,9 +7,11 @@ use App\Http\Requests\LetterRequest\ApproveLetterRequest;
 use App\Http\Requests\LetterRequest\StoreOutgoingRequest;
 use App\Http\Requests\LetterRequest\UpdateRequest;
 use App\Http\Requests\LetterRequest\UpdateRequestFile;
+use App\Models\Letter;
 use App\Models\LetterRequest;
 use App\Services\LetterRequestAttachmentService;
 use App\Services\LetterRequestService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -29,6 +31,18 @@ class LetterRequestController extends Controller
 
     // Start View function
 
+    public function dashboardWaka(): View
+    {
+        $totalDisposedCount = Letter::assignedDisposition(auth()->id())->count();
+        $totalRequestCount = LetterRequest::count();
+        $disposedLetter = Letter::assignedDisposition(auth()->id())
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('waka.dashboard', compact('totalDisposedCount', 'totalRequestCount', 'disposedLetter'));
+    }
+
     /**
      * List permintaan waka beserta statusnya (Oleh Waka)
      */
@@ -39,7 +53,7 @@ class LetterRequestController extends Controller
                     ->latest()
                     ->paginate(10);
         
-        return view('', compact('requests'));
+        return view('waka.requestIndex', compact('requests'));
     }
 
     /**
@@ -59,7 +73,7 @@ class LetterRequestController extends Controller
      */
     public function createRequestView(): View
     {
-        return view('');
+        return view('waka.createRequest');
     }
 
     /**
@@ -74,7 +88,7 @@ class LetterRequestController extends Controller
 
         $request->load(['letter.classification', 'attachments']);
 
-        return view('', compact('request'));
+        return view('waka.detailRequest', compact('request'));
     }
 
     /**
@@ -85,7 +99,7 @@ class LetterRequestController extends Controller
     {
         $request->load(['letter.classification', 'attachments']);
 
-        return view('', compact('request'));
+        return view('tu.requestDetail', compact('request')); // sesuaikan nama view & variabelnya
     }
 
     // End View function
@@ -95,27 +109,33 @@ class LetterRequestController extends Controller
      */
     public function store(StoreOutgoingRequest $request): RedirectResponse
     {
-        $data = $request->safe()->only(['subject', 'description']);
+        try {
+            $data = $request->safe()->only(['subject', 'description']);
+            
+            // 1. Buat data request
+            $letterRequest = $this->requestService->createRequest($data);
 
-        // 1. Buat data request
-        $letterRequest = $this->requestService->createRequest($data);
+            // 2. Upload draf kasar jika ada
+            if ($request->hasFile('draft_file')) {
+                $this->requestService->uploadFile($letterRequest, $request->file('draft_file'));
+            }
 
-        // 2. Upload draf kasar jika ada
-        if ($request->hasFile('draft_file')) {
-            $this->requestService->uploadFile($letterRequest, $request->file('draft_file'));
+            // 3. Upload lampiran pendukung jika ada
+            if ($request->hasFile('attachments')) {
+                // loop array file
+                foreach ($request->file('attachments') as $file) {
+                    $this->attachmentService->addAttachment($letterRequest, $file);
+                }   
+            }
+
+            return redirect()
+                    ->route('waka.request.view')
+                    ->with('success', 'Request terkirim.');
+        } catch (Exception $e) {
+            return redirect()
+                    ->back()
+                    ->with('error', 'Gagal membuat permintaan: ' . $e->getMessage());
         }
-
-        // 3. Upload lampiran pendukung jika ada
-        if ($request->hasFile('attachments')) {
-            // loop array file
-            foreach ($request->file('attachments') as $file) {
-                $this->attachmentService->addAttachment($letterRequest, $file);
-            }   
-        }
-
-        return redirect()
-                ->route('')
-                ->with('success', 'Request terkirim.');
     }
 
     /**

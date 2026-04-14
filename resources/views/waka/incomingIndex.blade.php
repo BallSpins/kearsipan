@@ -2,10 +2,10 @@
     <x-slot:title>
         Surat Masuk
     </x-slot:title>
-    <x-sidebar.tu />
+    <x-sidebar.waka />
     
     <div class="bg-white shadow-xl">
-        <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
+        <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
     </div>
     <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
         <div class="relative ml-auto mt-10 mr-20">
@@ -16,7 +16,7 @@
                 </svg>
             </div>
 
-            <input type="text" name="search" value="{{ request('search') }}"
+              <input type="text" name="search" value="{{ request('search') }}"
                 class="block w-full border rounded-md  pl-10 pr-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#000000]">
         </div>
     </form>
@@ -42,10 +42,8 @@
                             <td class="px-6 py-4 text-gray-700">{{ $item->address }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ $item->status }}</td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
-                                <a 
-                                    class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30">Hapus
-                                </a>
-                                <a href="{{ route('tu.incoming.draft.edit.view', $item->id) }}" class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">Update
+                                <a href="{{ route('waka.incoming.detail.view', $item->id) }}" class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">
+                                  Detail
                                 </a>
                             </td>
                             <td></td>

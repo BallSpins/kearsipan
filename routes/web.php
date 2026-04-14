@@ -9,6 +9,8 @@ use App\Http\Controllers\LetterRequestAttachmentController;
 use App\Http\Controllers\LetterRequestController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UserController;
+use App\Http\Requests\LetterRequest\StoreOutgoingRequest;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
@@ -46,6 +48,10 @@ Route::middleware([
     Route::get('/dashboard', function (): View {
         return view('dashboard');
     });
+
+    // route untuk menampilkan halaman template surat (GET /templates)
+    Route::get('/templates', [TemplateController::class, 'index'])
+        ->name('templates.index');
 
     // ========================================================================
     // FILE DOWNLOAD GROUP
@@ -260,9 +266,7 @@ Route::middleware([
             'role:' . UserRole::only(UserRole::KEPALA_TU, UserRole::TU),
         ])->group(function () {
             // route untuk menampilkan dashboard khusus TU (GET /tu/dashboard)
-            Route::get('/dashboard', function () {
-                return view('tu.dashboard');
-            })->name('dashboard');
+            Route::get('/dashboard', [LetterController::class, 'TUDashboardView'])->name('dashboard');
 
             // ====================================================================
             // LETTER REQUEST (Permintaan Surat dari WAKA) - TU Management
@@ -306,7 +310,7 @@ Route::middleware([
 
             // route untuk menampilkan form edit draft surat masuk (GET /tu/draft/edit/{letter})
             // Note: Parameter {letter} diisi letter id. Hanya surat dengan status DRAFT yang bisa diedit.
-            Route::get('/draft/edit/{letter}', [LetterController::class, 'editIncomingDraftView'])
+            Route::get('/draft/edit/{letter}', [LetterController::class, 'letterDraftDetailView'])
                 ->name('incoming.draft.edit.view');
 
             // ====================================================================
@@ -376,6 +380,15 @@ Route::middleware([
         ->middleware([
             'role:' . UserRole::only(UserRole::WAKA),
         ])->group(function () {
+            Route::get('/dashboard', [LetterRequestController::class, 'dashboardWaka'])
+                ->name('dashboard');
+
+            Route::get('/review', [LetterController::class, 'indexReviewView'])
+                ->name('review.index.view');
+
+            Route::post('/request', [LetterRequestController::class, 'store'])
+                ->name('request.store');
+
             // route untuk menampilkan halaman review surat keluar (GET /waka/review/{letter})
             // Note: Parameter {letter} diisi letter id. WAKA hanya bisa review jika dia adalah reviewer yang ditunjuk di LetterValidate.
             Route::get('/review/{letter}', [LetterController::class, 'reviewLetterView'])
@@ -386,6 +399,15 @@ Route::middleware([
             // action: 'approve' atau 'reject'. Jika reject, note wajib diisi. Check di controller bahwa WAKA adalah reviewer yang ditunjuk.
             Route::post('/review/{letter}', [LetterController::class, 'review'])
                 ->name('review');
+
+            Route::get('/requests', [LetterRequestController::class, 'indexWakaRequestView'])
+                ->name('request.view');
+
+            Route::get('/requests/detail/{request}', [LetterRequestController::class, 'detailWakaRequestView'])
+                ->name('request.detail.view');
+
+            Route::get('/requests/create', [LetterRequestController::class, 'createRequestView'])
+                ->name('request.create.view');
 
             // ====================================================================
             // DISPOSITION (Disposisi Surat Masuk) - Assigned to WAKA

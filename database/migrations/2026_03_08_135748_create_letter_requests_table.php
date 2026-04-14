@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('subject');
             $table->text('description');
             $table->text('file_path')
-                    ->nullable(false);
+                    ->nullable();
             $table->foreignId('letter_id')->nullable()->constrained(); // Terisi jika sudah jadi surat resmi
             $table->foreignId('waka_id')->nullable()->constrained('users');
             $table->timestamps();

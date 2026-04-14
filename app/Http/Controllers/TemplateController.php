@@ -6,6 +6,7 @@ use App\Models\LetterTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Support\Facades\Cache;
 
 class TemplateController extends Controller
 {
@@ -23,5 +24,14 @@ class TemplateController extends Controller
 
         return response()
                 ->download($fullPath, $downloadName);
+    }
+
+    public function index()
+    {
+        $templates = Cache::rememberForever('letter_templates', function () {
+            return LetterTemplate::all();
+        });
+
+        return view('letterTemplate', compact('templates'));
     }
 }

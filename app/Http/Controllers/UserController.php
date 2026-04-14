@@ -43,7 +43,7 @@ class UserController extends Controller
                 return redirect()->route('kepsek.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
                                  ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
             } else if (auth()->user()->role === UserRole::ADMIN) {
-                return redirect()->route('users.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                return redirect()->route('users.index') // Ke dashboard atau halaman yang dituju sebelumnya
                                  ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
             }
         }
@@ -78,7 +78,7 @@ class UserController extends Controller
     {
         $users = User::paginate(10);
         
-        return view('', compact('users'));
+        return view('admin.userIndex', compact('users'));
     }
 
     /**
@@ -88,7 +88,7 @@ class UserController extends Controller
     {
         $roles = array_column(UserRole::cases(), 'value');
 
-        return view('', compact('roles'));
+        return view('admin.create', compact('roles'));
     }
 
     /**
@@ -96,7 +96,7 @@ class UserController extends Controller
      */
     public function editUserView(User $user): View
     {
-        return view('', compact('user'));
+        return view('admin.edit', compact('user'));
     }
 
     // End View function
@@ -113,10 +113,10 @@ class UserController extends Controller
             User::create($data);
 
             return redirect()
-                    ->route('')
+                    ->route('users.index')
                     ->with('success', 'User baru berhasil dibuat.');
         } catch (Exception $e) {
-            return redirect()->back()
+            return redirect()->route('users.index')
                 ->with('error', $e->getMessage());
         }
     }
@@ -138,10 +138,10 @@ class UserController extends Controller
             $user->update($data);
 
             return redirect()
-                    ->route('')
+                    ->route('users.index')
                     ->with('success', 'User berhasil diperbarui.');
         } catch (Exception $e) {
-            return redirect()->back()
+            return redirect()->route('users.index')
                 ->with('error', $e->getMessage());
         }
     }
@@ -155,10 +155,10 @@ class UserController extends Controller
             $user->delete();
 
             return redirect()
-                    ->back()
-                    ->with('success', 'User berhasil diperbarui.');
+                    ->route('users.index')
+                    ->with('success', 'User berhasil dihapus.');
         } catch (Exception $e) {
-            return redirect()->back()
+            return redirect()->route('users.index')
                 ->with('error', $e->getMessage());
         }
     }
