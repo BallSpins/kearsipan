@@ -331,6 +331,9 @@ Route::middleware([
             Route::get('/archived', [LetterController::class, 'indexArchivedView'])
                 ->name('archived');
 
+            Route::get('/archived/detail/{letter}', [LetterController::class, 'archivedDetailView'])
+                ->name('archived.detail.view');
+
             // route untuk meregistrasi/membuat surat masuk baru (POST /tu/incoming)
             // Note: Data divalidasi di app/Http/Requests/Letter/StoreIncomingRequest.php
             // Membuat Letter dengan type INCOMING, status DRAFT. Upload file utama dan lampiran jika ada.

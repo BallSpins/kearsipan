@@ -273,6 +273,17 @@ class LetterController extends Controller
         return view('tu.letterArchive', compact('letters'));
     }
 
+    public function archivedDetailView(Letter $letter): View
+    {
+        if ($letter->status !== LetterStatus::COMPLETED) {
+            abort(403, 'Halaman ini hanya untuk surat yang sudah diarsipkan.');
+        }
+
+        $letter->load(['attachments', 'classification']);
+
+        return view('tu.detailArchive', compact('letter'));
+    }
+
     // End view function
 
     /**

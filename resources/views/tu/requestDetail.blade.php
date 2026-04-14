@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-slot:title>
-        Surat Masuk
+        Detail Surat
     </x-slot:title>
     
     <x-sidebar.tu />
@@ -53,7 +53,7 @@
                     <div class="flex flex-col mt-4">
                         <label class="text-[#484848] mb-2 text-xl font-medium">Tanggal</label>
 
-                        <input type="date" value="{{ $item->created_at->format('Y-m-d') }}"
+                        <input type="date" value="{{ $request->created_at->format('Y-m-d') }}"
                             class="border rounded-md bg-white hover:bg-gray-50 transition 
                h-12 p-3 text-lg outline-none
                [&::-webkit-calendar-picker-indicator]:w-7 

@@ -1,14 +1,14 @@
 <x-layouts.app>
     <x-slot:title>
-        edit draft
+        Detail Arsip
     </x-slot:title>
     <x-sidebar.tu />
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
     </div>
-    <div class="flex mt-10">
+        <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
-            <a href="{{ route('tu.request.list.view') }}" class="text-center rotate-90 items-center justify-center flex">
+            <a href="{{ route('tu.archived') }}" class="text-center rotate-90 items-center justify-center flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
                     <g fill="none" fill-rule="evenodd">
                         <path
@@ -49,5 +49,16 @@
                 <label for="" class="text-[#484848] mb-2 text-xl">Alamat Tujuan</label>
                 <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
             </form>
+        </div>
+        <div class="bg-white rounded-md shadow-xl w-150 h-110 ml-auto mr-20 p-8">
+            <h1 class="text-4xl font-semibold mb-4">Tindakan</h1>
+            <div class=" w-full border border-gray-300 mb-15"></div>
+            <div class="text-center">
+                <button class="bg-[#B4F3C2] border-[#28A745] hover:bg-[#d4fddd] p-3 rounded-md text-xl px-20 font-semibold cursor-pointer shadow-xl">
+                    Di-Setujui</button>
+
+                </div>
+                <h1 class="font-semibold mt-5 text-2xl">Catatan</h1>
+                <textarea name="" class="bg-[#F2F2F2] w-full h-40 rounded p-2 resize-none border" id="" cols="30" rows="10"></textarea>
         </div>
 </x-layouts.app>

@@ -110,5 +110,17 @@ class LetterSeeder extends Seeder
             'file_path' => 'letters/seed/surat_siap_ttd.pdf',
             'status' => LetterStatus::VALIDATED,
         ]);
+
+        Letter::create([
+            'full_number' => '004/SK/III/2026',
+            'sequence_number' => 4,
+            'year' => 2026,
+            'type' => LetterType::OUTGOING,
+            'classification_code' => $classification->code,
+            'address' => 'Kepala Desa Sukomulyo',
+            'subject' => 'Izin Kegiatan Bakti Sosial Siswa',
+            'file_path' => 'letters/seed/surat_siap_ttd.pdf',
+            'status' => LetterStatus::COMPLETED,
+        ]);
     }
 }

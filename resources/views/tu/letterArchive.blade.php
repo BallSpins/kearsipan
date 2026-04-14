@@ -1,14 +1,14 @@
 <x-layouts.app>
     <x-slot:title>
-        Surat Masuk
+        Arsip
     </x-slot:title>
-    
+
     <x-sidebar.tu />
 
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
     </div>
-        <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
+    <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
         <div class="relative ml-auto mt-10 mr-20">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg class="h-5 w-5 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,17 +35,34 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
+                    @foreach ($letters as $index => $item)
                         <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 text-gray-700"></td>
-                            <td class="px-6 py-4 text-gray-700"></td>
-                            <td class="px-6 py-4 text-gray-700"></td>
-                            <td class="px-6 py-4 text-gray-700"></td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $index + 1 }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $item->full_number }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $item->type }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $item->address }}
+                            </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="px-3 py-1 rounded-full text-xs font-semibold">
                                 </span>
                             </td>
-                            <td></td>
+                            <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
+                                <a
+                                    class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30 text-white">Hapus
+                                </a>
+                                <a href="{{ route('tu.archived.detail.view', $item->id) }}"
+                                    class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30 text-white">Detail
+                                </a>
+                            </td>
                         </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
