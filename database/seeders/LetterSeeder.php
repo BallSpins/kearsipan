@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\DispositionStatus;
 use App\Enums\LetterStatus;
 use App\Enums\LetterType;
 use App\Models\Classification;
@@ -66,6 +67,18 @@ class LetterSeeder extends Seeder
             'status' => LetterStatus::RECEIVED, // Menunggu disposisi Kepsek
         ]);
 
+        $incoming = Letter::create([
+            'origin_number' => '001/SM/III/2026',
+            'sequence_number' => 1,
+            'year' => 2026,
+            'type' => LetterType::INCOMING,
+            'classification_code' => $classification->code,
+            'address' => 'Dinas Pendidikan Provinsi Jawa Timur',
+            'subject' => 'Undangan Rapat Koordinasi Kurikulum Merdeka',
+            'file_path' => 'letters/seed/surat_masuk_1.pdf',
+            'status' => LetterStatus::DISPATCHED, // Menunggu disposisi Kepsek
+        ]);
+
         // --- CONTOH SURAT KELUAR (OUTGOING) - STATUS DRAFT ---
         Letter::create([
             'full_number' => '002/SK/III/2026',
@@ -96,6 +109,19 @@ class LetterSeeder extends Seeder
             'waka_id' => 3, 
             'acc_katu' => false,
             'acc_waka' => false,
+        ]);
+
+        $reviewingLetter->letterValidate()->create([
+            'waka_id' => 4, 
+            'acc_katu' => false,
+            'acc_waka' => false,
+        ]);
+
+        $incoming->dispositions()->create([
+            'receiver_id' => 4,
+            'receiver_role' => 'Waka',
+            'instruction' => 'Tolong ditindak lanjuti',
+            'status' => DispositionStatus::PENDING,
         ]);
 
         // --- CONTOH SURAT KELUAR (OUTGOING) - SUDAH VALIDASI ---

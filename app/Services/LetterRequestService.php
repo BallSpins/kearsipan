@@ -88,6 +88,8 @@ class LetterRequestService
             if ($updated && $oldPath && Storage::disk('public')->exists($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
             }
+
+            return true;
         });
     }
 

@@ -26,17 +26,20 @@
             <h1 class="font-semibold text-4xl">Template Surat</h1>
         </div>
     </div>
-    <div class="bg-white rounded-md shadow p-6 ml-77 mr-10 mt-6">
-        <div class="flex flex-row justify-between items-center">
-            <h1 class="text-2xl font-semibold">Surat Tugas</h1>
 
-            <button class="bg-[#28A745] text-white rounded flex text-xl font-semibold p-2 items-center gap-2">
-                Download
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
-                </svg>
-            </button>
-        </div>
+    <div class="p-6 ml-77 mr-10 mt-6 flex flex-col gap-4">
+        @foreach ($templates as $template)
+            <div class="flex flex-row justify-between items-center bg-white px-8 py-4 rounded-xl shadow-xl">
+                <h1 class="text-2xl font-semibold">{{ $template->name }}</h1>
+
+                <a href="{{ route('download.template.download', $template->slug) }}" class="bg-[#28A745] text-white rounded flex text-xl font-semibold p-2 items-center gap-2">
+                    Download
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                    </svg>
+                </a>
+            </div>
+        @endforeach
     </div>
 </x-layouts.app>

@@ -78,7 +78,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('waka.incomingIndex', compact('letters'));
     }
 
     /**
@@ -134,7 +134,7 @@ class LetterController extends Controller
             $query->where('receiver_id', auth()->id());
         }]);
 
-        return view('', compact('letter'));
+        return view('waka.incomingDetail', compact('letter'));
     }
 
     /**
@@ -182,8 +182,12 @@ class LetterController extends Controller
                     ->with(['letterValidate', 'classification'])
                     ->latest()
                     ->paginate(10);
-
-        return view('', compact('letters'));
+        
+        if($user->role === UserRole::KEPALA_TU) {
+            return view('katu.reviewIndex', compact('letters'));
+        } else if ($user->role === UserRole::WAKA) {
+            return view('waka.reviewIndex', compact('letters'));
+        }
     }
     
     /**
@@ -206,7 +210,7 @@ class LetterController extends Controller
     {
         $letter->load(['attachments', 'classification', 'letterValidate']);
 
-        return view('', compact('letter'));
+        return view('waka.reviewDetail', compact('letter'));
     }
 
     /**
