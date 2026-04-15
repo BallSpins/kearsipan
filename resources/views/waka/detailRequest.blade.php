@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-slot:title>
-        Surat Masuk
+        Detail Permintaan Surat
     </x-slot:title>
     <x-sidebar.waka />
     <div class="bg-white shadow-xl">
@@ -22,13 +22,13 @@
         </div>
     </div>
     <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
-        <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
+        <h1 class="text-4xl font-semibold mb-4">Detail Permintaan</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form action="">
             <div class="flex flex-row gap-40">
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat</label>
-                    <input type="text" disabled value="{{ $request->address }}" name="address" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Perhial</label>
+                    <input type="text" disabled value="{{ $request->subject }}" name="address" class="rounded border w-150 h-10 p-2 mb-2">
 
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Surat yang disertakan</label>
                     <div class="flex flex-row gap-4">
@@ -43,8 +43,20 @@
   
                       </div>
                         <div class="my-auto">
-                            <a href="#"
-                                class="bg-[#28A745] hover:bg-[#218838] text-white p-2  rounded-xl shadow-md flex items-center justify-center transition">
+                            @php
+                                $hasFile = !empty($request->file_path);
+                            @endphp
+                            <a 
+                            @if($hasFile)
+                                href="{{ route('download.outgoing', $request->id) }}"
+                            @else
+                                href="javascript:void(0)" {{-- Path kosong/tidak ke mana-mana --}}
+                            @endif
+                            class="p-2 rounded-xl shadow-md flex items-center justify-center transition 
+                            {{ $hasFile 
+                               ? 'bg-[#28A745] hover:bg-[#218838] text-white' 
+                               : 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-50 pointer-events-none' }}"
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -67,8 +79,20 @@
   
                       </div>
                         <div class="my-auto">
-                            <a href="#"
-                                class="bg-[#28A745] hover:bg-[#218838] text-white p-2  rounded-xl shadow-md flex items-center justify-center transition">
+                            @php
+                                $hasFile = !empty($request->attachments->first()->file_path);
+                            @endphp
+                            <a 
+                            @if($hasFile)
+                                href="{{ route('download.outgoing.attachment', $request->attachments->first()->id) }}"
+                            @else
+                                href="javascript:void(0)" {{-- Path kosong/tidak ke mana-mana --}}
+                            @endif
+                            class="p-2 rounded-xl shadow-md flex items-center justify-center transition 
+                            {{ $hasFile 
+                               ? 'bg-[#28A745] hover:bg-[#218838] text-white' 
+                               : 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-50 pointer-events-none' }}"
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -80,11 +104,8 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Nomor Surat</label>
-                    <input type="text" disabled name="" class="rounded border w-150 h-10 p-2 mb-2">
-
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
-                    <textarea name="subject" disabled id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none"></textarea>
+                    <textarea name="subject" disabled id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none">{{ $request->description }}</textarea>
                 </div>
             </div>
         </form>

@@ -191,9 +191,8 @@ Route::middleware([
             'role:' . UserRole::only(UserRole::KEPALA_SEKOLAH),
         ])->group(function () {
             // route untuk menampilkan dashboard khusus KEPALA SEKOLAH (GET /kepsek/dashboard)
-            Route::get('/dashboard', function () {
-                return view('dashboardTu');
-            })->name('dashboard');
+            Route::get('/dashboardKepsek', [LetterController::class, 'indexDashboardKepsekView'])
+                ->name('dashboardkep.view');
 
             // route untuk menampilkan daftar surat masuk baru yang belum di-review (GET /kepsek/incoming)
             // Status: RECEIVED. Hanya menampilkan surat yang baru diterima oleh sistem.
@@ -332,6 +331,9 @@ Route::middleware([
             // Status: COMPLETED. Menampilkan surat masuk & keluar yang sudah selesai proses.
             Route::get('/archived', [LetterController::class, 'indexArchivedView'])
                 ->name('archived');
+
+            Route::get('/archived/detail/{letter}', [LetterController::class, 'archivedDetailView'])
+                ->name('archived.detail.view');
 
             // route untuk meregistrasi/membuat surat masuk baru (POST /tu/incoming)
             // Note: Data divalidasi di app/Http/Requests/Letter/StoreIncomingRequest.php

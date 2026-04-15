@@ -24,7 +24,8 @@
     <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
         <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
-        <form action="">
+        <form action="{{ route('waka.dispositions.completed', $letter->dispositions->first()->id) }}" method="POST">
+            @csrf
             <div class="flex flex-row gap-10">
                 <div class="flex flex-col">
                     <div class="flex flex-row gap-4">

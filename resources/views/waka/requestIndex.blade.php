@@ -77,13 +77,13 @@
                         <td class="px-6 py-4 text-gray-700">{{ $item->subject }}</td>
 
                         <td class="px-6 py-4 text-gray-700 text-center">
-                          @if ($item->status)
+                          @if ($item->letter)
                             <span
                                   class="px-2 py-1 rounded-full text-xs {{ $item->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }}">
-                                  {{ ucfirst($item->status) }}
+                                  {{ ucfirst($item->letter->status) }}
                               </span>
                           
-                          @elseif (!$item->status)
+                          @else
                           <span
                                   class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">
                                   Pending

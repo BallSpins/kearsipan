@@ -1,12 +1,10 @@
 <x-layouts.app>
     <x-slot:title>
-        Arsip
+        Permintaan Acc
     </x-slot:title>
-
-    <x-sidebar.tu />
-
+    <x-sidebar.kepsek />
     <div class="bg-white shadow-xl">
-        <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
+        <h1 class="text-black ml-67 text-2xl font-bold">Kepala Sekolah</h1>
     </div>
     <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
         <div class="relative ml-auto mt-10 mr-20">
@@ -54,11 +52,11 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
-                                <a
-                                    class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30 text-white">Hapus
-                                </a>
-                                <a href="{{ route('tu.archived.detail.view', $item->id) }}"
+                                <a href="{{ route('kepsek.incoming.detail.view', $item->id) }}"
                                     class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30 text-white">Detail
+                                </a>
+                                <a href=""
+                                    class="px-3 py-1 rounded-md font-semibold bg-[#A9A2A2] hover:bg-gray-500 cursor-pointer w-30 text-white">Arsip
                                 </a>
                             </td>
                         </tr>
