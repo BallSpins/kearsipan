@@ -40,7 +40,7 @@ class UserController extends Controller
                 return redirect()->route('waka.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
                                  ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
             } else if (auth()->user()->role === UserRole::KEPALA_SEKOLAH) {
-                return redirect()->route('kepsek.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                return redirect()->route('kepsek.dashboardkep.view') // Ke dashboard atau halaman yang dituju sebelumnya
                                  ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
             } else if (auth()->user()->role === UserRole::ADMIN) {
                 return redirect()->route('users.index') // Ke dashboard atau halaman yang dituju sebelumnya

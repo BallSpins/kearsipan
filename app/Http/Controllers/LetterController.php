@@ -14,6 +14,7 @@ use App\Services\AttachmentService;
 use App\Services\ClassificationService;
 use App\Services\DispositionService;
 use App\Services\LetterService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -45,6 +46,17 @@ class LetterController extends Controller
     /**
      * Antrean surat masuk untuk TU (Registrasi) (oleh TU dan KATU)
      */
+    public function indexDashboardKepsekView(): View{
+        $totalRequestCount = Letter::readyToSign()->count();
+        $totalIncomingCount = Letter::incomingNew()->count();
+        $letterToSign = Letter::readyToSign()
+                        ->with(['classification'])
+                        ->latest()
+                        ->limit(5)
+                        ->get();
+        return view('kepsek.dashboardKep', compact('totalRequestCount', 'totalIncomingCount', 'letterToSign'));
+    }
+
     public function indexIncomingView(): View
     {
         $letters = Letter::incomingDrafts()
@@ -65,7 +77,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
 
-        return view('', compact('letters'));
+        return view('kepsek.requestIndexKep', compact('letters'));
     }
 
     /**
@@ -114,7 +126,7 @@ class LetterController extends Controller
 
         $letter->load(['attachments', 'classification']);
 
-        return view('', compact('letter'));
+        return view('kepsek.requestDetail', compact('letter'));
     }
 
     /**
@@ -200,7 +212,7 @@ class LetterController extends Controller
                     ->latest()
                     ->paginate(10);
         
-        return view('', compact('letters'));
+        return view('kepsek.requestAcc', compact('letters'));
     }
 
     /**
@@ -220,7 +232,7 @@ class LetterController extends Controller
     {
         $letter->load(['attachments', 'classification']);
 
-        return view('', compact('letter'));
+        return view('kepsek.detailRequest', compact('letter'));
     }
 
     // End View Surat Keluar
@@ -275,6 +287,17 @@ class LetterController extends Controller
                     ->paginate(10);
 
         return view('tu.letterArchive', compact('letters'));
+    }
+
+    public function archivedDetailView(Letter $letter): View
+    {
+        if ($letter->status !== LetterStatus::COMPLETED) {
+            abort(403, 'Halaman ini hanya untuk surat yang sudah diarsipkan.');
+        }
+
+        $letter->load(['attachments', 'classification']);
+
+        return view('tu.detailArchive', compact('letter'));
     }
 
     // End view function
@@ -393,7 +416,7 @@ class LetterController extends Controller
         }
 
         return redirect()
-                ->route('')
+                ->back()
                 ->with('success', 'Surat final berhasil diunggah.');
     }
 

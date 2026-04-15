@@ -62,7 +62,7 @@ class DispositionController extends Controller
             DispositionStatus::COMPLETED
         );
 
-        return redirect()->back()->with('success', 'Tugas selesai. Sistem akan mengecek status arsip surat.');
+        return redirect()->route('waka.incoming.view')->with('success', 'Tugas selesai. Sistem akan mengecek status arsip surat.');
     }
 
     /**
