@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\DispositionStatus;
 use App\Http\Requests\Letter\StoreDispositionRequest;
 use App\Models\Disposition;
+use App\Models\Letter;
 use App\Services\DispositionService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,7 @@ class DispositionController extends Controller
         try {
             $this->dispositionService->createDisposition($letter, $request->validated());
             
-            return redirect()->back()
+            return redirect()->route('kepsek.incoming.view')
                 ->with('success', 'Disposisi berhasil dikirimkan.');
         } catch (Exception $e) {
             return redirect()->back()
@@ -61,6 +62,8 @@ class DispositionController extends Controller
             $disposition, 
             DispositionStatus::COMPLETED
         );
+
+        // $this->dispositionService->
 
         return redirect()->route('waka.incoming.view')->with('success', 'Tugas selesai. Sistem akan mengecek status arsip surat.');
     }

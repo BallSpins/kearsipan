@@ -35,10 +35,7 @@ class DispositionService
                 ]);
             }
 
-            // Update status surat menjadi DISPATCHED jika belum
-            if ($letter->status !== LetterStatus::DISPATCHED) {
-                $letter->update(['status' => LetterStatus::DISPATCHED]);
-            }
+            $letter->update(['status' => LetterStatus::DISPATCHED]);
         });
     }
 
@@ -52,7 +49,7 @@ class DispositionService
             $updated = $disposition->update(['status' => $status]);
 
             // 2. Jika status diubah jadi COMPLETED, cek kawan-kawannya (disposisi lain di surat yang sama)
-            if ($status === DispositionStatus::COMPLETED) {
+            if ($disposition->status === DispositionStatus::COMPLETED) {
                 $this->checkAndArchiveLetter($disposition->letter);
             }
 

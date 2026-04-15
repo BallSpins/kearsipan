@@ -1,16 +1,14 @@
 <x-layouts.app>
-    <x-slot:title>
-        Detail Permintaan Persetujuan
-    </x-slot:title>
-
+    <x-slot:title>Detail Permintaan Persetujuan</x-slot:title>
     <x-sidebar.kepsek />
 
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">Kepala Sekolah</h1>
     </div>
-    <div class="flex mt-10">
-        <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
-            <a href="{{ route('kepsek.incoming.view') }}" class="text-center rotate-90 items-center justify-center flex">
+
+    <div class="mt-10 bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
+            <a href="{{ route('kepsek.incoming.view') }}"
+                class="text-center rotate-90 items-center justify-center flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
                     <g fill="none" fill-rule="evenodd">
                         <path
@@ -21,75 +19,99 @@
                 </svg>
             </a>
         </div>
-    </div>
-    <div class="pl-72 pr-10 py-10 flex flex-col gap-6">
+
+    <div class="pl-72 pr-10 py-10 flex flex-col gap-6" 
+         x-data="{ 
+            dispositions: [], 
+            selectedWaka: '',
+            addWaka() {
+                if(!this.selectedWaka) return;
+                const el = document.getElementById('waka-select');
+                const name = el.options[el.selectedIndex].text;
+                if(this.dispositions.find(d => d.receiver_id === this.selectedWaka)) {
+                    alert('Waka ini sudah ditambahkan!');
+                    return;
+                }
+                this.dispositions.push({
+                    receiver_id: this.selectedWaka,
+                    username: name,
+                    instruction: ''
+                });
+                this.selectedWaka = '';
+            },
+            removeWaka(index) {
+                this.dispositions.splice(index, 1);
+            }
+         }">
 
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl mx-auto">
             <h2 class="text-2xl font-bold text-gray-700 mb-2">Disposisi</h2>
             <hr class="mb-6 border-gray-300">
 
-            <form action="">
+            <form action="{{ route('kepsek.dispositions.store', $letter->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
                 <div class="flex flex-wrap gap-3 mb-8">
-                    <button type="button"
+                    <a href="{{ asset('storage/' . $letter->file_path) }}" target="_blank"
                         class="flex items-center gap-3 border border-gray-400 rounded-md px-4 py-2 hover:bg-gray-50 transition w-full sm:w-64">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1.5 13H8.5a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zm0-3H8.5a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zm-3-6V3.5L18.5 9H13a.5.5 0 0 1-.5-.5z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm1.5 13H8.5a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zm0-3H8.5a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zm-3-6V3.5L18.5 9H13a.5.5 0 0 1-.5-.5z" />
                         </svg>
                         <span class="text-gray-800 font-medium">Buka surat</span>
-                    </button>
+                    </a>
 
-                    <button type="button"
-                        class="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-md shadow-sm transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    <a href="{{ route('download.incoming', $letter->id) }}"
+                        class="bg-green-500 items-center hover:bg-green-600 text-white p-2.5 rounded-md shadow-sm transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
-                    </button>
-
-                    <button type="button"
-                        class="bg-[#1D4E63] hover:bg-[#153a4a] text-white px-6 py-2 rounded-md font-medium shadow-sm transition">
-                        Upload Surat
-                    </button>
+                    </a>
                 </div>
 
                 <div class="space-y-6">
-                    <div>
-                        <label class="block text-gray-600 text-lg mb-2 ">Waka Ditugaskan</label>
-                        <select name="" id=""
-                            class="w-full border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none">
-                            <option value=""
-                                class="w-full border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none"
-                                selected hidden>Waka </option>
-                            <option value=""
-                                class="w-full border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none"
-                                selected hidden>Waka </option>
-                            <option value=""
-                                class="w-full border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none">
-                                Waka 1</option>
-                            <option value=""
-                                class="w-full border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none">
-                                Waka 2</option>
-                        </select>
-                    </div>
-
-                    <div class="flex flex-col">
-                        <label for="" class="text-md text-black">Wakan sarpras</label>
-                        <div class="flex flex-row gap-2">
-                            <div class="w-170 border border-gray-400 rounded-md p-3 bg-gray-300 text-gray-800 focus:outline-none">
-                                <span>perintah</span>
-                            </div>
-                            <button class="bg-[#FF0000] hover:bg-[#ff6060] p-2 px-14 text-white rounded-md cursor-pointer">Hapus</button>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <label class="block text-gray-600 font-semibold mb-2">Tambah Disposisi Waka</label>
+                        <div class="flex gap-2">
+                            <select id="waka-select" x-model="selectedWaka"
+                                    class="rounded border flex-1 h-10 p-2 bg-white focus:ring-2 focus:ring-blue-400">
+                                <option value="" disabled selected>Pilih Waka</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" @click="addWaka()" class="bg-blue-600 hover:bg-blue-700 px-6 text-white rounded-md cursor-pointer">Pilih</button>
                         </div>
                     </div>
+
+                    <div class="space-y-4">
+                        <template x-for="(item, index) in dispositions" :key="item.receiver_id">
+                            <div class="flex flex-col p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                <label class="text-sm font-bold text-gray-700 mb-1">
+                                    Instruksi untuk: <span x-text="item.username"></span>
+                                </label>
+                                <input type="hidden" :name="`dispositions[${index}][receiver_id]`" :value="item.receiver_id">
+                                <div class="flex flex-row gap-2">
+                                    <textarea :name="`dispositions[${index}][instruction]`" x-model="item.instruction"
+                                        placeholder="Tulis instruksi/perintah..."
+                                        class="flex-1 border border-gray-400 rounded-md p-3 bg-white focus:ring-2 focus:ring-blue-400"
+                                        required></textarea>
+                                    <button type="button" @click="removeWaka(index)" class="bg-red-600 hover:bg-red-700 px-6 text-white rounded-md h-12 self-end">Hapus</button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <template x-if="dispositions.length === 0">
+                        <div class="text-center py-4 text-gray-400 border-2 border-dashed rounded-lg">
+                            Belum ada waka yang dipilih.
+                        </div>
+                    </template>
                 </div>
 
-                <div class="ml-181 mt-12">
-                    <button type="submit"
-                        class="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-2.5 rounded-md font-medium shadow-[0_4px_0_rgb(5,150,105)] active:shadow-none active:translate-y-[2px] transition-all cursor-pointer">
-                        Kirim
+                <div class="flex justify-end mt-12">
+                    <button type="submit" x-show="dispositions.length > 0"
+                        class="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-2.5 rounded-md font-medium shadow-[0_4px_0_rgb(5,150,105)] active:shadow-none active:translate-y-[2px] transition-all">
+                        Kirim Disposisi
                     </button>
                 </div>
             </form>

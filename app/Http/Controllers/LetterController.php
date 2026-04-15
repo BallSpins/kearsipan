@@ -10,6 +10,7 @@ use App\Http\Requests\Letter\StoreIncomingRequest;
 use App\Http\Requests\Letter\UpdateSignedLetterRequest;
 use App\Models\Letter;
 use App\Models\LetterRequest;
+use App\Models\User;
 use App\Services\AttachmentService;
 use App\Services\ClassificationService;
 use App\Services\DispositionService;
@@ -124,9 +125,11 @@ class LetterController extends Controller
             abort(403, 'Halaman ini hanya untuk surat yang akan di-review oleh KEPSEK.');
         }
 
+        $users = User::whereIn('role', [UserRole::WAKA])->get();
+
         $letter->load(['attachments', 'classification']);
 
-        return view('kepsek.requestDetail', compact('letter'));
+        return view('kepsek.requestDetail', compact('letter', 'users'));
     }
 
     /**
@@ -277,8 +280,9 @@ class LetterController extends Controller
             $letter->load('letterRequest');
         }
 
+        $classifications = $this->classificationService->getClassifications();
 
-        return view('tu.editDraft', compact('letter'));
+        return view('tu.editDraft', compact('letter', 'classifications'));
     }
 
     /**
@@ -311,27 +315,48 @@ class LetterController extends Controller
      */
     public function storeIncoming(StoreIncomingRequest $request): RedirectResponse
     {
-        $data = $request->safe()->except(['file', 'attachments']);
+        try {
+            $data = $request->safe()->except(['file', 'attachments']);
 
-        // 1. Simpan data surat (tipe & status otomatis di service)
-        $letter = $this->letterService->registerIncomingLetter($data);
+            // 1. Simpan data surat (tipe & status otomatis di service)
+            $letter = $this->letterService->registerIncomingLetter($data);
 
-        // 2. Upload file utama jika ada
-        if ($request->hasFile('file')) {
-            $this->letterService->uploadFile($letter, $request->file('file'));
-        }
-
-        // 3. Upload lampiran pendukung jika ada
-        if ($request->hasFile('attachments')) {
-            // loop array file
-            foreach ($request->file('attachments') as $file) {
-                $this->attachmentService->addAttachment($letter, $file);
+            // 2. Upload file utama jika ada
+            if ($request->hasFile('file')) {
+                $this->letterService->uploadFile($letter, $request->file('file'));
             }
-        }
 
-        return redirect()
-                ->route('', $letter->id)
-                ->with('success', 'Surat masuk berhasil diregistrasi.');
+            // 3. Upload lampiran pendukung jika ada
+            if ($request->hasFile('attachments')) {
+                // loop array file
+                foreach ($request->file('attachments') as $file) {
+                    $this->attachmentService->addAttachment($letter, $file);
+                }
+            }
+
+            return redirect()
+                    ->route('tu.incoming.view')
+                    ->with('success', 'Surat masuk berhasil diregistrasi.');
+        } catch (Exception $e) {
+            return redirect()
+                    ->route('tu.incoming.view')
+                    ->with('error', 'Gagal meregistrasi surat masuk: ' . $e->getMessage());
+        }
+    }
+
+    public function giveToKepsek(Letter $letter): RedirectResponse
+    {
+        try {
+            $this->letterService->giveToKepsek($letter);
+
+            return redirect()
+                    ->route('tu.incoming.view')
+                    ->with('success', 'Surat berhasil diserahkan ke Kepsek.');
+        } catch (Exception $e) {
+            return redirect()
+                    ->route('tu.incoming.view')
+                    ->with('error', 'Gagal menyerahkan surat ke Kepsek: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -339,25 +364,32 @@ class LetterController extends Controller
      */
     public function updateLetter(Request $request, Letter $letter): RedirectResponse
     {
-        // 1. Simpan data surat terbaru
-        $this->letterService->updateDraftLetter($letter, $request->all());
+        try {
+            $data = $request->only(['classification_code', 'origin_number', 'address', 'subject']);
+            // 1. Simpan data surat terbaru
+            $this->letterService->updateDraftLetter($letter, $data);
 
-        // 2. Upload file utama baru jika ada
-        if ($request->hasFile('file')) {
-            $this->letterService->uploadFile($letter, $request->file('file'));
-        }
-
-        // 3. Upload lampiran pendukung baru jika ada
-        if ($request->hasFile('attachments')) {
-            // loop array file
-            foreach ($request->file('attachments') as $file) {
-                $this->attachmentService->addAttachment($letter, $file);
+            // 2. Upload file utama baru jika ada
+            if ($request->hasFile('file')) {
+                $this->letterService->uploadFile($letter, $request->file('file'));
             }
-        }
 
-        return redirect()
-                ->route('', $letter->id)
-                ->with('success', 'Surat masuk berhasil diperbarui.');
+            // 3. Upload lampiran pendukung baru jika ada
+            if ($request->hasFile('attachments')) {
+                // loop array file
+                foreach ($request->file('attachments') as $file) {
+                    $this->attachmentService->addAttachment($letter, $file);
+                }
+            }
+
+            return redirect()
+                    ->route('tu.incoming.view', $letter->id)
+                    ->with('success', 'Surat masuk berhasil diperbarui.');
+        } catch (Exception $e) {
+            return redirect()
+                    ->route('tu.incoming.view')
+                    ->with('error', 'Gagal memperbarui surat masuk: ' . $e->getMessage());
+        }
     }
 
     public function downloadIncoming(Letter $letter): BinaryFileResponse

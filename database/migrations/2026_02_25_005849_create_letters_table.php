@@ -28,7 +28,7 @@ return new class extends Migration
             $table->text('subject')
                     ->nullable(false);                                        // pengganti no pakket / no urut
             $table->text('file_path')
-                    ->nullable(false);
+                    ->nullable();
             $table->enum('status', array_column(LetterStatus::cases(), 'value'))// status dari surat
                     ->default(LetterStatus::DRAFT);
 

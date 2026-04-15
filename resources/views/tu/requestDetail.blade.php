@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="flex justify-end">
-            <a href="{{ route('tu.incoming.draft.create.view') }}" class="mr-20 py-4 px-10 bg-[#1D546D] hover:bg-[#5F9598] text-white rounded-sm mt-5 flex items-center gap-2">
+            <a href="{{ route('tu.request.create.outgoing.view', $request->id) }}" class="mr-20 py-4 px-10 bg-[#1D546D] hover:bg-[#5F9598] text-white rounded-sm mt-5 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                     <path fill="currentColor"
                         d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5z" />

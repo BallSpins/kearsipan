@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-slot:title>
-        edit draft
+        Edit Draf
     </x-slot:title>
     <x-sidebar.tu />
     <div class="bg-white shadow-xl">
@@ -12,7 +12,8 @@
     </div>
     <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
-            <a href="{{ route('tu.incoming.view') }}" class="text-center rotate-90 items-center justify-center flex">
+            <a href="{{ route('tu.incoming.view') }}"
+                class="text-center rotate-90 items-center justify-center flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
                     <g fill="none" fill-rule="evenodd">
                         <path
@@ -23,35 +24,151 @@
                 </svg>
             </a>
         </div>
-        <div class="bg-white rounded-md shadow-xl w-200 h-150 ml-5 p-8">
-            <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
-            <div class=" w-full border border-gray-300 mb-15"></div>
-            <form action="" class="flex flex-col gap-4">
-                <div class="flex flex-row gap-2">
-                    <a href=""
-                        class="flex items-center gap-3 border rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
-                            <path fill="#3B82F6" fill-rule="evenodd"
-                                d="M14.25 2.5a.25.25 0 0 0-.25-.25H7A2.75 2.75 0 0 0 4.25 5v14A2.75 2.75 0 0 0 7 21.75h10A2.75 2.75 0 0 0 19.75 19V9.147a.25.25 0 0 0-.25-.25H15a.75.75 0 0 1-.75-.75zm.75 9.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1 0-1.5zm0 4a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1 0-1.5z"
-                                clip-rule="evenodd" />
-                            <path fill="#3B82F6"
-                                d="M15.75 2.824c0-.184.193-.301.336-.186q.182.147.323.342l3.013 4.197c.068.096-.006.22-.124.22H16a.25.25 0 0 1-.25-.25z" />
-                        </svg>
-                    </a>
-                    <a href=""
-                        class="bg-[#28A745] hover:bg-[#218838] text-white p-2 rounded-lg shadow-sm transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                    </a>
-                </div>
-                <label for="" class="text-[#484848] mb-2 text-xl">Nomor Surat</label>
-                <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
+        <a href="{{ route('templates.index') }}" target="_blank"
+            class="bg-[#1D546D] hover:bg-[#5F9598] cursor-pointer ml-auto text-white rounded-sm flex items-center px-10 py-2 mr-20 ">
+            <h1 class="font-semibold text-2xl">Template Surat</h1>
+    </a>
+    </div>
+    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
+        <h1 class="text-4xl font-semibold mb-4">Edit Surat Masuk</h1>
+        <div class=" w-full border border-gray-300 mb-15"></div>
+        <form id="form-update" action="{{ route('tu.incoming.update', $letter->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="flex flex-row gap-40">
+                <div class="flex flex-col">
+                    <label for="classification_code" class="text-[#7E95DB] mb-2 text-xl">Kode Klasifikasi</label>
 
-                <label for="" class="text-[#484848] mb-2 text-xl">Alamat Tujuan</label>
-                <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
-            </form>
-        </div>
+                    <select 
+                        name="classification_code" 
+                        id="classification_code" 
+                        class="rounded border w-150 h-10 p-2 mb-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#7E95DB]"
+                        required
+                    >
+                        <option value="" disabled selected>Pilih Klasifikasi</option>
+                        @foreach ($classifications as $classification)
+                            <option value="{{ $classification->code }}"
+                                {{ $classification->code === $letter->classification_code ? 'selected' : '' }}>
+                                {{ $classification->code }} - {{ Str::limit($classification->name, 50) }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
+                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat</label>
+                    <input type="text" value="{{ $letter->address }}" name="address" class="rounded border w-150 h-10 p-2 mb-2">
+
+                    <label class="text-[#7E95DB] mb-2 text-xl">Draf Utama</label>
+                    <div class="flex flex-row gap-4">
+                        {{-- Hubungkan label FOR dengan ID input --}}
+                        @php
+                            $hasFile = !empty($letter->file_path);
+                        @endphp
+                        <label for="file" class="w-full flex flex-row gap-4">
+                            <div class="relative border border-black border-dashed rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                                <input accept=".pdf" type="file" name="file" id="file" class="hidden" onchange="updateFileName(this, 'draft-name')">
+                                
+                                <div class="flex flex-col items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-[#4285F4]" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                    </svg>
+                                    @if($hasFile)
+                                        <span id="draft-name" class="text-sm text-gray-500 mt-1">{{ $letter->file_path }}</span>
+                                    @else
+                                        <span id="draft-name" class="text-sm text-gray-500 mt-1">Pilih file...</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <a 
+                            @if($hasFile)
+                                href="{{ route('download.incoming', $letter->id) }}"
+                            @else
+                                href="javascript:void(0)" {{-- Path kosong/tidak ke mana-mana --}}
+                            @endif
+                            class="p-2 rounded-xl shadow-md flex items-center justify-center transition 
+                            {{ $hasFile 
+                               ? 'bg-[#28A745] hover:bg-[#218838] text-white' 
+                               : 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-50 pointer-events-none' }}"    
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                            </a>
+                        </label>
+                    </div>
+                    
+                    <label class="text-[#7E95DB] mb-2 text-xl mt-4 block">Lampiran</label>
+                    <div class="flex flex-row gap-4">
+                        {{-- Tambahkan Label FOR agar area ini bisa diklik --}}
+                        <label for="attachments" class="w-full flex flex-row gap-4">
+                            @php
+                            $hasFile = !empty($letter->attachments->first()->file_path);
+                            @endphp
+
+                            <div class="relative border border-black rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                                <input accept=".pdf,.jpg,.jpeg,.png" type="file" name="attachments[]" id="attachments" class="hidden" onchange="updateFileName(this, 'attachments-name')">
+                                
+                                <div class="flex flex-col items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-[#4285F4]" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                    </svg>
+                                    @if($hasFile)
+                                        <span id="attachments-name" class="text-sm text-gray-500 mt-1">{{ $letter->attachments->first()->file_path }}</span>
+                                    @else
+                                        <span id="attachments-name" class="text-sm text-gray-500 mt-1">Pilih file...</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <a 
+                            @endphp
+                            @if($hasFile)
+                                href="{{ route('download.incoming', $letter->attachments->first()->id) }}"
+                            @else
+                                href="javascript:void(0)" {{-- Path kosong/tidak ke mana-mana --}}
+                            @endif
+                            class="p-2 rounded-xl shadow-md flex items-center justify-center transition 
+                            {{ $hasFile 
+                               ? 'bg-[#28A745] hover:bg-[#218838] text-white' 
+                               : 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-50 pointer-events-none' }}"    
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                            </a>
+                        </label>
+                    </div>
+                    
+                    <script>
+                        // Tambahkan parameter targetId supaya nama file tidak tertukar antara input 1 dan 2
+                        function updateFileName(input, targetId) {
+                            const fileName = input.files[0] ? input.files[0].name : 'Pilih file...';
+                            document.getElementById(targetId).textContent = fileName;
+                        }
+                    </script>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Nomor Surat</label>
+                    <input type="text" value="{{ $letter->full_number ?? $letter->origin_number }}" name="origin_number" class="rounded border w-150 h-10 p-2 mb-2">
+
+                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
+                    <textarea name="subject" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none">{{ $letter->subject }}</textarea>
+                    <div class="ml-auto">
+                        <button type="submit" form="form-kepsek"
+                            class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Serahkan ke Kepsek</button>
+                        <button type="submit" form="form-update"
+                            class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form id="form-kepsek" action="{{ route('tu.incoming.give.kepsek', $letter->id) }}" method="POST">
+                            @csrf
+                        </form>
+    </div>
 </x-layouts.app>

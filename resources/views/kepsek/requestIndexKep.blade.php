@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-slot:title>
-        Permintaan Acc
+        Surat Masuk
     </x-slot:title>
     <x-sidebar.kepsek />
     <div class="bg-white shadow-xl">
@@ -49,10 +49,12 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="px-3 py-1 rounded-full text-xs font-semibold">
+                                    {{ $item->status }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
-                                <a href="{{ route('kepsek.incoming.detail.view', $item->id) }}"
+                                <a 
+                                href="{{ route('kepsek.incoming.detail.view', $item->id) }}"
                                     class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30 text-white">Detail
                                 </a>
                                 <a href=""

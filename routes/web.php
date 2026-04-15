@@ -274,6 +274,9 @@ Route::middleware([
             // LETTER REQUEST (Permintaan Surat dari WAKA) - TU Management
             // ====================================================================
 
+            Route::get('/request/create/{letterRequest}', [LetterRequestController::class, 'createOutgoingView'])
+                ->name('request.create.outgoing.view');
+
             // route untuk menampilkan daftar semua permintaan surat (letter request) dari WAKA (GET /tu/request)
             // Status: pending, approved, rejected, completed. Dengan pagination 10 per halaman.
             Route::get('/request', [LetterRequestController::class, 'indexTURequestView'])
@@ -341,8 +344,15 @@ Route::middleware([
             // route untuk meregistrasi/membuat surat masuk baru (POST /tu/incoming)
             // Note: Data divalidasi di app/Http/Requests/Letter/StoreIncomingRequest.php
             // Membuat Letter dengan type INCOMING, status DRAFT. Upload file utama dan lampiran jika ada.
+            // Route::post('/incoming', function (Request $request) {
+            //     dd($request->all());
+            // })
+            //     ->name('incoming');
             Route::post('/incoming', [LetterController::class, 'storeIncoming'])
                 ->name('incoming');
+
+            Route::post('/give-kepsek/{letter}', [LetterController::class, 'giveToKepsek'])
+                ->name('incoming.give.kepsek');
 
             // route untuk mengirim surat masuk ke proses review/validasi oleh KEPSEK (POST /tu/incoming/finalize/{letter})
             // Note: Parameter {letter} diisi letter id. Mengubah status dari DRAFT menjadi RECEIVED.

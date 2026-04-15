@@ -12,7 +12,7 @@
     </div>
     <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
-            <a href="{{ route('tu.request.list.view') }}"
+            <a href="{{ route('tu.incoming.view') }}"
                 class="text-center rotate-90 items-center justify-center flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
                     <g fill="none" fill-rule="evenodd">
@@ -30,35 +30,72 @@
     </a>
     </div>
     <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
-        <h1 class="text-4xl font-semibold mb-4">Buat Surat</h1>
+        <h1 class="text-4xl font-semibold mb-4">Buat Surat Masuk</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
-        <form action="">
+        <form action="{{ route('tu.incoming') }}" method="POST" enctype="multipart/form-data">
+            @csrf
             <div class="flex flex-row gap-40">
                 <div class="flex flex-col">
+                    <label for="classification_code" class="text-[#7E95DB] mb-2 text-xl">Kode Klasifikasi</label>
+
+                    <select 
+                        name="classification_code" 
+                        id="classification_code" 
+                        class="rounded border w-150 h-10 p-2 mb-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#7E95DB]"
+                        required
+                    >
+                        <option value="" disabled selected>Pilih Klasifikasi</option>
+                        @foreach ($classifications as $classification)
+                            <option value="{{ $classification->code }}">
+                                {{ $classification->code }} - {{ Str::limit($classification->name, 50) }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat</label>
                     <input type="text" name="address" class="rounded border w-150 h-10 p-2 mb-2">
 
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Lampiran</label>
-                    <div
-                        class="relative border border-black rounded-lg w-full h-65 flex items-center justify-center bg-white">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-[#4285F4]" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-                        </svg>
-
-                        <div class="absolute bottom-4 right-4">
-                            <a href="#"
-                                class="bg-[#28A745] hover:bg-[#218838] text-white p-3 rounded-xl shadow-md flex items-center justify-center transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                            </a>
-                        </div>
+                    <label class="text-[#7E95DB] mb-2 text-xl">Draf Utama</label>
+                    <div class="flex flex-row gap-4">
+                        {{-- Hubungkan label FOR dengan ID input --}}
+                        <label for="file" class="w-full">
+                            <div class="relative border border-black border-dashed rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                                <input accept=".pdf" type="file" name="file" id="file" class="hidden" onchange="updateFileName(this, 'draft-name')">
+                                
+                                <div class="flex flex-col items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-[#4285F4]" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                    </svg>
+                                    <span id="draft-name" class="text-sm text-gray-500 mt-1">Pilih file...</span>
+                                </div>
+                            </div>
+                        </label>
                     </div>
+                    
+                    <label class="text-[#7E95DB] mb-2 text-xl mt-4 block">Lampiran</label>
+                    <div class="flex flex-row gap-4">
+                        {{-- Tambahkan Label FOR agar area ini bisa diklik --}}
+                        <label for="attachments" class="w-full">
+                            <div class="relative border border-black rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                                <input accept=".pdf,.jpg,.jpeg,.png" type="file" name="attachments[]" id="attachments" class="hidden" onchange="updateFileName(this, 'attachments-name')">
+                                
+                                <div class="flex flex-col items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-[#4285F4]" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                    </svg>
+                                    <span id="attachments-name" class="text-sm text-gray-500 mt-1">Pilih file...</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <script>
+                        // Tambahkan parameter targetId supaya nama file tidak tertukar antara input 1 dan 2
+                        function updateFileName(input, targetId) {
+                            const fileName = input.files[0] ? input.files[0].name : 'Pilih file...';
+                            document.getElementById(targetId).textContent = fileName;
+                        }
+                    </script>
                 </div>
 
                 <div class="flex flex-col">
@@ -68,8 +105,8 @@
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
                     <textarea name="subject" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none"></textarea>
                     <div class="ml-auto">
-                        <button
-                            class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Kirim</button>
+                        <button type="submit"
+                            class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Simpan</button>
                     </div>
                 </div>
             </div>

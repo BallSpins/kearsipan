@@ -158,7 +158,9 @@ class Letter extends Model
     public function scopeIncomingNew(Builder $query): void
     {
         $query->where('type', LetterType::INCOMING)
-                ->where('status', LetterStatus::RECEIVED);
+                ->whereIn('status', [
+                    LetterStatus::RECEIVED,
+                ]);
     }
 
     /**

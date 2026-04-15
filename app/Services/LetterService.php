@@ -35,7 +35,7 @@ class LetterService
             // Set status default untuk antrean surat masuk
             $finalData = array_merge($data, [
                 'type'            => LetterType::INCOMING,
-                'status'          => LetterStatus::RECEIVED,
+                'status'          => LetterStatus::DRAFT,
                 'sequence_number' => $generated['sequence_number'],
                 'year'            => $generated['year'],
                 'origin_number' => $data['origin_number'],
@@ -76,13 +76,24 @@ class LetterService
     /**
      * Logika untuk memperbarui surat draft
      */
-    public function updateDraftLetter(Letter $letter, array $data): Letter
+    public function updateDraftLetter(Letter $letter, array $data): bool
     {
         if ($letter->status != LetterStatus::DRAFT) {
             throw new Exception("Hanya surat berstatus Draf yang bisa diperbarui");
         }
 
         return $letter->update($data);
+    }
+
+    public function giveToKepsek(Letter $letter): bool
+    {
+        if ($letter->status !== LetterStatus::DRAFT) {
+            throw new Exception("Hanya surat berstatus Draf yang bisa diajukan ke Kepsek.");
+        }
+
+        return $letter->update([
+            'status' => LetterStatus::RECEIVED
+        ]);
     }
 
     /**
@@ -193,6 +204,8 @@ class LetterService
             if ($updated && $oldPath && Storage::disk('public')->exists($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
             }
+
+            return true;
         });
     }
 }

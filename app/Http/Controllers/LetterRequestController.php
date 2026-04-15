@@ -208,6 +208,11 @@ class LetterRequestController extends Controller
                 ->download($path, $letter->file_name);
     }
 
+    public function createOutgoingView(LetterRequest $letterRequest): View
+    {
+        return view('tu.createOutgoing', compact('letterRequest'));
+    }
+
     /**
      * TU menyetujui request dan menjadikannya surat keluar resmi
      */

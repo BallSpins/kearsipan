@@ -23,12 +23,17 @@
                 </svg>
             </a>
         </div>
-        <div class="bg-white rounded-md shadow-xl w-200 h-150 ml-5 p-8">
+        <div class="bg-white rounded-md shadow-xl w-200 h-200 ml-5 p-8">
             <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
             <div class=" w-full border border-gray-300 mb-15"></div>
             <form action="" class="flex flex-col gap-4">
                 <div class="flex flex-row gap-2">
-                    <a href=""
+                    <a 
+                    @if ($letter->type === App\Enums\LetterType::OUTGOING)
+                        href="{{ route('download.incoming', $letter->id) }}" {{-- Link download untuk surat keluar --}}
+                    @else
+                        href="{{ route('download.outgoing', $letter->id) }}" {{-- Link download --}}               
+                    @endif
                         class="flex items-center gap-3 border rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                             <path fill="#3B82F6" fill-rule="evenodd"
@@ -37,8 +42,15 @@
                             <path fill="#3B82F6"
                                 d="M15.75 2.824c0-.184.193-.301.336-.186q.182.147.323.342l3.013 4.197c.068.096-.006.22-.124.22H16a.25.25 0 0 1-.25-.25z" />
                         </svg>
+
+                        Buka Surat
                     </a>
-                    <a href=""
+                    <a 
+                    @if ($letter->type === App\Enums\LetterType::OUTGOING)
+                        href="{{ route('download.incoming', $letter->id) }}" {{-- Link download untuk surat keluar --}}
+                    @else
+                        href="{{ route('download.outgoing', $letter->id) }}" {{-- Link download --}}               
+                    @endif
                         class="bg-[#28A745] hover:bg-[#218838] text-white p-2 rounded-lg shadow-sm transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2.5">
@@ -48,10 +60,20 @@
                     </a>
                 </div>
                 <label for="" class="text-[#484848] mb-2 text-xl">Nomor Surat</label>
-                <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
+                @php
+                    if ($letter->type === App\Enums\LetterType::OUTGOING) {
+                        $number = $letter->full_number;
+                    } else {
+                        $number = $letter->origin_number;
+                    }
+                @endphp
+                <input type="text" disabled value="{{ $number }}" class="rounded border w-150 h-10 p-2 mb-2">
 
-                <label for="" class="text-[#484848] mb-2 text-xl">Alamat Tujuan</label>
-                <input type="text" class="rounded border w-150 h-10 p-2 mb-2">
+                <label for="" class="text-[#484848] mb-2 text-xl">Alamat</label>
+                <input type="text" disabled value="{{ $letter->address }}" class="rounded border w-150 h-10 p-2 mb-2">
+                
+                <label for="" class="text-[#484848] mb-2 text-xl">Perihal</label>
+                <textarea disabled name="description" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none">{{ $letter->subject }}</textarea>
             </form>
         </div>
         <div class="bg-white rounded-md shadow-xl w-150 h-110 ml-auto mr-20 p-8">
