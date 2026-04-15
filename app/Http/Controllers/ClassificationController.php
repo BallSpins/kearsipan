@@ -27,14 +27,14 @@ class ClassificationController extends Controller
     {
         $classifications = $this->classificationService->getPaginatedClassifications();
 
-        return view('', compact('classifications'));
+        return view('katu.classificationIndex', compact('classifications'));
     }
 
     public function createClassificationView(): View
     {
         $classifications = $this->classificationService->getClassifications();
 
-        return view('', compact('classifications'));
+        return view('katu.classificationCreate', compact('classifications'));
     }
 
     /**
@@ -44,7 +44,7 @@ class ClassificationController extends Controller
     {
         $classifications = $this->classificationService->getClassifications();
 
-        return view('', compact('classification', 'classifications'));
+        return view('katu.classificationEdit', compact('classification', 'classifications'));
     }
 
     // End View function

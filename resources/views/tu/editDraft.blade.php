@@ -4,11 +4,15 @@
     </x-slot:title>
     <x-sidebar.tu />
     <div class="bg-white shadow-xl">
-        <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
+        @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
+            <h1 class="text-black ml-67 text-2xl font-bold">Kepala Tata Usaha</h1>
+        @elseif (auth()->user()->role === App\Enums\UserRole::TU)
+            <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
+        @endif
     </div>
     <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
-            <a href="{{ route('tu.request.list.view') }}" class="text-center rotate-90 items-center justify-center flex">
+            <a href="{{ route('tu.incoming.view') }}" class="text-center rotate-90 items-center justify-center flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
                     <g fill="none" fill-rule="evenodd">
                         <path

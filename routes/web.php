@@ -242,6 +242,9 @@ Route::middleware([
         ->middleware([
             'role:' . UserRole::only(UserRole::KEPALA_TU),
         ])->group(function () {
+            Route::get('/review', [LetterController::class, 'indexReviewView'])
+                ->name('review.index.view');
+                
             // route untuk menampilkan halaman review surat keluar (GET /katu/review/{letter})
             // Note: Parameter {letter} diisi letter id. Menampilkan form untuk approve atau reject surat.
             Route::get('/review/{letter}', [LetterController::class, 'reviewLetterView'])
