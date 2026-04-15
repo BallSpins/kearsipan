@@ -21,7 +21,7 @@
             </a>
         </div>
     </div>
-    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
+    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-320 mt-10 ml-87 p-12">
         <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form action="">
@@ -40,7 +40,7 @@
                       </div>
                         <div class="my-auto">
                             <a href="#"
-                                class="bg-[#28A745] hover:bg-[#218838] text-white p-2  rounded-xl shadow-md flex items-center justify-center transition">
+                                class="bg-[#28A745] hover:bg-[#218838] text-white p-4  rounded-xl shadow-md flex items-center justify-center transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                     <path stroke-linecap="round" stroke-linejoin="round"

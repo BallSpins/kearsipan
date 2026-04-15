@@ -34,7 +34,7 @@ class UserController extends Controller
                 return redirect()->route('tu.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
                                  ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
             } else if (auth()->user()->role === UserRole::KEPALA_TU) {
-                return redirect()->route('katu.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
+                return redirect()->route('tu.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya
                                  ->with('success', 'Selamat datang kembali, ' . auth()->user()->name);
             } else if (auth()->user()->role === UserRole::WAKA) {
                 return redirect()->route('waka.dashboard') // Ke dashboard atau halaman yang dituju sebelumnya

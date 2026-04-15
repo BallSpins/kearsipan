@@ -220,9 +220,13 @@ class LetterController extends Controller
      */
     public function reviewLetterView(Letter $letter): View
     {
+        $user = auth()->user();
         $letter->load(['attachments', 'classification', 'letterValidate']);
-
-        return view('waka.reviewDetail', compact('letter'));
+        if ($user->role === UserRole::WAKA) {
+            return view('waka.reviewDetail', compact('letter'));
+        } else if($user->role === UserRole::KEPALA_TU) {
+            return view('katu.reviewDetail', compact('letter'));
+        }
     }
 
     /**
