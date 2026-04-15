@@ -189,9 +189,8 @@ Route::middleware([
             'role:' . UserRole::only(UserRole::KEPALA_SEKOLAH),
         ])->group(function () {
             // route untuk menampilkan dashboard khusus KEPALA SEKOLAH (GET /kepsek/dashboard)
-            Route::get('/dashboard', function () {
-                return view('dashboardTu');
-            })->name('dashboard');
+            Route::get('/dashboardKepsek', [LetterController::class, 'indexDashboardKepsekView'])
+                ->name('dashboardkep.view');
 
             // route untuk menampilkan daftar surat masuk baru yang belum di-review (GET /kepsek/incoming)
             // Status: RECEIVED. Hanya menampilkan surat yang baru diterima oleh sistem.
