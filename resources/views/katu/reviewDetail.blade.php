@@ -24,7 +24,8 @@
     <div x-data="{ note: '' }" class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
         <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
-        <form action="">
+        <form action="{{ route('katu.review', $letter->id) }}" method="POST">
+            @csrf
             <div class="flex flex-row gap-10">
                 <div class="flex flex-col">
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Surat yang disertakan</label>
@@ -77,11 +78,11 @@
                     <label for="" class="text-[#7E95DB] mb-2 text-xl">Nomor Surat</label>
                     <input type="text" disabled value="{{ $number }}" name="" class="rounded border w-2xl h-10 p-2 mb-2">
 
-                    <label for="revision_note" class="text-[#7E95DB] mb-2 text-xl">Catatan Revisi (Bila Ada)</label>
+                    <label for="note" class="text-[#7E95DB] mb-2 text-xl">Catatan Revisi (Bila Ada)</label>
                     <textarea 
                           x-model="note" {{-- Menghubungkan textarea ke variabel 'note' --}}
-                          name="revision_note" 
-                          id="revision_note" 
+                          name="note" 
+                          id="note" 
                           cols="30" 
                           rows="10" 
                           class="border w-2xl rounded p-2 resize-none"
@@ -92,12 +93,14 @@
               </div>
               <div class="flex justify-end w-full gap-4">
                   <button type="submit" 
+                        name="action" value="reject"
                       :disabled="note.length === 0"
                       :class="note.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'"
                       class="px-6 py-2 text-white text-lg rounded-lg transition mt-5">
                       Revisi
                   </button>
                   <button type="submit" 
+                        name="action" value="approve"
                       :disabled="note.length > 0" 
                       :class="note.length > 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#28A745] hover:bg-[#218838]'"
                       class="px-6 py-2 text-white text-lg rounded-lg transition mt-5">

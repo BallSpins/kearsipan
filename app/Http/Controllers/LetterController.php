@@ -8,6 +8,7 @@ use App\Enums\UserRole;
 use App\Http\Requests\Letter\ReviewLetterRequest;
 use App\Http\Requests\Letter\StoreIncomingRequest;
 use App\Http\Requests\Letter\UpdateSignedLetterRequest;
+use App\Http\Requests\LetterRequest\ApproveLetterRequest;
 use App\Models\Letter;
 use App\Models\LetterRequest;
 use App\Models\User;
@@ -392,6 +393,45 @@ class LetterController extends Controller
         }
     }
 
+    public function editOutgoingLetter(Letter $letter): View
+    {
+        $letter->load(['attachments', 'classification']);
+
+        $classifications = $this->classificationService->getClassifications();
+
+        return view('tu.requestReviewDetail', compact('letter', 'classifications'));
+    }
+
+    public function updateOutgoingLetter(ApproveLetterRequest $request, Letter $letter): RedirectResponse
+    {
+        try {
+            $data = $request->only(['classification_code', 'address', 'subject', 'description']);
+            // 1. Simpan data surat terbaru
+            $this->letterService->updateDraftLetter($letter, $data);
+
+            // 2. Upload file utama baru jika ada
+            if ($request->hasFile('file')) {
+                $this->letterService->uploadFile($letter, $request->file('file'));
+            }
+
+            // 3. Upload lampiran pendukung baru jika ada
+            if ($request->hasFile('attachments')) {
+                // loop array file
+                foreach ($request->file('attachments') as $file) {
+                    $this->attachmentService->addAttachment($letter, $file);
+                }
+            }
+
+            return redirect()
+                    ->route('tu.incoming.view', $letter->id)
+                    ->with('success', 'Surat masuk berhasil diperbarui.');
+        } catch (Exception $e) {
+            return redirect()
+                    ->route('tu.incoming.view')
+                    ->with('error', 'Gagal memperbarui surat masuk: ' . $e->getMessage());
+        }
+    }
+
     public function downloadIncoming(Letter $letter): BinaryFileResponse
     {
         $path = storage_path('app/public/' . $letter->file_path);
@@ -412,7 +452,7 @@ class LetterController extends Controller
         $this->letterService->submitForValidation($letter);
 
         return redirect()
-                ->back()
+                ->route('tu.incoming.view')
                 ->with('success', 'Surat dikirim untuk review.');
     }
 
@@ -421,6 +461,7 @@ class LetterController extends Controller
      */
     public function review(ReviewLetterRequest $request, Letter $letter): RedirectResponse
     {
+        // dd($request->all());
         $user = auth()->user();
 
         // Jika Waka, pastikan dia adalah Waka yang ditunjuk di LetterValidate
@@ -431,9 +472,15 @@ class LetterController extends Controller
         // $request->action bisa berisi 'approve' atau 'reject'
         $this->letterService->processReview($letter, $request->action, $request->note);
 
-        return redirect()
-                ->route('')
-                ->with('success', 'Hasil review berhasil disimpan.');
+        if ($user->role === UserRole::KEPALA_TU) {
+            return redirect()
+                    ->route('katu.review.index.view')
+                    ->with('success', 'Hasil review berhasil disimpan.');
+        } else if ($user->role === UserRole::WAKA) {
+            return redirect()
+                    ->route('waka.review.index.view')
+                    ->with('success', 'Hasil review berhasil disimpan.');
+        }
     }
 
     /**
@@ -451,8 +498,10 @@ class LetterController extends Controller
             $this->letterService->uploadFile($letter, $request->file('signed_file'));
         }
 
+        $this->letterService->sign($letter);
+
         return redirect()
-                ->back()
+                ->route('kepsek.outgoing.sign.view')
                 ->with('success', 'Surat final berhasil diunggah.');
     }
 

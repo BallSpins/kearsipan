@@ -93,7 +93,13 @@
                             <td class="px-6 py-4 text-gray-700">{{ $item->address }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ $item->status }}</td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
-                                <a href="{{ route('tu.incoming.draft.edit.view', $item->id) }}" class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">Update
+                                <a 
+                                @if ($item->type === App\Enums\LetterType::INCOMING)
+                                href="{{ route('tu.incoming.draft.edit.view', $item->id) }}" class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">Update
+                                @else
+                                href="{{ route('tu.outgoing.edit', $item->id) }}" class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30">Update
+
+                                @endif
                                 </a>
                             </td>
                             <td></td>

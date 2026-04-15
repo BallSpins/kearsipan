@@ -36,10 +36,23 @@ class ApproveLetterRequest extends FormRequest
                 'string', 
                 'max:255',
             ],
-            'description' => [
+            'draft_file' => [
                 'nullable', 
-                'string',
+                'file', 
+                'mimes:pdf,doc,docx', 
+                'max:5120'
+            ], // Max 5MB
+
+            // Validasi array lampiran pendukung
+            'attachments' => [
+                'nullable', 
+                'array'
             ],
+            'attachments.*' => [
+                'file', 
+                'mimes:pdf,jpg,jpeg,png', 
+                'max:2048'
+            ], // Max 2MB per file
         ];
     }
 }

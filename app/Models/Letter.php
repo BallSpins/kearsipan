@@ -129,6 +129,11 @@ class Letter extends Model
             $query->whereHas('letterValidate', function ($q) use ($wakaId) {
                 $q->where('waka_id', $wakaId);
             });
+        } else {
+            // Jika tidak ada ID Waka (berarti yang login adalah Ka TU), tampilkan semua yang menunggu validasi Ka TU
+            $query->whereHas('letterValidate', function ($q) {
+                $q->where('acc_katu', false);
+            });
         }
     }
 
@@ -148,7 +153,10 @@ class Letter extends Model
      */
     public function scopeIncomingDrafts(Builder $query): void
     {
-        $query->where('type', LetterType::INCOMING)
+        $query->whereIn('type', [
+            LetterType::INCOMING,
+            LetterType::OUTGOING,
+            ])
               ->where('status', LetterStatus::DRAFT);
     }
 

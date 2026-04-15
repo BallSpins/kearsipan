@@ -10,6 +10,7 @@ use App\Http\Controllers\LetterRequestController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\LetterRequest\StoreOutgoingRequest;
+use App\Models\Letter;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
@@ -224,7 +225,7 @@ Route::middleware([
             // Note: Parameter {letter} diisi letter id. Menampilkan draft surat yang sudah final sebelum TTD.
             Route::get('/ready-to-sign/detail/{letter}', [LetterController::class, 'signLetterView'])
                 ->name('outgoing.sign.detail.view');
-
+                
             // route untuk upload file surat yang sudah ditanda tangani (POST /kepsek/ready-to-sign/{letter})
             // Note: Parameter {letter} diisi letter id. Data divalidasi di app/Http/Requests/Letter/UpdateSignedLetterRequest.php
             // File harus PDF dan maksimal 5MB. Status surat akan berubah menjadi COMPLETED setelah upload.
@@ -327,6 +328,11 @@ Route::middleware([
             Route::get('/outgoing', [LetterController::class, 'indexOutgoingView'])
                 ->name('outgoing.view');
 
+            Route::get('/outgoing/edit/{letter}', [LetterController::class, 'editOutgoingLetter'])
+                ->name('outgoing.edit');
+            Route::put('/outgoing/{letter}', [LetterController::class, 'updateOutgoingLetter'])
+                ->name('outgoing.update');
+
             // route untuk menampilkan detail draft surat (incoming atau outgoing) (GET /tu/draft/detail/{letter})
             // Note: Parameter {letter} diisi letter id. Hanya surat dengan status DRAFT yang bisa dilihat. 
             // Jika OUTGOING, juga menampilkan data LetterRequest terkait.
@@ -350,6 +356,12 @@ Route::middleware([
             //     ->name('incoming');
             Route::post('/incoming', [LetterController::class, 'storeIncoming'])
                 ->name('incoming');
+
+            Route::post('/outgoing/{letterRequest}', [LetterRequestController::class, 'approve'])
+                ->name('outgoing');
+
+            Route::post('/outgoing/send-review/{letter}', [LetterController::class, 'finalizeToReviewing'])
+                ->name('outgoing.send.review');
 
             Route::post('/give-kepsek/{letter}', [LetterController::class, 'giveToKepsek'])
                 ->name('incoming.give.kepsek');

@@ -138,6 +138,17 @@ class LetterService
         ]);
     }
 
+    public function sign(Letter $letter): bool
+    {
+        if ($letter->status !== LetterStatus::VALIDATED) {
+            throw new Exception("Hanya surat yang sudah divalidasi yang bisa ditandatangani.");
+        }
+
+        return $letter->update([
+            'status' => LetterStatus::COMPLETED
+        ]);
+    }
+
     /**
      * Logika Persetujuan Bersama (Ka TU & Waka) dan Penanganan Revisi
      */

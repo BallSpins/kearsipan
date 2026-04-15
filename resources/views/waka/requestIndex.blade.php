@@ -80,7 +80,7 @@
                           @if ($item->letter)
                             <span
                                   class="px-2 py-1 rounded-full text-xs {{ $item->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }}">
-                                  {{ ucfirst($item->letter->status) }}
+                                  {{ ucfirst($item->letter->status->value) }}
                               </span>
                           
                           @else

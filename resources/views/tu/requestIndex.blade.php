@@ -18,7 +18,7 @@
                 <tr>
                     <th class="px-6 py-4 font-bold text-white text-lg">No</th>
                     <th class="px-6 py-4 font-bold text-white text-lg">Tanggal Agenda</th>
-                    <th class="px-6 py-4 font-bold text-white text-lg">Jenis Surat</th>
+                    <th class="px-6 py-4 font-bold text-white text-lg">Perihal</th>
                     <th class="px-6 py-4 font-bold text-white text-lg">Alamat Tujuan</th>
                     <th class="px-6 py-4 font-bold text-white text-lg text-center">Status</th>
                     <th class="px-6 py-4 font-bold text-white text-lg text-center">Aksi</th>
@@ -44,7 +44,7 @@
                             @if ($item->letter)
                               <span
                                     class="px-2 py-1 rounded-full text-xs {{ $item->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }}">
-                                    {{ ucfirst($item->letter->status) }}
+                                    {{ ucfirst($item->letter->status->value) }}
                                 </span>
                               
                             @else

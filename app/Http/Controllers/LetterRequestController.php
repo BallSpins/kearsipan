@@ -9,7 +9,9 @@ use App\Http\Requests\LetterRequest\UpdateRequest;
 use App\Http\Requests\LetterRequest\UpdateRequestFile;
 use App\Models\Letter;
 use App\Models\LetterRequest;
+use App\Services\ClassificationService;
 use App\Services\LetterRequestAttachmentService;
+use App\Services\LetterService;
 use App\Services\LetterRequestService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -19,14 +21,20 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class LetterRequestController extends Controller
 {
     protected $requestService;
-    protected $attachmentService;
+    protected $letterService;
+    protected $requestAttachmentService;
+    protected $classificationService;
 
     public function __construct(
         LetterRequestService $requestService,
-        LetterRequestAttachmentService $attachmentService
+        LetterService $letterService,
+        LetterRequestAttachmentService $requestAttachmentService,
+        ClassificationService $classificationService
     ) {
         $this->requestService = $requestService;
-        $this->attachmentService = $attachmentService;
+        $this->letterService = $letterService;
+        $this->requestAttachmentService = $requestAttachmentService;
+        $this->classificationService = $classificationService;
     }
 
     // Start View function
@@ -110,7 +118,7 @@ class LetterRequestController extends Controller
     public function store(StoreOutgoingRequest $request): RedirectResponse
     {
         try {
-            $data = $request->safe()->only(['subject', 'description']);
+            $data = $request->safe()->only(['subject', 'description', 'address']);
             
             // 1. Buat data request
             $letterRequest = $this->requestService->createRequest($data);
@@ -124,7 +132,7 @@ class LetterRequestController extends Controller
             if ($request->hasFile('attachments')) {
                 // loop array file
                 foreach ($request->file('attachments') as $file) {
-                    $this->attachmentService->addAttachment($letterRequest, $file);
+                    $this->requestAttachmentService->addAttachment($letterRequest, $file);
                 }   
             }
 
@@ -210,7 +218,9 @@ class LetterRequestController extends Controller
 
     public function createOutgoingView(LetterRequest $letterRequest): View
     {
-        return view('tu.createOutgoing', compact('letterRequest'));
+        $classifications = $this->classificationService->getClassifications();
+
+        return view('tu.createOutgoing', compact('letterRequest', 'classifications'));
     }
 
     /**
@@ -218,13 +228,30 @@ class LetterRequestController extends Controller
      */
     public function approve(ApproveLetterRequest $request, LetterRequest $letterRequest): RedirectResponse
     {
+        // dd($request->all());
         // $request berisi data resmi: nomor surat, klasifikasi, dsb.
-        $data = $request->validated();
+        $data = $request->only(['classification_code', 'subject', 'address', 'description']);
+        // dd($data);
+        $letter = $this->requestService->createLetter($letterRequest, $data);
 
-        $this->requestService->createLetter($letterRequest, $data);
+        $letterRequest->update(['letter_id' => $letter->id]);
+        
+        // dd($letter);
+        // 2. Upload draf kasar jika ada
+        if ($request->hasFile('draft_file')) {
+            $this->letterService->uploadFile($letter, $request->file('draft_file'));
+        }
+
+        // 3. Upload lampiran pendukung jika ada
+        if ($request->hasFile('attachments')) {
+            // loop array file
+            foreach ($request->file('attachments') as $file) {
+                $this->letterAttachmentService->addAttachment($letter, $file);
+            }   
+        }
 
         return redirect()
-                ->route('')
+                ->route('tu.request.list.view')
                 ->with('success', 'Request disetujui menjadi surat resmi.');
     }
 }

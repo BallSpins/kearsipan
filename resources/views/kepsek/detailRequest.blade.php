@@ -28,6 +28,8 @@
             <h2 class="text-2xl font-bold text-gray-700 mb-2">Detail Surat</h2>
             <hr class="mb-6 border-gray-300">
 
+            <form action="{{ route('kepsek.outgoing.sign', $letter->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
             <div class="flex gap-2 mb-6">
                 <button
                     class="flex items-center gap-3 border border-gray-400 rounded-md px-4 py-2 hover:bg-gray-50 transition w-100">
@@ -39,50 +41,51 @@
                     <span class="text-gray-800 font-medium">Buka surat</span>
                 </button>
 
-                <button class="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-md shadow-sm transition">
+                <a href="{{ route('download.outgoing', $letter->id) }}" class="bg-green-500 hover:bg-green-600 text-white p-2.5 rounded-md shadow-sm transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                </button>
+                </a>
 
-                <button
-                    class="bg-[#1D4E63] hover:bg-[#153a4a] text-white px-4 py-2 rounded-md font-medium shadow-sm transition">
-                    Upload Surat
-                </button>
+                <input 
+                    type="file" 
+                    name="signed_file" 
+                    id="signed_file" 
+                    accept="application/pdf" 
+                    required
+                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#1D4E63] file:text-white hover:file:bg-[#153a4a] cursor-pointer"
+                >
             </div>
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-gray-600 text-lg mb-1">Nomor Surat</label>
-                    <input type="text" value="1.2.3.7.87....." readonly
+                    <input type="text" value="{{ $letter->full_number }}" readonly
                         class="w-200 border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none">
                 </div>
 
                 <div>
                     <label class="block text-gray-600 text-lg mb-1">Jenis Surat</label>
-                    <input type="text" value="Surat Penawaran" readonly
+                    <input type="text" value="{{ $letter->type->value }}" readonly
                         class="w-200 border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-gray-600 text-lg mb-1">Alamat Pengirim</label>
-                    <input type="text" value="PT. Kursi" readonly
+                    <label class="block text-gray-600 text-lg mb-1">Alamat</label>
+                    <input type="text" value="{{ $letter->address }}" readonly
                         class="w-200 border border-gray-400 rounded-md p-3 bg-white text-gray-800 focus:outline-none">
                 </div>
             </div>
 
             <div class="flex justify-center gap-12 mt-12">
-                <button
+                <button type="submit"
                     class="bg-[#10B981] hover:bg-[#059669] text-white px-8 py-2.5 rounded-md font-medium shadow-[0_4px_0_rgb(5,150,105)] active:shadow-none active:translate-y-[2px] transition-all">
-                    Di-Setujui
-                </button>
-                <button
-                    class="bg-[#FF0000] hover:bg-[#CC0000] text-white px-10 py-2.5 rounded-md font-medium shadow-[0_4px_0_rgb(204,0,0)] active:shadow-none active:translate-y-[2px] transition-all">
-                    Ditolak
+                    Tanda Tangani
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </x-layouts.app>
