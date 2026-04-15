@@ -12,15 +12,6 @@
         @endif
     </div>
 
-    <div class="flex justify-end">
-        <a href="{{ route('tu.incoming.draft.create.view') }}" class="mr-20 py-4 px-10 bg-[#1D546D] hover:bg-[#5F9598] text-white rounded-sm mt-5 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5z" />
-            </svg>
-            <span class="text-4xl font-semibold">Buat Surat</span>
-        </a>
-    </div>
     <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200 ml-75 mr-20">
         <table class="w-full text-left">
             <thead class="bg-[#061E29]">
@@ -50,10 +41,18 @@
                         <td class="px-6 py-4 text-gray-700">{{ $item->user->name ?? 'Waka' }}</td>
 
                         <td class="px-6 py-4 text-gray-700 text-center">
+                            @if ($item->letter)
+                              <span
+                                    class="px-2 py-1 rounded-full text-xs {{ $item->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }}">
+                                    {{ ucfirst($item->letter->status) }}
+                                </span>
+                              
+                            @else
                             <span
-                                class="px-2 py-1 rounded-full text-xs {{ $item->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }}">
-                                {{ ucfirst($item->status) }}
-                            </span>
+                                    class="px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700">
+                                    Pending
+                                </span>
+                            @endif
                         </td>
 
                         <td class="px-6 py-4 text-gray-700 text-center">
