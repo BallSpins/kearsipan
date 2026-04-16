@@ -21,7 +21,7 @@
             </a>
         </div>
 
-        <form action="#" method="POST" class="bg-white rounded-md shadow-xl p-12 w-150 ml-20">
+        <form action="{{ route('classifications.store') }}" method="POST" class="bg-white rounded-md shadow-xl p-12 w-150 ml-20">
             @csrf
             <h1 class="text-4xl font-semibold mb-4">Buat Kode</h1>
             <div class="w-full border border-gray-300 mb-8"></div>
@@ -29,17 +29,39 @@
             <div class="space-y-6">
                 <div class="flex flex-col gap-2">
                     <label class="text-2xl text-[#7E95DB]">Referensi Kode</label>
-                    <input type="text" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <select name="parent_code" id="classification_select" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                        <option value="" disabled selected>Pilih Kode Surat</option>
+                        @foreach ($classifications as $classification)
+                            <option value="{{ $classification->code }}">
+                                {{ $classification->code }} - {{ Str::limit($classification->name, 50) }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="flex flex-col gap-2">
                     <label class="text-2xl text-[#7E95DB]">Kode Surat Baru</label>
-                    <input type="text" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <input type="text" id="new_code_input" name="code" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg bg-gray-100">
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const selectElement = document.getElementById('classification_select');
+                        const inputElement = document.getElementById('new_code_input');
+                    
+                        selectElement.addEventListener('change', function() {
+                            // Ambil value dari option yang dipilih
+                            const selectedCode = this.value;
+
+                            // Masukkan ke input "Kode Surat Baru"
+                            inputElement.value = selectedCode;
+                        });
+                    });
+                </script>
 
                 <div class="flex flex-col gap-2">
                     <label class="text-2xl text-[#7E95DB]">Nama Kode</label>
-                    <input type="text" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <input type="text" name="name" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
                 </div>
             </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\LetterStatus;
 use App\Enums\UserRole;
 use App\Http\Requests\LetterRequest\ApproveLetterRequest;
 use App\Http\Requests\LetterRequest\StoreOutgoingRequest;
@@ -70,6 +71,12 @@ class LetterRequestController extends Controller
     public function indexTURequestView(): View
     {
         $requests = LetterRequest::with(['letter'])
+                    ->where(function ($query) {
+                        $query->whereDoesntHave('letter') // Ambil yang gapunya letter
+                              ->orWhereHas('letter', function ($subQuery) {
+                                  $subQuery->where('status', '!=', 'completed'); // Atau yang letternya bukan completed
+                              });
+                    })
                     ->latest()
                     ->paginate(10);
         

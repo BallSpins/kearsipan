@@ -26,7 +26,7 @@
                                 {{ $index + 1 }}
                             </td>
                             <td class="px-6 py-4 text-gray-700">
-                                {{ $item->full_number }}
+                                {{ $item->full_number ?? $item->origin_number }}
                             </td>
                             <td class="px-6 py-4 text-gray-700">
                                 {{ $item->type }}
@@ -36,15 +36,16 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="px-3 py-1 rounded-full text-xs font-semibold">
+                                {{ $item->status }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
                                 <a href="{{ route('kepsek.outgoing.sign.detail.view', $item->id) }}"
                                     class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30 text-white">Detail
                                 </a>
-                                <a href=""
+                                {{-- <a href=""
                                     class="px-3 py-1 rounded-md font-semibold bg-[#A9A2A2] hover:bg-gray-500 cursor-pointer w-30 text-white">Arsip
-                                </a>
+                                </a> --}}
                             </td>
                         </tr>
                     @endforeach

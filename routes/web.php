@@ -200,6 +200,9 @@ Route::middleware([
             Route::get('/incoming', [LetterController::class, 'indexIncomingNewView'])
                 ->name('incoming.view');
 
+            Route::post('/set-archive/{letter}', [LetterController::class, 'setArchive'])
+                ->name('set-archive');
+
             // route untuk menampilkan detail surat masuk untuk di-review dan didisposisikan (GET /kepsek/incoming/detail/{letter})
             // Note: Parameter {letter} diisi letter id. Hanya surat dengan type INCOMING dan status RECEIVED yang bisa diakses.
             Route::get('/incoming/detail/{letter}', [LetterController::class, 'detailIncomingNewView'])

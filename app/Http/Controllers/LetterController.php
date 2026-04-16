@@ -309,6 +309,21 @@ class LetterController extends Controller
         return view('tu.detailArchive', compact('letter'));
     }
 
+    public function setArchive(Letter $letter): RedirectResponse
+    {
+        try {
+            $this->letterService->archive($letter);
+
+            return redirect()
+                    ->route('kepsek.incoming.view')
+                    ->with('success', 'Surat berhasil diarsipkan.');
+        } catch (Exception $e) {
+            return redirect()
+                    ->route('kepsek.incoming.view')
+                    ->with('error', 'Gagal mengarsipkan surat: ' . $e->getMessage());
+        }
+    }
+
     // End view function
 
     /**

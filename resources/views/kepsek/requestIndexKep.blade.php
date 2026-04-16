@@ -39,7 +39,7 @@
                                 {{ $index + 1 }}
                             </td>
                             <td class="px-6 py-4 text-gray-700">
-                                {{ $item->full_number }}
+                                {{ $item->full_number ?? $item->origin_number }}
                             </td>
                             <td class="px-6 py-4 text-gray-700">
                                 {{ $item->type }}
@@ -57,9 +57,12 @@
                                 href="{{ route('kepsek.incoming.detail.view', $item->id) }}"
                                     class="px-3 py-1 rounded-md font-semibold bg-[#065F46] hover:bg-green-950 cursor-pointer w-30 text-white">Detail
                                 </a>
-                                <a href=""
-                                    class="px-3 py-1 rounded-md font-semibold bg-[#A9A2A2] hover:bg-gray-500 cursor-pointer w-30 text-white">Arsip
-                                </a>
+                                <form action="{{ route('kepsek.set-archive', $item->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="px-3 py-1 rounded-md font-semibold bg-[#A9A2A2] hover:bg-gray-500 cursor-pointer w-30 text-white">Arsip
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

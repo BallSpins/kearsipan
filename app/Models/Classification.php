@@ -42,6 +42,11 @@ class Classification extends Model
         ];
     }
 
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
     /**
      * Relasi ke Induk (Parent)
      */

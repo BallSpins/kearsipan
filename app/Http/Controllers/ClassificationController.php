@@ -54,16 +54,19 @@ class ClassificationController extends Controller
      */
     public function storeClassification(ClassificationRequest $request): RedirectResponse
     {
+        // dd($request->all());
         try {
             $data = $request->validated();
 
-            $this->classificationService->createClassification($data);
+            $cls = $this->classificationService->createClassification($data);
+
+            // dd($cls);
 
             return redirect()
-                    ->route('')
+                    ->route('classifications.index')
                     ->with('success', 'Klasifikasi baru berhasil dibuat.');
         } catch (Exception $e) {
-            return redirect()->back()
+            return redirect()->route('classifications.index')
                 ->with('error', $e->getMessage());
         }
     }
@@ -76,10 +79,12 @@ class ClassificationController extends Controller
         try {
             $data = $request->validated();
 
+            // dd($data);
+
             $this->classificationService->updateClassification($classification, $data);
 
             return redirect()
-                    ->route('')
+                    ->route('classifications.index')
                     ->with('success', 'Klasifikasi berhasil diperbarui.');
         } catch (Exception $e) {
             return redirect()->back()
@@ -92,14 +97,15 @@ class ClassificationController extends Controller
      */
     public function deleteClassification(Classification $classification): RedirectResponse
     {
+        // dd($classification);
         try {
             $this->classificationService->deleteClassification($classification);
 
             return redirect()
-                    ->back()
+                    ->route('classifications.index')
                     ->with('success', 'Klasifikasi berhasil dihapus.');
         } catch (Exception $e) {
-            return redirect()->back()
+            return redirect()->route('classifications.index')
                 ->with('error', $e->getMessage());
         }
     }

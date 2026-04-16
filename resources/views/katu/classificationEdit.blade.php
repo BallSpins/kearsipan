@@ -19,36 +19,59 @@
             </a>
         </div>
 
-        <form action="#" method="POST" class="bg-white rounded-md shadow-xl p-12 w-150 ml-20">
+        <form action="{{ route('classifications.update', $classification->code) }}" method="POST" class="bg-white rounded-md shadow-xl p-12 w-150 ml-20">
             @csrf
-            <h1 class="text-4xl font-semibold mb-4">Buat Kode</h1>
+            @method('PUT')
+            <h1 class="text-4xl font-semibold mb-4">Edit Kode</h1>
             <div class="w-full border border-gray-300 mb-8"></div>
 
             <div class="space-y-6">
                 <div class="flex flex-col gap-2">
                     <label class="text-2xl text-[#7E95DB]">Referensi Kode</label>
-                    <input type="text" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <select name="parent_code" id="classification_select" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg" required>
+                        <option value="" disabled selected>Pilih Kode Surat</option>
+                        @foreach ($classifications as $classif)
+                            <option value="{{ $classif->code }}" {{ $classif->code == $classification->parent_code ? 'selected' : '' }}>
+                                {{ $classif->code }} - {{ Str::limit($classif->name, 50) }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="flex flex-col gap-2">
                     <label class="text-2xl text-[#7E95DB]">Kode Surat Baru</label>
-                    <input type="text" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <input type="text" value="{{ $classification->code }}" id="new_code_input" name="code" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg bg-gray-100">
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const selectElement = document.getElementById('classification_select');
+                        const inputElement = document.getElementById('new_code_input');
+                    
+                        selectElement.addEventListener('change', function() {
+                            // Ambil value dari option yang dipilih
+                            const selectedCode = this.value;
+
+                            // Masukkan ke input "Kode Surat Baru"
+                            inputElement.value = selectedCode;
+                        });
+                    });
+                </script>
 
                 <div class="flex flex-col gap-2">
                     <label class="text-2xl text-[#7E95DB]">Nama Kode</label>
-                    <input type="text" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <input type="text" value="{{ $classification->name }}" name="name" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
                 </div>
             </div>
 
             <div class="flex justify-center w-full gap-4 mt-10 ">
-                <button type="submit" class="cursor-not-allowed bg-[#484848] hover:bg-[#838383] text-white text-xl rounded-md px-8 p-2"
+                <button type="reset" class="bg-[#484848] hover:bg-[#838383] text-white text-xl rounded-md px-8 p-2"
                     class="px-8 py-3 text-white text-xl rounded-lg transition font-semibold">
                     Batal
                 </button>
                 
                 <button type="submit" 
-                    class="cursor-not-allowed bg-[#28A745] hover:bg-[#218838] text-white text-xl rounded-md px-8 p-2"
+                    class="bg-[#28A745] hover:bg-[#218838] text-white text-xl rounded-md px-8 p-2"
                     class="px-8 py-3 text-white text-xl rounded-lg transition font-semibold">
                     Simpan
                 </button>

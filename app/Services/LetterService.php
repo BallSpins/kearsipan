@@ -128,6 +128,13 @@ class LetterService
         });
     }
 
+    public function archive(Letter $letter): bool
+    {
+        return $letter->update([
+            'status' => LetterStatus::COMPLETED
+        ]);
+    }
+
     /**
      * Logika untuk Penyelesaian Akhir (Archived)
      */

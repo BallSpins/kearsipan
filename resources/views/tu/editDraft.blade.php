@@ -30,7 +30,11 @@
     </a>
     </div>
     <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
-        <h1 class="text-4xl font-semibold mb-4">Edit Surat Masuk</h1>
+        @if($letter->type === App\Enums\LetterType::INCOMING)
+            <h1 class="text-4xl font-semibold mb-4">Edit Surat Masuk</h1>
+        @else
+            <h1 class="text-4xl font-semibold mb-4">Edit Surat Keluar</h1>
+        @endif
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form id="form-update" action="{{ route('tu.incoming.update', $letter->id) }}" method="POST" enctype="multipart/form-data">
             @csrf

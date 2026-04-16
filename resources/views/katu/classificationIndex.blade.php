@@ -58,15 +58,19 @@
                                 {{ $item->code }}
                             </td>
                             <td class="px-6 py-4 text-gray-700">
-                                {{ $item->name }}
+                                {{ Str::limit($item->name, 50) }}
                             </td>
                             <td class="px-6 py-4 text-center justify-center flex gap-2 text-white">
                                 <a href="{{ route('classifications.edit', $item->code) }}"
                                     class="px-3 py-1 rounded-md font-semibold bg-[#7E95DB] hover:bg-[#bcc2d6] cursor-pointer w-30 text-white">Edit
                                 </a>
-                                <a
-                                    class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30 text-white">Hapus
-                                </a>
+                                <form method="POST" action="{{ route('classifications.delete', $item->code) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="px-3 py-1 rounded-md font-semibold bg-[#AC1010] hover:bg-red-900 cursor-pointer w-30 text-white">Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

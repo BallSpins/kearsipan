@@ -37,7 +37,7 @@
                     @foreach ($letters as $index => $item)
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-6 py-4 text-gray-700">{{ $index + 1 }}</td>
-                            <td class="px-6 py-4 text-gray-700">{{ $item->full_number }}</td>
+                            <td class="px-6 py-4 text-gray-700">{{ $item->full_number ?? $item->origin_number }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ $item->type }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ $item->address }}</td>
                             <td class="px-6 py-4 text-gray-700">{{ $item->status }}</td>
