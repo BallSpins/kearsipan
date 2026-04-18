@@ -78,7 +78,7 @@ class UserController extends Controller
     {
         $users = User::paginate(10);
         
-        return view('admin.userIndex', compact('users'));
+        return view('katu.indexUser', compact('users'));
     }
 
     /**
@@ -88,7 +88,7 @@ class UserController extends Controller
     {
         $roles = array_column(UserRole::cases(), 'value');
 
-        return view('admin.create', compact('roles'));
+        return view('katu.createUser', compact('roles'));
     }
 
     /**
@@ -96,7 +96,7 @@ class UserController extends Controller
      */
     public function editUserView(User $user): View
     {
-        return view('admin.edit', compact('user'));
+        return view('katu.editUser', compact('user'));
     }
 
     // End View function

@@ -4,6 +4,13 @@
     </x-slot:title>
     <div>
         <x-sidebar.tu />
+        @if (session()->has('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    window.notyf.success("{{ session('success') }}");
+                });
+            </script>
+        @endif
 
         <div class="bg-white shadow-xl">
             @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)

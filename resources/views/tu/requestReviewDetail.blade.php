@@ -169,7 +169,7 @@
                     </div>
                 </div>
             </div>
-            @if ($letter->letterValidate)
+            @if ($letter->letterValidate && auth()->user()->role === App\Enums\UserRole::TU)
                 <div class="flex flex-col">
                     @if ($letter->letterValidate->note_katu)
                         <label for="" class="text-[#7E95DB] mb-2 text-xl">Catatan Kepala TU</label>

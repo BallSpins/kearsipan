@@ -6,6 +6,28 @@
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">Kepala Sekolah</h1>
     </div>
+
+    {{-- Alert Sukses --}}
+    @if (session()->has('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.notyf.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+      
+    {{-- Alert Error (Opsional, untuk menangani Exception) --}}
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Looping karena $errors isinya array
+                @foreach ($errors->all() as $error)
+                    window.notyf.error("{{ $error }}");
+                @endforeach
+            });
+        </script>
+    @endif
+
     <div class="bg-[#061E29] shadow-lg  w-385 ml-75">
         <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200">
             <table class="w-full text-left">

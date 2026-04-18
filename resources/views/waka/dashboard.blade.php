@@ -4,6 +4,13 @@
     </x-slot:title>
     <div>
         <x-sidebar.waka />
+        @if (session()->has('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    window.notyf.success("{{ session('success') }}");
+                });
+            </script>
+        @endif
 
         <div class="bg-white shadow-xl">
             <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>

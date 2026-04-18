@@ -7,6 +7,28 @@
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
     </div>
+
+    {{-- Alert Sukses --}}
+    @if (session()->has('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.notyf.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+      
+    {{-- Alert Error (Opsional, untuk menangani Exception) --}}
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Looping karena $errors isinya array
+                @foreach ($errors->all() as $error)
+                    window.notyf.error("{{ $error }}");
+                @endforeach
+            });
+        </script>
+    @endif
+
     <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
         <div class="relative ml-auto mt-10 mr-20">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

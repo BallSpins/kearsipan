@@ -12,6 +12,28 @@
             <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
         @endif
     </div>
+
+    {{-- Alert Sukses --}}
+    @if (session()->has('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.notyf.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+      
+    {{-- Alert Error (Opsional, untuk menangani Exception) --}}
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Looping karena $errors isinya array
+                @foreach ($errors->all() as $error)
+                    window.notyf.error("{{ $error }}");
+                @endforeach
+            });
+        </script>
+    @endif
+
     <div class="flex flex-row ml-77 gap-220">
         <div class="flex justify-end">
             <a href="{{ route('classifications.create') }}"

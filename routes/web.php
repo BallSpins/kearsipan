@@ -111,7 +111,7 @@ Route::middleware([
     Route::prefix('users')
         ->name('users.')
         ->middleware([
-            'role:' . UserRole::only(UserRole::ADMIN),
+            'role:' . UserRole::only(UserRole::KEPALA_TU),
         ])->group(function () {
             // route untuk menampilkan daftar semua user dengan pagination 10 per halaman (GET /users)
             Route::get('/', [UserController::class, 'indexUserView'])

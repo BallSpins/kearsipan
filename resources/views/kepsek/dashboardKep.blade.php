@@ -3,6 +3,15 @@
         Dashboard Kepsek
     </x-slot:title>
     <x-sidebar.kepsek />
+
+    @if (session()->has('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.notyf.success("{{ session('success') }}");
+            });
+        </script>
+    @endif
+
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">Kepala Sekolah</h1>
     </div>

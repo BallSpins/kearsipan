@@ -39,6 +39,14 @@
         </div>
     </a>
     @endif
+    @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
+        <a href="{{ route('users.index') }}" class="flex px-4 py-2 p-4 {{ request()->routeIs('users.index') ? 'bg-[#5F9598] ' : 'hover:bg-[#5F9598]' }}">
+        <div class="justify-center flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"><path fill="currentColor" d="M9.175 10.825Q8 9.65 8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12t-2.825-1.175M4 20v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z"/></svg>
+            <h1 class="text-xl">Kelola User</h1>
+        </div>
+    </a>
+    @endif
     <button type="button" 
         @click="$dispatch('open-logout-modal')" 
         @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)

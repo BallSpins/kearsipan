@@ -4,18 +4,22 @@
     </x-slot:title>
 
     @if (session()->has('success'))
-        <div class="bg-green-500 text-white p-4 rounded mb-4">
-            {{ session('success') }}
-        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.notyf.success("{{ session('success') }}");
+            });
+        </script>
     @endif
+
     @if ($errors->any())
-        <div class="bg-red-500 text-white p-4 rounded mb-4">
-            <ul>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Looping karena $errors isinya array
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                    window.notyf.error("{{ $error }}");
                 @endforeach
-            </ul>
-        </div>
+            });
+        </script>
     @endif
 
     <div class="min-h-screen flex items-center justify-center bg-[#d1d1cf]">
