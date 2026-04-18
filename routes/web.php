@@ -16,6 +16,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
+Route::get('/', function () {
+    return view('home');
+});
+
 // ============================================================================
 // START AUTH
 // ============================================================================

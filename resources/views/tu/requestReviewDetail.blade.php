@@ -29,7 +29,12 @@
             <h1 class="font-semibold text-2xl">Template Surat</h1>
     </a>
     </div>
-    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
+    <div 
+        @if ($letter->letterValidate)
+            class="bg-white shadow-xl items-center justify-center rounded-xl h-250 w-370 mb-10 mt-10 ml-87 p-12">
+        @else
+            class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mb-10 mt-10 ml-87 p-12">
+        @endif
         <h1 class="text-4xl font-semibold mb-4">Edit Surat Masuk</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form id="form-update" action="{{ route('tu.outgoing.update', $letter->id) }}" method="POST" enctype="multipart/form-data">
@@ -164,6 +169,16 @@
                     </div>
                 </div>
             </div>
+            @if ($letter->letterValidate)
+                <div class="flex flex-col">
+                    @if ($letter->letterValidate->note_katu)
+                        <label for="" class="text-[#7E95DB] mb-2 text-xl">Catatan Kepala TU</label>
+                    @else
+                        <label for="" class="text-[#7E95DB] mb-2 text-xl">Catatan Waka</label>
+                    @endif
+                    <textarea id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none">{{ $letter->letterValidate->note_katu ?? $letter->letterValidate->note_waka }}</textarea>
+                </div>
+            @endif
         </form>
         <form id="form-validation" action="{{ route('tu.outgoing.send.review', $letter->id) }}" method="POST">
                             @csrf
