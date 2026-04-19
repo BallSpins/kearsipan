@@ -59,12 +59,20 @@ class LetterController extends Controller
         return view('kepsek.dashboardKep', compact('totalRequestCount', 'totalIncomingCount', 'letterToSign'));
     }
 
-    public function indexIncomingView(): View
+    public function indexIncomingView(Request $request): View
     {
         $letters = Letter::incomingDrafts()
                     ->with(['classification'])
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
-                    ->paginate(10);
+                    ->paginate(10)
+                    ->withQueryString();
 
         return view('tu.incomingIndex', compact('letters'));
     }
@@ -72,10 +80,17 @@ class LetterController extends Controller
     /**
      * List surat masuk yang baru diterima oleh kepsek (oleh kepsek)
      */
-    public function indexIncomingNewView(): View
+    public function indexIncomingNewView(Request $request): View
     {
         $letters = Letter::incomingNew()
                     ->with(['classification'])
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
                     ->paginate(10);
 
@@ -85,10 +100,17 @@ class LetterController extends Controller
     /**
      * List surat masuk yang di disposisikan kepada waka (oleh Waka)
      */
-    public function indexWakaDispositionView(): View
+    public function indexWakaDispositionView(Request $request): View
     {
         $letters = Letter::assignedDisposition(auth()->id())
                     ->with(['classification', 'dispositions'])
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
                     ->paginate(10);
 
@@ -175,10 +197,17 @@ class LetterController extends Controller
     /**
      * List draft surat keluar (permintaan dari waka) (oleh TU dan Ka TU)
      */
-    public function indexOutgoingView(): View
+    public function indexOutgoingView(Request $request): View
     {
         $letters = Letter::outgoingDrafts()
                     ->with(['classification'])
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
                     ->paginate(10);
 
@@ -188,7 +217,7 @@ class LetterController extends Controller
     /**
      * Antrean review surat keluar untuk Waka dan Ka TU (oleh waka dan Ka TU)
      */
-    public function indexReviewView(): View
+    public function indexReviewView(Request $request): View
     {
         $user = auth()->user();
 
@@ -196,6 +225,13 @@ class LetterController extends Controller
 
         $letters = Letter::waitingValidation($wakaId)
                     ->with(['letterValidate', 'classification'])
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
                     ->paginate(10);
         
@@ -289,9 +325,16 @@ class LetterController extends Controller
     /**
      * List surat yang sudah selesai (arsip oleh TU)
      */
-    public function indexArchivedView(): View
+    public function indexArchivedView(Request $request): View
     {
         $letters = Letter::archived()
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
                     ->paginate(10);
 

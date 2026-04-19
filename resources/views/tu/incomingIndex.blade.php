@@ -44,7 +44,7 @@
                 <span class="text-4xl font-semibold">Buat Surat</span>
             </a>
         </div>
-        <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
+        <form action="{{ route('tu.incoming.view') }}" method="GET" class="flex">
             <div class="relative ml-auto mt-10 mr-20">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-[#3B82F6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
