@@ -10,7 +10,7 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#E6ECFE]">
+<body class="bg-[#1E3F4D]">
     <div x-data="{}"> 
         {{ $slot }}
     </div>
