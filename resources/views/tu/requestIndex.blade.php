@@ -86,8 +86,8 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-        {{ $requests->links() }}
     </div>
+    <div class="bg-white px-6 py-4 mr-8">
+        {{ $requests->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>

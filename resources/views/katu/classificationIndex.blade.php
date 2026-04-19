@@ -99,6 +99,8 @@
                 </tbody>
             </table>
         </div>
-        {{ $classifications->links() }}
+    </div>
+    <div class="bg-white px-6 py-4 mr-8">
+        {{ $classifications->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>

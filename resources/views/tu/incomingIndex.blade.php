@@ -97,4 +97,7 @@
             </table>
         </div>
     </div>
+    <div class="bg-white px-6 py-4 mr-8">
+        {{ $letters->links('pagination::tailwind') }}
+    </div>
 </x-layouts.app>
