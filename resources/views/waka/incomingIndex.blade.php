@@ -4,9 +4,9 @@
     </x-slot:title>
     <x-sidebar.waka />
     
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
-    </div>
+    </div> --}}
 
     {{-- Alert Sukses --}}
     @if (session()->has('success'))
@@ -42,8 +42,8 @@
                 class="block w-full border rounded-md  pl-10 pr-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#000000]">
         </div>
     </form>
-    <div class="bg-[#061E29] shadow-lg  w-385 ml-75">
-        <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200">
+    <div class="bg-[#061E29] shadow-lg  w-385 ml-75 rounded-2xl">
+        <div class="mt-10 bg-white shadow-lg overflow-x-auto rounded-2xl">
             <table class="w-full text-left">
                 <thead class="bg-[#061E29]">
                     <tr>
@@ -75,7 +75,7 @@
             </table>
         </div>
     </div>
-    <div class="bg-white px-6 py-4 mr-8">
+    <div class="px-6 py-4 mr-8">
         {{ $letters->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>

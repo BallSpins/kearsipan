@@ -3,9 +3,9 @@
         Buat Permintaan
     </x-slot:title>
     <x-sidebar.waka />
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
-    </div>
+    </div> --}}
 
     {{-- Alert Error (Opsional, untuk menangani Exception) --}}
     @if (session('error'))
@@ -37,21 +37,21 @@
             </a>
         </div>
     </div>
-    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
-        <h1 class="text-4xl font-semibold mb-4">Buat Permintaan</h1>
+    <div class="bg-[#29627C] shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
+        <h1 class="text-4xl text-white font-semibold mb-4">Buat Permintaan</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form action="{{ route('waka.request.store') }}" method="POST"enctype="multipart/form-data">
           @csrf
             <div class="flex flex-row gap-40">
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
-                    <input type="text" name="subject" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-white mb-2 text-xl">Perihal</label>
+                    <input type="text" name="subject" class="rounded bg-white w-150 h-10 p-2 mb-2">
 
-                    <label class="text-[#7E95DB] mb-2 text-xl">Draf Utama</label>
+                    <label class="text-white mb-2 text-xl">Draf Utama</label>
                     <div class="flex flex-row gap-4">
                         {{-- Hubungkan label FOR dengan ID input --}}
                         <label for="draft_file" class="w-full">
-                            <div class="relative border border-black border-dashed rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                            <div class="relative border border-white border-dashed rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
                                 <input accept=".pdf,.doc,.docx" type="file" name="draft_file" id="draft_file" class="hidden" onchange="updateFileName(this, 'draft-name')">
                                 
                                 <div class="flex flex-col items-center">
@@ -64,11 +64,11 @@
                         </label>
                     </div>
                     
-                    <label class="text-[#7E95DB] mb-2 text-xl mt-4 block">Lampiran</label>
+                    <label class="text-white mb-2 text-xl mt-4 block">Lampiran</label>
                     <div class="flex flex-row gap-4">
                         {{-- Tambahkan Label FOR agar area ini bisa diklik --}}
                         <label for="attachments" class="w-full">
-                            <div class="relative border border-black rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                            <div class="relative border border-white rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
                                 <input accept=".pdf,.doc,.docx" type="file" name="attachments[]" id="attachments" class="hidden" onchange="updateFileName(this, 'attachments-name')">
                                 
                                 <div class="flex flex-col items-center">
@@ -92,8 +92,8 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Deskripsi</label>
-                    <textarea name="description" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none"></textarea>
+                    <label for="" class="text-white mb-2 text-xl">Deskripsi</label>
+                    <textarea name="description" id="" cols="30" rows="10" class="bg-white w-150 rounded p-2 resize-none"></textarea>
                     <div class="ml-auto">
                         <button
                             class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Kirim</button>

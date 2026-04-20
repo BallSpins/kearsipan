@@ -5,9 +5,9 @@
     <x-sidebar.waka />
     
 
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
-    </div>
+    </div> --}}
 
     {{-- Alert Sukses --}}
     @if (session()->has('success'))
@@ -31,15 +31,15 @@
     @endif
 
     <div class="flex justify-end">
-        <a href="{{ route('waka.request.create.view') }}" class="mr-20 py-4 px-10 bg-[#1D546D] hover:bg-[#5F9598] text-white rounded-sm mt-5 flex items-center gap-2">
+        <a href="{{ route('waka.request.create.view') }}" class="mr-20 px-10 bg-[#061E29] hover:bg-white/5 text-white rounded-sm mt-5 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                 <path fill="currentColor"
                     d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5z" />
             </svg>
-            <span class="text-4xl font-semibold">Buat Permintaan</span>
+            <span class="text-xl font-semibold">Buat Permintaan</span>
         </a>
     </div>
-    <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200 ml-75 mr-20">
+    <div class="mt-10 bg-white shadow-lg overflow-x-auto rounded-2xl ml-75 mr-20">
         <table class="w-full text-left">
             <thead class="bg-[#061E29]">
                 <tr>
@@ -90,7 +90,7 @@
             </tbody>
         </table>
     </div>
-    <div class="bg-white px-6 py-4 mr-8">
+    <div class="px-6 py-4 mr-8">
         {{ $requests->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>
