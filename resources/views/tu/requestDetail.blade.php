@@ -14,17 +14,11 @@
 
     <div class="flex flex-row justify-between">
         <div class="flex mt-10">
-            <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
+            <div class="bg-white hover:bg-gray-200 rounded-xl w-40 ml-77 h-15 shadow-lg">
                 <a href="{{ route('tu.request.list.view') }}"
-                    class="text-center rotate-90 items-center justify-center flex">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
-                        <g fill="none" fill-rule="evenodd">
-                            <path
-                                d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-                            <path fill="currentColor"
-                                d="M13.06 16.06a1.5 1.5 0 0 1-2.12 0l-5.658-5.656a1.5 1.5 0 1 1 2.122-2.121L12 12.879l4.596-4.596a1.5 1.5 0 0 1 2.122 2.12l-5.657 5.658Z" />
-                        </g>
-                    </svg>
+                    class="text-center items-center justify-center flex">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24"><path fill="currentColor" d="M12 9.059V6.5a1.001 1.001 0 0 0-1.707-.708L4 12l6.293 6.207a.997.997 0 0 0 1.414 0A1 1 0 0 0 12 17.5v-2.489c2.75.068 5.755.566 8 3.989v-1c0-4.633-3.5-8.443-8-8.941"/></svg>
+                    <h1 class="text-xl font-bold">KEMBALI</h1>
                 </a>
             </div>
         </div>
@@ -53,7 +47,7 @@
         <form class="space-y-6">
             <div class="flex flex-col">
                 <div class="flex items-center gap-3">
-                    <div class="w-180 items-center bg-[#D1D5DB] rounded-md border border-black overflow-hidden h-12">
+                    <div class="w-180 items-center bg-white rounded-md overflow-hidden h-12">
                         <div class="h-full px-3 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-[#3B82F6]" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
@@ -77,7 +71,7 @@
                 <label class="text-white text-lg font-medium mb-1">Tanggal</label>
                 <div class="relative flex items-center">
                     <input type="text" disabled value="{{ $request->created_at->format('d/m/Y') }}" 
-                           class="w-180 h-12 px-4 rounded-md border border-black bg-[#D1D5DB] text-black focus:outline-none">
+                           class="w-180 h-12 px-4 rounded-md bg-white text-black focus:outline-none">
                     <div class=" text-[#4285F4]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zm0-12H5V6h14zm-7 5h5v5h-5z"/>
@@ -89,19 +83,19 @@
             <div class="flex flex-col">
                 <label class="text-white text-lg font-medium mb-1">Alamat Tujuan</label>
                 <input type="text" disabled value="{{ $request->destination ?? 'Wali Murid' }}" 
-                       class="w-200 h-12 px-4 rounded-md border border-black bg-[#D1D5DB] text-black">
+                       class="w-200 h-12 px-4 rounded-md bg-white text-black">
             </div>
 
             <div class="flex flex-col">
                 <label class="text-white text-lg font-medium mb-1">Jenis Surat</label>
                 <input type="text" disabled value="{{ $request->letter_type ?? 'Surat Undangan' }}" 
-                       class="w-200 h-12 px-4 rounded-md border border-black bg-[#D1D5DB] text-black">
+                       class="w-200 h-12 px-4 rounded-md bg-white text-black">
             </div>
 
             <div class="flex flex-col">
                 <label class="text-white text-lg font-medium mb-1">Perihal</label>
                 <textarea disabled rows="4" 
-                          class="w-200 p-4 rounded-md border border-black bg-[#D1D5DB] text-black resize-none shadow-inner">{{ $request->description }}</textarea>
+                          class="w-200 p-4 rounded-md bg-white text-black resize-none shadow-inner">{{ $request->description }}</textarea>
             </div>
         </form>
     </div>

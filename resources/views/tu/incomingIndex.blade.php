@@ -4,13 +4,13 @@
     </x-slot:title>
     <x-sidebar.tu />
     
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
             <h1 class="text-black ml-67 text-2xl font-bold">Kepala Tata Usaha</h1>
         @elseif (auth()->user()->role === App\Enums\UserRole::TU)
             <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
         @endif
-    </div>
+    </div> --}}
     
     {{-- Alert Sukses --}}
     @if (session()->has('success'))
@@ -33,15 +33,15 @@
         </script>
     @endif
 
-    <div class="flex flex-row ml-77 gap-220">
+    <div class="flex flex-row ml-77 gap-240">
         <div class="flex justify-end">
             <a href="{{ route('tu.incoming.draft.create.view') }}"
-                class="mr-20 py-3 px-10 bg-[#1D546D] hover:bg-[#5F9598] text-white rounded-sm mt-5 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+                class="mr-20 h-15 px-6 bg-[#061E29] hover:bg-white/5 text-white rounded-sm mt-5 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                     <path fill="currentColor"
                         d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5z" />
                 </svg>
-                <span class="text-4xl font-semibold">Buat Surat</span>
+                <span class="text-2xl font-semibold">Buat Surat</span>
             </a>
         </div>
         <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
@@ -59,8 +59,8 @@
         </form>
     </div>
 
-    <div class="bg-[#061E29] shadow-lg  w-385 ml-75">
-        <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200">
+    <div class="bg-[#061E29] shadow-lg  w-385 ml-75 rounded-2xl">
+        <div class="mt-10 bg-white shadow-lg overflow-x-auto rounded-2xl">
             <table class="w-full text-left">
                 <thead class="bg-[#061E29]">
                     <tr>
@@ -97,7 +97,7 @@
             </table>
         </div>
     </div>
-    <div class="bg-white px-6 py-4 mr-8">
+    <div class="px-6 py-4 mr-8">
         {{ $letters->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>

@@ -14,7 +14,7 @@
 
         <div class="ml-10 mt-5">
             @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
-                <h1 class="text-black ml-67 text-2xl font-bold">Kepala Tata Usaha</h1>
+                <h1 class="text-black ml-67 text-4xl font-bold">Kepala Tata Usaha</h1>
                 <h1 class="text-white ml-67 text-xl">Ayo, taklukkan tumpukan suratmu!</h1>
             @elseif (auth()->user()->role === App\Enums\UserRole::TU)
                 <h1 class="text-white ml-67 text-4xl font-bold">Tata Usaha</h1>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-xl w-110 h-55">
-                <h1 class="font-semibold text-xl p-2 ml-10 mt-10 text-[#7F7F7F]">Revisi</h1>
+                <h1 class="font-semibold text-2xl p-2 ml-10 mt-10 text-[#7F7F7F]">Revisi</h1>
                 <div class="flex gap-40 mt-5">
                     <p class="font-bold text-7xl p-2 ml-10 text-[#1D546D]">{{ $revisionRequestCount }}</p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 24 24"><path fill="#3B82F6" d="M5 21h14c1.1 0 2-.9 2-2v-7h-2v7H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2"/><path fill="#3B82F6" d="M7 13v3c0 .55.45 1 1 1h3c.27 0 .52-.11.71-.29l9-9a.996.996 0 0 0 0-1.41l-3-3a.996.996 0 0 0-1.41 0l-9.01 8.99A1 1 0 0 0 7 13m10-7.59L18.59 7L17.5 8.09L15.91 6.5zm-8 8l5.5-5.5l1.59 1.59l-5.5 5.5H9z"/></svg>
@@ -46,18 +46,18 @@
             </div>
         </div>
 
-        <h1 class="text-white text-4xl font-semibold ml-75 mt-10">Draft Surat</h1>
+        <h1 class="text-white text-2xl font-semibold ml-75 mt-10">Draft Surat</h1>
 
         <div class="bg-[#061E29] shadow-lg  w-360 ml-75 rounded-2xl">
             <div class="mt-10 bg-white shadow-lg overflow-x-auto rounded-2xl">
             <table class="w-full text-left">
                 <thead class="bg-[#061E29]">
                     <tr>
-                        <th class="px-6 py-4 font-bold text-white text-lg">No</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Tanggal Agenda</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Jenis Surat</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Alamat Tujuan</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg text-center">Status</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">No</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">Tanggal Agenda</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">Jenis Surat</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">Alamat Tujuan</th>
+                        <th class="px-6 py-4 font-bold text-white text-md text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">

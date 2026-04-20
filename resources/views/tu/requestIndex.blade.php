@@ -11,7 +11,7 @@
             <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
         @endif
     </div> --}}
-    <div class="flex flex-row ml-77 gap-240">
+    <div class="flex flex-row ml-386">
         <form action="{{ route('tu.request.list.view') }}" method="GET" class="flex">
             <div class="relative ml-auto mt-10 mr-20">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -25,16 +25,6 @@
                     class="block w-full border rounded-md  pl-10 pr-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#000000]">
             </div>
         </form>
-        <div class="flex justify-end">
-            <a href="{{ route('tu.incoming.draft.create.view') }}"
-                class="mr-20 h-15 px-6 bg-[#061E29] hover:bg-white/5 text-white rounded-sm mt-5 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
-                    <path fill="currentColor"
-                        d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5z" />
-                </svg>
-                <span class="text-2xl font-semibold">Buat Surat</span>
-            </a>
-        </div>
     </div>
     {{-- Alert Sukses --}}
     @if (session()->has('success'))

@@ -3,37 +3,34 @@
         Edit Draf
     </x-slot:title>
     <x-sidebar.tu />
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
             <h1 class="text-black ml-67 text-2xl font-bold">Kepala Tata Usaha</h1>
         @elseif (auth()->user()->role === App\Enums\UserRole::TU)
             <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
         @endif
-    </div>
+    </div> --}}
     <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
             <a href="{{ route('tu.incoming.view') }}"
-                class="text-center rotate-90 items-center justify-center flex">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24">
-                    <g fill="none" fill-rule="evenodd">
-                        <path
-                            d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-                        <path fill="currentColor"
-                            d="M13.06 16.06a1.5 1.5 0 0 1-2.12 0l-5.658-5.656a1.5 1.5 0 1 1 2.122-2.121L12 12.879l4.596-4.596a1.5 1.5 0 0 1 2.122 2.12l-5.657 5.658Z" />
-                    </g>
+             class="text-center items-center justify-center flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M12 9.059V6.5a1.001 1.001 0 0 0-1.707-.708L4 12l6.293 6.207a.997.997 0 0 0 1.414 0A1 1 0 0 0 12 17.5v-2.489c2.75.068 5.755.566 8 3.989v-1c0-4.633-3.5-8.443-8-8.941" />
                 </svg>
+                <h1 class="text-xl font-bold">KEMBALI</h1>
             </a>
         </div>
         <a href="{{ route('templates.index') }}" target="_blank"
-            class="bg-[#1D546D] hover:bg-[#5F9598] cursor-pointer ml-auto text-white rounded-sm flex items-center px-10 py-2 mr-20 ">
+            class="bg-[#061E29] hover:bg-white/5 cursor-pointer ml-auto text-white rounded-sm flex items-center px-10 py-2 mr-20 ">
             <h1 class="font-semibold text-2xl">Template Surat</h1>
     </a>
     </div>
-    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
+    <div class="bg-[#29627C] shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
         @if($letter->type === App\Enums\LetterType::INCOMING)
-            <h1 class="text-4xl font-semibold mb-4">Edit Surat Masuk</h1>
+            <h1 class="text-white text-4xl font-semibold mb-4">Edit Surat Masuk</h1>
         @else
-            <h1 class="text-4xl font-semibold mb-4">Edit Surat Keluar</h1>
+            <h1 class="text-white text-4xl font-semibold mb-4">Edit Surat Keluar</h1>
         @endif
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form id="form-update" action="{{ route('tu.incoming.update', $letter->id) }}" method="POST" enctype="multipart/form-data">
@@ -41,7 +38,7 @@
             @method('PUT')
             <div class="flex flex-row gap-40">
                 <div class="flex flex-col">
-                    <label for="classification_code" class="text-[#7E95DB] mb-2 text-xl">Kode Klasifikasi</label>
+                    <label for="classification_code" class="text-white mb-2 text-xl">Kode Klasifikasi</label>
 
                     <select 
                         name="classification_code" 
@@ -58,17 +55,17 @@
                         @endforeach
                     </select>
                     
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Alamat</label>
-                    <input type="text" value="{{ $letter->address }}" name="address" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-white mb-2 text-xl">Alamat</label>
+                    <input type="text" value="{{ $letter->address }}" name="address" class="rounded bg-white w-150 h-10 p-2 mb-2">
 
-                    <label class="text-[#7E95DB] mb-2 text-xl">Draf Utama</label>
+                    <label class="text-white mb-2 text-xl">Draf Utama</label>
                     <div class="flex flex-row gap-4">
                         {{-- Hubungkan label FOR dengan ID input --}}
                         @php
                             $hasFile = !empty($letter->file_path);
                         @endphp
                         <label for="file" class="w-full flex flex-row gap-4">
-                            <div class="relative border border-black border-dashed rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
+                            <div class="relative rounded-lg w-full h-20 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition">
                                 <input accept=".pdf" type="file" name="file" id="file" class="hidden" onchange="updateFileName(this, 'draft-name')">
                                 
                                 <div class="flex flex-col items-center">
@@ -103,7 +100,7 @@
                         </label>
                     </div>
                     
-                    <label class="text-[#7E95DB] mb-2 text-xl mt-4 block">Lampiran</label>
+                    <label class="text-white mb-2 text-xl mt-4 block">Lampiran</label>
                     <div class="flex flex-row gap-4">
                         {{-- Tambahkan Label FOR agar area ini bisa diklik --}}
                         <label for="attachments" class="w-full flex flex-row gap-4">
@@ -157,11 +154,11 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Nomor Surat</label>
-                    <input type="text" value="{{ $letter->full_number ?? $letter->origin_number }}" name="origin_number" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-white mb-2 text-xl">Nomor Surat</label>
+                    <input type="text" value="{{ $letter->full_number ?? $letter->origin_number }}" name="origin_number" class="rounded bg-white w-150 h-10 p-2 mb-2">
 
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
-                    <textarea name="subject" id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none">{{ $letter->subject }}</textarea>
+                    <label for="" class="text-white mb-2 text-xl">Perihal</label>
+                    <textarea name="subject" id="" cols="30" rows="10" class="bg-white w-150 rounded p-2 resize-none">{{ $letter->subject }}</textarea>
                     <div class="ml-auto">
                         <button type="submit" form="form-kepsek"
                             class="bg-[#28A745] px-6 py-2 text-white text-lg rounded-lg cursor-pointer mt-5">Serahkan ke Kepsek</button>
