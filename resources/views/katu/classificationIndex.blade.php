@@ -100,7 +100,7 @@
             </table>
         </div>
     </div>
-    <div class="px-6 py-4 mr-8">
+    <div class="px-6 py-4 mr-8 text-white">
         {{ $classifications->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>

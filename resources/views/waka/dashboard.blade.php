@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <h1 class="text-2xl font-semibold ml-75 mt-10">Draft Surat</h1>
+        <h1 class="text-2xl text-white font-semibold ml-75 mt-10">Draft Surat</h1>
 
         <div class="bg-[#061E29] shadow-lg  w-360 ml-75 rounded-2xl">
             <div class="mt-10 bg-white shadow-lg overflow-x-auto border rounded-2xl">

@@ -36,12 +36,12 @@
 
             @for ($page = $start; $page <= $end; $page++)
                 @if ($page == $current)
-                    <span class="px-4 py-1 text-black font-semibold border-b-2 border-black">
+                    <span class="border rounded-xl px-4 py-1 text-white font-semibold border-b-2  cursor-pointer">
                         {{ $page }}
                     </span>
                 @else
                     <a href="{{ $paginator->url($page) }}"
-                       class="px-4 py-1 text-gray-500 hover:text-black transition">
+                       class="rounded-xl px-4 py-1 text-white hover:text-white transition">
                         {{ $page }}
                     </a>
                 @endif                
@@ -50,11 +50,11 @@
             {{-- Next --}}
             @if ($paginator->hasMorePages())
                 <a href="{{ $paginator->nextPageUrl() }}"
-                   class="px-2 text-gray-500 hover:text-black transition">
+                   class="px-2 text-white">
                     ›
                 </a>
             @else
-                <span class="px-2 text-gray-300 cursor-not-allowed">
+                <span class="px-2 text-white cursor-not-allowed">
                     ›
                 </span>
             @endif

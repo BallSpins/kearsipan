@@ -13,11 +13,14 @@
     </div> --}}
 
     <div class="ml-77 mt-10 pr-10" x-data="{ note: '' }"> 
-        <div class="bg-white hover:bg-gray-200 rounded-full w-15 h-15 shadow-lg flex items-center justify-center mb-6">
-            <a href="{{ route('classifications.index') }}" class="flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                    <path fill="black" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.41z"/>
+        <div class="bg-white hover:bg-gray-200 rounded-xl w-40 h-15 shadow-lg flex items-center justify-center mb-6">
+            <a href="{{ route('classifications.index') }}" 
+             class="text-center items-center justify-center flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M12 9.059V6.5a1.001 1.001 0 0 0-1.707-.708L4 12l6.293 6.207a.997.997 0 0 0 1.414 0A1 1 0 0 0 12 17.5v-2.489c2.75.068 5.755.566 8 3.989v-1c0-4.633-3.5-8.443-8-8.941" />
                 </svg>
+                <h1 class="text-xl font-bold">KEMBALI</h1>
             </a>
         </div>
 
