@@ -10,7 +10,6 @@ window.notyf = new Notyf({
         x: 'center',
         y: 'top',
     },
-    dismissible: true,
 });
 
 Alpine.start();

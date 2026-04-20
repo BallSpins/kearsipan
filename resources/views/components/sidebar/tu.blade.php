@@ -58,9 +58,9 @@
     <button type="button" 
         @click="$dispatch('open-logout-modal')" 
         @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
-            class="flex bg-[#FF0000] w-40 h-10 rounded ml-10 mt-100 px-8">
+            class="flex bg-[#FF0000] w-40 h-10 rounded ml-10 mt-80 px-8">
         @else
-            class="flex bg-[#FF0000] w-40 h-10 rounded ml-10 mt-130 px-8">
+            class="flex bg-[#FF0000] w-40 h-10 rounded ml-10 mt-110 px-8">
         @endif
           <div class="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">

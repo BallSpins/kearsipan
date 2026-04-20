@@ -11,7 +11,7 @@
         @endif
     </div> --}}
     <div class="flex mt-10">
-        <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
+        <div class="bg-white hover:bg-gray-200 rounded-xl w-40 ml-77 h-15 shadow-lg">
             <a href="{{ route('tu.incoming.view') }}"
              class="text-center items-center justify-center flex">
                 <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24">

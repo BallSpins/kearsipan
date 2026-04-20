@@ -55,10 +55,17 @@ class LetterRequestController extends Controller
     /**
      * List permintaan waka beserta statusnya (Oleh Waka)
      */
-    public function indexWakaRequestView(): View
+    public function indexWakaRequestView(Request $request): View
     {
         $requests = LetterRequest::byWaka(auth()->id())
                     ->with(['letter'])
+                    ->when($request->search, function($query, $search) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('origin_number', 'like', "%{$search}%")
+                                  ->orWhere('full_number', 'like', "%{$search}%")
+                                  ->orWhere('subject', 'like', "%{$search}%");
+                        });
+                    })
                     ->latest()
                     ->paginate(10);
         

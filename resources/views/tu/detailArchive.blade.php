@@ -126,7 +126,7 @@
                 <input type="text" disabled value="{{ $letter->address }}" class="rounded bg-white w-150 h-10 p-2 mb-2">
                 
                 <label for="" class="text-white mb-2 text-xl">Perihal</label>
-                <textarea disabled name="description" class="bg-white w-180 h-50 rounded p-2 resize-none">{{ $letter->subject }}</textarea>
+                <textarea disabled name="description" class="bg-white w-180 h-40 rounded p-2 resize-none">{{ $letter->subject }}</textarea>
             </form>
         </div>
 </x-layouts.app>

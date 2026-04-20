@@ -46,10 +46,10 @@
                         @endforeach
                     </select>
 
-                    <label for="" class="text-white mb-2 text-xl">Alamat</label>
+                    <label for="" class="text-white mb-2 text-xl">Pengirim</label>
                     <input type="text" name="address" class="bg-white rounded border w-150 h-10 p-2 mb-2">
 
-                    <label class="text-white mb-2 text-xl">Draf Utama</label>
+                    <label class="text-white mb-2 text-xl">Upload Surat Masuk</label>
                     <div class="flex flex-row gap-4">
                         {{-- Hubungkan label FOR dengan ID input --}}
                         <label for="file" class="w-full">

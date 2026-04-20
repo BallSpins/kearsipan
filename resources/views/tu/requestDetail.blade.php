@@ -36,7 +36,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M13 6a1 1 0 1 0-2 0v5H6a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2h-5z" />
                 </svg>
-                <span class="text-2xl font-semibold">Buat Surat</span>
+                <span class="text-2xl font-semibold">Lanjutkan</span>
             </a>
         </div>
     </div>
@@ -72,11 +72,6 @@
                 <div class="relative flex items-center">
                     <input type="text" disabled value="{{ $request->created_at->format('d/m/Y') }}" 
                            class="w-180 h-12 px-4 rounded-md bg-white text-black focus:outline-none">
-                    <div class=" text-[#4285F4]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zm0-12H5V6h14zm-7 5h5v5h-5z"/>
-                        </svg>
-                    </div>
                 </div>
             </div>
 
