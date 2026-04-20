@@ -12,13 +12,13 @@
         </script>
     @endif
 
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">Kepala Sekolah</h1>
-    </div>
+    </div> --}}
 
     <div class="mt-20 ml-75 flex gap-70 items-center justify-center">
         <div class="bg-white rounded-xl shadow-xl w-120 h-55">
-            <h1 class="font-semibold text-xl p-2 ml-10">Total Permintaan</h1>
+            <h1 class="font-semibold text-2xl p-2 ml-10">Total Permintaan</h1>
             <div class="flex gap-60 mt-10">
                 <p class="font-bold text-7xl p-2 ml-10">{{ $totalRequestCount }}</p>
                 <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="bg-white rounded-xl shadow-xl w-120 h-55">
-            <h1 class="font-semibold text-xl p-2 ml-10">Revisi</h1>
+            <h1 class="font-semibold text-2xl p-2 ml-10">Revisi</h1>
             <div class="flex gap-60 mt-10">
                 <p class="font-bold text-7xl p-2 ml-10">{{ $totalIncomingCount }}</p>
                 <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 24 24">
@@ -41,18 +41,18 @@
         </div>
     </div>
 
-    <h1 class="text-4xl font-semibold ml-75 mt-10">Surat Menunggu Persetujuan</h1>
+    <h1 class="text-2xl font-semibold ml-75 mt-10 text-white">Surat Menunggu Persetujuan</h1>
 
-    <div class="bg-[#061E29] shadow-lg  w-360 ml-75">
-        <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200">
+    <div class="bg-[#061E29] shadow-lg  w-360 ml-75 rounded-2xl">
+        <div class="mt-10 bg-white shadow-lg overflow-x-auto border rounded-2xl">
             <table class="w-full text-left">
                 <thead class="bg-[#061E29]">
                     <tr>
-                        <th class="px-6 py-4 font-bold text-white text-lg">No</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Tanggal Agenda</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Jenis Surat</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg">Alamat Tujuan</th>
-                        <th class="px-6 py-4 font-bold text-white text-lg text-center">Status</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">No</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">Tanggal Agenda</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">Jenis Surat</th>
+                        <th class="px-6 py-4 font-bold text-white text-md">Alamat Tujuan</th>
+                        <th class="px-6 py-4 font-bold text-white text-md text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
