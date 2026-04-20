@@ -3,13 +3,13 @@
         Edit Kode
     </x-slot:title>
     <x-sidebar.tu />
-        <div class="bg-white shadow-xl">
+        {{-- <div class="bg-white shadow-xl">
         @if (auth()->user()->role === App\Enums\UserRole::KEPALA_TU)
             <h1 class="text-black ml-67 text-2xl font-bold">Kepala Tata Usaha</h1>
         @elseif (auth()->user()->role === App\Enums\UserRole::TU)
             <h1 class="text-black ml-67 text-2xl font-bold">Tata Usaha</h1>
         @endif
-    </div>
+    </div> --}}
         <div class="ml-77 mt-10 pr-10" x-data="{ note: '' }"> 
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 h-15 shadow-lg flex items-center justify-center mb-6">
             <a href="{{ route('classifications.index') }}" class="flex items-center justify-center">
@@ -19,16 +19,16 @@
             </a>
         </div>
 
-        <form action="{{ route('classifications.update', $classification->code) }}" method="POST" class="bg-white rounded-md shadow-xl p-12 w-150 ml-20">
+        <form action="{{ route('classifications.update', $classification->code) }}" method="POST" class="bg-[#29627C] rounded-md shadow-xl p-12 w-150 ml-20">
             @csrf
             @method('PUT')
-            <h1 class="text-4xl font-semibold mb-4">Edit Kode</h1>
+            <h1 class="text-white text-4xl font-semibold mb-4">Edit Kode</h1>
             <div class="w-full border border-gray-300 mb-8"></div>
 
             <div class="space-y-6">
                 <div class="flex flex-col gap-2">
-                    <label class="text-2xl text-[#7E95DB]">Referensi Kode</label>
-                    <select name="parent_code" id="classification_select" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg" required>
+                    <label class="text-2xl text-white">Referensi Kode</label>
+                    <select name="parent_code" id="classification_select" class="rounded-md bg-white w-full h-12 px-4 text-lg" required>
                         <option value="" disabled selected>Pilih Kode Surat</option>
                         @foreach ($classifications as $classif)
                             <option value="{{ $classif->code }}" {{ $classif->code == $classification->parent_code ? 'selected' : '' }}>
@@ -39,8 +39,8 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <label class="text-2xl text-[#7E95DB]">Kode Surat Baru</label>
-                    <input type="text" value="{{ $classification->code }}" id="new_code_input" name="code" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg bg-gray-100">
+                    <label class="text-2xl text-white">Kode Surat Baru</label>
+                    <input type="text" value="{{ $classification->code }}" id="new_code_input" name="code" class="rounded-md w-full h-12 px-4 text-lg bg-white">
                 </div>
 
                 <script>
@@ -59,8 +59,8 @@
                 </script>
 
                 <div class="flex flex-col gap-2">
-                    <label class="text-2xl text-[#7E95DB]">Nama Kode</label>
-                    <input type="text" value="{{ $classification->name }}" name="name" class="rounded-md border border-gray-400 w-full h-12 px-4 text-lg">
+                    <label class="text-2xl text-white">Nama Kode</label>
+                    <input type="text" value="{{ $classification->name }}" name="name" class="rounded-md bg-white w-full h-12 px-4 text-lg">
                 </div>
             </div>
 

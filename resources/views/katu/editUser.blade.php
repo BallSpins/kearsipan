@@ -4,9 +4,9 @@
     </x-slot:title>
     <x-sidebar.tu />
 
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
       <h1 class="text-black ml-67 text-2xl font-bold">Kepala Tata Usaha</h1>
-    </div>
+    </div> --}}
 
     <div class="ml-77 mt-10 pr-10"> 
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 h-15 shadow-lg flex items-center justify-center mb-6">
@@ -17,25 +17,25 @@
             </a>
         </div>
 
-        <form action="{{ route('users.update', $user->id) }}" method="POST" class="bg-white rounded-md shadow-xl p-12 w-150 ml-20">
+        <form action="{{ route('users.update', $user->id) }}" method="POST" class="bg-[#29627C] rounded-md shadow-xl p-12 w-150 ml-20">
             @csrf
             @method('PUT')
 
-            <h1 class="text-3xl mb-6 border-b border-gray-300 pb-4">Edit Akun</h1>
+            <h1 class="text-3xl mb-6 border-b border-gray-300 pb-4 text-white">Edit Akun</h1>
 
             <label for="" class="text-[#7E95DB] flex flex-col gap-2 text-xl">
                 Nama
-                <input type="text" name="name" value="{{ $user->name }}" class="rounded border border-black w-150 h-10 p-2 mb-2 text-black">
+                <input type="text" name="name" value="{{ $user->name }}" class="bg-white w-100 h-10 p-2 mb-2 text-black">
             </label>
 
             <label for="" class="text-[#7E95DB] flex flex-col gap-2 text-xl">
                 Username
-                <input type="text" name="username" value="{{ $user->username }}" class="rounded border border-black w-150 h-10 p-2 mb-2 text-black">
+                <input type="text" name="username" value="{{ $user->username }}" class="bg-white w-100 h-10 p-2 mb-2 text-black">
             </label>
 
             <label for="" class="text-[#7E95DB] flex flex-col gap-2 text-xl">
                 Role
-                <select name="role" id="role" class="rounded border border-black w-150 p-2 mb-2 bg-white text-black">
+                <select name="role" id="role" class="bg-white w-100 p-2 mb-2 text-black">
                     <option value="" disabled selected>Pilih Role</option>
                     @foreach (App\Enums\UserRole::cases() as $role)
                         <option value="{{ $role->value }}" @selected($user->role->value === $role->value)>{{ $role->value }}</option>
@@ -45,7 +45,7 @@
 
             <label for="" class="text-[#7E95DB] flex flex-col gap-2 text-xl">
                 Password
-                <input type="password" name="password" class="rounded border border-black w-150 h-10 p-2 mb-2 text-black">
+                <input type="password" name="password" class="bg-white w-100 h-10 p-2 mb-2 text-black">
             </label>
 
             <div class="mx-auto flex gap-4">
