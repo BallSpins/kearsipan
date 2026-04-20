@@ -16,6 +16,7 @@ use App\Services\LetterService;
 use App\Services\LetterRequestService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 

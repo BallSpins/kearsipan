@@ -44,12 +44,8 @@
                 </div>
             </div>
             <div class="relative ml-56">
-                <div class="aspect-[4/5] bg-gray-800 border border-gray-700 shadow-2xl overflow-hidden grayscale hover:grayscale-0 transition duration-700">
-                    <img src="{{ asset('closeup.avif') }}" alt="Archten Preview" class="w-full h-full object-cover">
-                </div>
-                <div class="absolute -bottom-10 -right-10 bg-white text-[#061E29] p-10 hidden lg:block border border-gray-200 shadow-2xl">
-                    <p class="text-5xl font-black mb-1">0.02s</p>
-                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Query Latency</p>
+                <div class="aspect-[4/5] bg-gray-800 border border-gray-700 shadow-2xl overflow-hidden transition duration-700">
+                    <img src="{{ asset('lobby.jpg') }}" alt="Archten Preview" class="w-full h-full object-cover">
                 </div>
             </div>
         </div>
