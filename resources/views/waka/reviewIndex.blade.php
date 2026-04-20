@@ -3,10 +3,10 @@
         Permintaan ACC
     </x-slot:title>
     <x-sidebar.waka />
-    
+{{--     
     <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
-    </div>
+    </div> --}}
 
     {{-- Alert Sukses --}}
     @if (session()->has('success'))
@@ -29,7 +29,7 @@
         </script>
     @endif
 
-    <div class="mt-10 bg-white shadow-lg overflow-x-auto border border-gray-200 ml-75 mr-20">
+    <div class="mt-10 bg-white shadow-lg overflow-x-auto rounded-2xl ml-75 mr-20">
         <table class="w-full text-left">
             <thead class="bg-[#061E29]">
                 <tr>
@@ -83,7 +83,7 @@
             </tbody>
         </table>
     </div>
-    <div class="bg-white px-6 py-4 mr-8">
+    <div class="px-6 py-4 mr-8">
         {{ $letters->links('pagination::tailwind') }}
     </div>
 </x-layouts.app>

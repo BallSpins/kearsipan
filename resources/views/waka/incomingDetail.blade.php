@@ -3,9 +3,9 @@
         Detail Disposisi
     </x-slot:title>
     <x-sidebar.waka />
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
-    </div>
+    </div> --}}
     <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
             <a href="{{ route('waka.incoming.view') }}"
@@ -21,8 +21,8 @@
             </a>
         </div>
     </div>
-    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-320 mt-10 ml-87 p-12">
-        <h1 class="text-4xl font-semibold mb-4">Detail Surat</h1>
+    <div class="bg-[#29627C]  shadow-xl items-center justify-center rounded-xl h-160 w-320 mt-10 ml-87 p-12">
+        <h1 class="text-4xl font-semibold mb-4 text-white">Detail Surat</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form action="{{ route('waka.dispositions.completed', $letter->dispositions->first()->id) }}" method="POST">
             @csrf
@@ -30,7 +30,7 @@
                 <div class="flex flex-col">
                     {{-- Download File Utama --}}
                 <div class="flex flex-col gap-4">
-                    <label for="" class="text-[#484848] mb-2 text-xl">Surat yang Disertakan</label>
+                    <label for="" class="text-white mb-2 text-xl">Surat yang Disertakan</label>
 
                     <div class="flex flex-row gap-2">
                         <a 
@@ -39,7 +39,7 @@
                         @else
                             href="{{ route('download.outgoing', $letter->id) }}" {{-- Link download --}}               
                         @endif
-                            class="flex items-center gap-3 border rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
+                            class="flex items-center gap-3 rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                 <path fill="#3B82F6" fill-rule="evenodd"
                                     d="M14.25 2.5a.25.25 0 0 0-.25-.25H7A2.75 2.75 0 0 0 4.25 5v14A2.75 2.75 0 0 0 7 21.75h10A2.75 2.75 0 0 0 19.75 19V9.147a.25.25 0 0 0-.25-.25H15a.75.75 0 0 1-.75-.75zm.75 9.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1 0-1.5zm0 4a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1 0-1.5z"
@@ -68,19 +68,19 @@
 
                 {{-- Download Lampiran --}}
                 <div class="flex flex-col gap-4">
-                    <label for="" class="text-[#484848] mb-2 text-xl">Lampiran</label>
+                    <label for="" class="text-white mb-2 text-xl">Lampiran</label>
 
                     <div class="flex flex-row gap-2">
                         <a 
                         @if (!$letter->attachments->first())
                             href="javascript:void(0)" {{-- Path kosong/tidak ke mana-mana --}}
-                            class="flex items-center gap-3 border rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2 opacity-45 cursor-not-allowed">
+                            class="flex items-center gap-3 rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2 opacity-45 cursor-not-allowed">
                         @elseif ($letter->type === App\Enums\LetterType::OUTGOING)
                             href="{{ route('download.incoming.attachment', $letter->attachments->first()->id) }}" 
-                            class="flex items-center gap-3 border rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
+                            class="flex items-center gap-3 rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
                         @else
                             href="{{ route('download.outgoing.attachment', $letter->attachments->first()->id) }}" {{-- Link download --}}               
-                            class="flex items-center gap-3 border rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
+                            class="flex items-center gap-3 rounded-md bg-white hover:bg-gray-50 transition w-100 h-10 p-2">
                         @endif
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                 <path fill="#3B82F6" fill-rule="evenodd"
@@ -114,14 +114,14 @@
             </div>
 
                 <div class="flex flex-col">
-                    <label for="revision_note" class="text-[#7E95DB] mb-2 text-xl">Tugas</label>
+                    <label for="revision_note" class="text-white mb-2 text-xl">Tugas</label>
                     <textarea 
                           name="" 
                           id=""
                           disabled
                           cols="30" 
                           rows="10" 
-                          class="border w-2xl rounded p-2 resize-none"
+                          class="bg-white w-2xl rounded p-2 resize-none"
                           >{{ trim($letter->dispositions->first()->instruction ?? '') }}</textarea>
                 </div>
 

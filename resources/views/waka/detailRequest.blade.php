@@ -3,9 +3,9 @@
         Detail Permintaan Surat
     </x-slot:title>
     <x-sidebar.waka />
-    <div class="bg-white shadow-xl">
+    {{-- <div class="bg-white shadow-xl">
         <h1 class="text-black ml-67 text-2xl font-bold">WAKA</h1>
-    </div>
+    </div> --}}
     <div class="flex mt-10">
         <div class="bg-white hover:bg-gray-200 rounded-full w-15 ml-77 h-15 shadow-lg">
             <a href="{{ route('waka.request.view') }}"
@@ -21,16 +21,16 @@
             </a>
         </div>
     </div>
-    <div class="bg-white shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
-        <h1 class="text-4xl font-semibold mb-4">Detail Permintaan</h1>
+    <div class="bg-[#29627C] shadow-xl items-center justify-center rounded-xl h-160 w-370 mt-10 ml-87 p-12">
+        <h1 class="text-4xl text-white font-semibold mb-4">Detail Permintaan</h1>
         <div class=" w-full border border-gray-300 mb-15"></div>
         <form action="">
             <div class="flex flex-row gap-40">
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Perhial</label>
-                    <input type="text" disabled value="{{ $request->subject }}" name="address" class="rounded border w-150 h-10 p-2 mb-2">
+                    <label for="" class="text-white mb-2 text-xl">Perhial</label>
+                    <input type="text" disabled value="{{ $request->subject }}" name="address" class="rounded bg-white w-150 h-10 p-2 mb-2">
 
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Surat yang disertakan</label>
+                    <label for="" class="text-white mb-2 text-xl">Surat yang disertakan</label>
                     <div class="flex flex-row gap-4">
                       <div
                           class="relative border border-black rounded-lg w-full h-20 flex items-center justify-center bg-white">
@@ -66,7 +66,7 @@
                         </div>
                     </div>
 
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Lampiran</label>
+                    <label for="" class="text-white mb-2 text-xl">Lampiran</label>
                     <div class="flex flex-row gap-4">
                       <div
                           class="relative border border-black rounded-lg w-full h-20 flex items-center justify-center bg-white">
@@ -104,8 +104,8 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="" class="text-[#7E95DB] mb-2 text-xl">Perihal</label>
-                    <textarea name="subject" disabled id="" cols="30" rows="10" class="border w-150 rounded p-2 resize-none">{{ $request->description }}</textarea>
+                    <label for="" class="text-white mb-2 text-xl">Perihal</label>
+                    <textarea name="subject" disabled id="" cols="30" rows="10" class="bg-white w-150 rounded p-2 resize-none">{{ $request->description }}</textarea>
                 </div>
             </div>
         </form>
